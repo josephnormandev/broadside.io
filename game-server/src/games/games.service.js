@@ -1,6 +1,6 @@
-import { LoggerService } from '../logger/logger.service.js';
+import LoggerService from '../logger/logger.service.js';
 
-import { PlayersService } from '../players/players.service.js';
+import { PlayersService, GamePlayer } from '../players/players.service.js';
 
 export class GamesService
 {

@@ -16,7 +16,7 @@ export class MainService
                     token: 'abcd',
                     username: 'Wine_Craft',
                 }),
-                team_2: new Player({
+                player_2: new Player({
                     token: '1234',
                     username: 'Jurgmania',
                 }),

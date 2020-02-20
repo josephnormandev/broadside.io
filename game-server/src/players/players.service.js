@@ -1,10 +1,10 @@
 import WebSocket from 'ws';
 
-import ConfigService from './config/config.service.js';
+import ConfigService from '../config/config.service.js';
 
-// import { GamesService } from './games/games.service.js';
+// import { GamesService } from '../games/games.service.js';
 
-import LoggerService from './logger/logger.service.js';
+import LoggerService from '../logger/logger.service.js';
 
 export class PlayersService
 {
