@@ -1,4 +1,5 @@
 const Config = {
+    player_ws_port: 8081,
 };
 
 export default class ConfigService
