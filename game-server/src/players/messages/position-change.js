@@ -1,7 +1,7 @@
 export default function positionSet(self, x, y)
 {
     return {
-        receiver: 'connected',
+        receiver: 'position-change',
         data: {
             self: self,
             x: x,

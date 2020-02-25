@@ -15,7 +15,6 @@ export default class Pages extends React.Component
     {
         return (
             <div>
-                <Helmet />
                 <Router>
                     <Switch>
                         <Route exact path="/games/play" component={ PlayPage } />

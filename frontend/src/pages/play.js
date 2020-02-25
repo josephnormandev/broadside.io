@@ -1,8 +1,11 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Badge } from 'react-bootstrap';
 
 import GenericClient from '../workers/client.js';
 import tokenMessage from '../workers/game/messages/token.js';
+import setPositionMessage from '../workers/game/messages/set-position.js';
+import * as ConnectedReceiver from '../workers/game/receivers/connected.js';
+import * as PositionChangeReceiver from '../workers/game/receivers/position-change.js';
 
 import PasswordField from '../forms/fields/password';
 
@@ -13,7 +16,7 @@ export default class PlayPage extends React.Component
         super(props);
 
         this.client = new GenericClient(
-            'localhost',
+            window.location.hostname,
             8081,
             this.handleMessage.bind(this),
             this.handleClose.bind(this)
@@ -23,10 +26,22 @@ export default class PlayPage extends React.Component
 
         this.state = {
             opened: false,
-            open_fail: false,
+            connected: false,
             closed: false,
             submitted: false,
+            pos_self: {
+                x: 0,
+                y: 0,
+            },
+            pos_enemy: {
+                x: 0,
+                y: 0,
+            },
         };
+
+        this.receivers = new Map();
+        this.receivers.set(ConnectedReceiver.receiver, ConnectedReceiver);
+        this.receivers.set(PositionChangeReceiver.receiver, PositionChangeReceiver);
     }
 
     async componentDidMount()
@@ -35,31 +50,51 @@ export default class PlayPage extends React.Component
         {
             this.setState({
                 opened: true,
+                connected: false,
+                closed: false,
             });
         }
         else
         {
             this.setState({
-                open_fail: true,
+                opened: false,
+                connected: false,
+                closed: true,
             });
         }
     }
 
     handleMessage(receiver, data)
     {
-        console.log(receiver, data);
+        if(this.receivers.has(receiver))
+        {
+            this.receivers.get(receiver).receive(this, data);
+        }
+    }
+
+    handleConnected()
+    {
+        this.setState({
+            opened: false,
+            connected: true,
+            closed: false,
+        });
     }
 
     handleClose()
     {
         this.setState({
             opened: false,
+            connected: false,
             closed: true,
         });
     }
 
     render()
     {
+        var variant = this.state.opened ? 'warning' :
+                            this.state.connected ? 'success' :
+                                this.state.closed ? 'danger' : 'secondary';
         return (
             <div>
                 <> { !this.state.submitted &&
@@ -81,12 +116,41 @@ export default class PlayPage extends React.Component
                             Submit
                         </Button>
                     </div>
+                } { this.state.submitted &&
+                    <div style={{
+                        margin: '0px',
+                        width: '500px',
+                        height: '500px',
+                        backgroundColor: 'black',
+                    }} onClick={ this.handleClick.bind(this) }>
+                        <div style={{
+                            borderRadius: '50%',
+                            width: '25px',
+                            height: '25px',
+                            backgroundColor: 'blue',
+                            position: 'absolute',
+                            left: this.state.pos_self.x,
+                            top: this.state.pos_self.y,
+                        }} />
+                        <div style={{
+                            borderRadius: '50%',
+                            width: '25px',
+                            height: '25px',
+                            backgroundColor: 'red',
+                            position: 'absolute',
+                            left: this.state.pos_enemy.x,
+                            top: this.state.pos_enemy.y,
+                        }} />
+                    </div>
                 } </>
-                <h3>Opened: { this.state.opened ? 'true' : 'false' }</h3>
-                <h3>Open Failed: { this.state.open_fail ? 'true' : 'false' }</h3>
-                <h3>Closed: { this.state.closed ? 'true' : 'false' }</h3>
+                <Badge variant={ variant }>Connection</Badge>
             </div>
         );
+    }
+
+    handleClick(e)
+    {
+        this.client.sendMessage(setPositionMessage(e.pageX, e.pageY));
     }
 
     handleSubmit(e)

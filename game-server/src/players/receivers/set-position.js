@@ -12,8 +12,8 @@ export function receive(game, player, other_player, data)
     {
         player.setPosition(x, y);
 
-        player.sendMessage(positionChangeMessage(true, x, y));
-        other_player.sendMessage(positionChangeMessage(false, x, y));
+        player.send(positionChangeMessage(true, x, y));
+        other_player.send(positionChangeMessage(false, x, y));
     }
 }
 
