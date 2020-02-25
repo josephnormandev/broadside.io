@@ -1,11 +1,12 @@
-import { GamesService, Game } from '../games/games.service.js';
+import GamesService from '../games/games.service.js';
+import Game from '../games/game.js';
 
-import { Player } from '../players/players.service.js';
+import Player from '../players/player.js';
 
 // for the time being, the only role this class serves is to tell the Games
 // service to create the one game to play
 
-export class MainService
+export default class MainService
 {
     static async initialize()
     {

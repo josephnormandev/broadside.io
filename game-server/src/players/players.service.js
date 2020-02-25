@@ -2,13 +2,16 @@ import WebSocket from 'ws';
 
 import ConfigService from '../config/config.service.js';
 
-import { GamesService } from '../games/games.service.js';
+import GamesService from '../games/games.service.js';
 
 import LoggerService from '../logger/logger.service.js';
 
+import Player from './player.js';
+import OnlinePlayer from './online-player.js';
+import GamePlayer from './game-player.js';
 import connectedMessage from './messages/connected.js';
 
-export class PlayersService
+export default class PlayersService
 {
     static websocket_server;
     static players;
@@ -16,6 +19,10 @@ export class PlayersService
 
     static async initialize()
     {
+        Player.initialize(PlayersService);
+        OnlinePlayer.initialize(PlayersService);
+        GamePlayer.initialize(PlayersService);
+
         PlayersService.websocket_server = new WebSocket.Server({
             port: ConfigService.get('player_ws_port'),
             verifyClient: function(info, callback) {
@@ -129,78 +136,5 @@ export class PlayersService
 
             GamesService.playerLeave(player);
         }
-    }
-}
-
-export class Player
-{
-    constructor(player)
-    {
-        this.token = player.token;
-        this.username = player.username;
-    }
-
-    equals(other)
-    {
-        if(other.token != null)
-        {
-            return other.token == this.token;
-        }
-        return false;
-    }
-
-    get inGame()
-    {
-        return GamesService.isPlayerInGame(this);
-    }
-
-    get online()
-    {
-        return PlayersService.isPlayerOnline(this);
-    }
-}
-
-export class OnlinePlayer extends Player
-{
-    constructor(player, socket)
-    {
-        super(player);
-
-        this.socket = socket;
-    }
-
-    send(message)
-    {
-        this.socket.send(JSON.stringify(message));
-    }
-
-    kick()
-    {
-        this.socket.close();
-    }
-}
-
-export class GamePlayer extends Player
-{
-    constructor(player, number, game)
-    {
-        super(player);
-
-        this.number = number;
-        this.game = game;
-
-        this.setPosition(0, 0);
-    }
-
-    setPosition(x, y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-    send(message)
-    {
-        if(PlayersService.isPlayerOnline(this))
-            PlayersService.getOnlinePlayer(this).send(message);
     }
 }
