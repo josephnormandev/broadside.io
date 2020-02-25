@@ -21,7 +21,7 @@ export class GamesService
     {
         for(var [game_id, game] of GamesService.games)
         {
-            if(game.hasPlayer(online_player))
+            if(game.hasPlayer(player))
             {
                 game.checkOnline();
             }
@@ -50,7 +50,7 @@ export class GamesService
     {
         for(var [game_id, game] of GamesService.games)
         {
-            if(game.hasPlayer(online_player))
+            if(game.hasPlayer(player))
             {
                 game.checkOnline();
             }
