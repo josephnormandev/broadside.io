@@ -6,6 +6,8 @@ import { GamesService } from '../games/games.service.js';
 
 import LoggerService from '../logger/logger.service.js';
 
+import connectedMessage from './messages/connected.js';
+
 export class PlayersService
 {
     static websocket_server;
@@ -25,7 +27,7 @@ export class PlayersService
             setTimeout(function() {
                 if(player == null)
                     socket.close();
-            }, 5000);
+            }, 10000);
 
             socket.on('message', async function(message) {
                 var message = JSON.parse(message);
@@ -47,7 +49,7 @@ export class PlayersService
                             if(result != null)
                             {
                                 player = new Player(result);
-                                PlayersService.playerConnect(player);
+                                PlayersService.playerConnect(player, socket);
                             }
                             else
                             {
@@ -77,8 +79,10 @@ export class PlayersService
 
     static playerConnect(player, socket)
     {
-        this.players.set(player.token, new OnlinePlayer(player, socket));
+        PlayersService.players.set(player.token, new OnlinePlayer(player, socket));
         LoggerService.green(`Player '${ player.username }' Connected`);
+
+        PlayersService.players.get(player.token).send(connectedMessage());
 
         GamesService.playerJoin(player);
     }
@@ -103,20 +107,24 @@ export class PlayersService
 
             if(PlayersService.receivers.has(receiver))
             {
-                this.receivers.get(receiver).receive(
+                PlayersService.receivers.get(receiver).receive(
                     PlayersService,
                     online_player,
                     data
                 );
+            }
+            else
+            {
+                GamesService.handleGameMessage(player, receiver, data);
             }
         }
     }
 
     static playerDisconnect(player)
     {
-        if(this.players.has(player.token))
+        if(PlayersService.players.has(player.token))
         {
-            this.players.delete(player.token);
+            PlayersService.players.delete(player.token);
             LoggerService.red(`Player '${ player.username }' Disconnected`);
 
             GamesService.playerLeave(player);
@@ -174,8 +182,25 @@ export class OnlinePlayer extends Player
 
 export class GamePlayer extends Player
 {
-    constructor(player)
+    constructor(player, number, game)
     {
         super(player);
+
+        this.number = number;
+        this.game = game;
+
+        this.setPosition(0, 0);
+    }
+
+    setPosition(x, y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    send(message)
+    {
+        if(PlayersService.isPlayerOnline(this))
+            PlayersService.getOnlinePlayer(this).send(message);
     }
 }
