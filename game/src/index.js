@@ -1,4 +1,5 @@
-export default function test()
-{
-    console.log('test the game');
-}
+import Simulation from './simulation.js';
+
+export {
+    Simulation,
+};

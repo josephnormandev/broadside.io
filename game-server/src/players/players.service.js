@@ -81,6 +81,7 @@ export default class PlayersService
         });
 
         PlayersService.players = new Map();
+        
         PlayersService.receivers = new Map();
     }
 
@@ -90,8 +91,6 @@ export default class PlayersService
         LoggerService.green(`Player '${ player.username }' Connected`);
 
         PlayersService.players.get(player.token).send(connectedMessage());
-
-        GamesService.playerJoin(player);
     }
 
     static isPlayerOnline(player)
@@ -133,8 +132,6 @@ export default class PlayersService
         {
             PlayersService.players.delete(player.token);
             LoggerService.red(`Player '${ player.username }' Disconnected`);
-
-            GamesService.playerLeave(player);
         }
     }
 }

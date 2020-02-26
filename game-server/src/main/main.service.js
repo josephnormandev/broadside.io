@@ -11,7 +11,7 @@ export default class MainService
     static async initialize()
     {
         setTimeout(function() {
-            GamesService.createGame(101, new Game({
+            GamesService.createGame(new Game({
                 id: 101,
                 player_1: new Player({
                     token: 'abcd',

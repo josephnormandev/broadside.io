@@ -1,78 +1,70 @@
 import LoggerService from '../logger/logger.service.js';
 
 import Game from './game.js';
-
-import PlayersService from '../players/players.service.js';
 import * as SetPositionReceiver from '../players/receivers/set-position.js';
 
 export default class GamesService
 {
     static games;
+    static game_players;
 
     static initialize()
     {
         Game.initialize(GamesService);
 
         GamesService.games = new Map();
+        GamesService.game_players = new Map();
 
         GamesService.receivers = new Map();
         GamesService.receivers.set(SetPositionReceiver.receiver, SetPositionReceiver);
     }
 
-    static createGame(id, game)
+    static createGame(game)
     {
-        GamesService.games.set(id, game);
-        LoggerService.cyan(`Game '${ id }' has been created`);
+        GamesService.games.set(game.id, game);
+        GamesService.game_players.set(game.player_1.token, game.id);
+        GamesService.game_players.set(game.player_2.token, game.id);
+
+        LoggerService.cyan(`Game '${ game.id }' has been created`);
     }
 
-    static playerJoin(player)
+    static endGame(game)
     {
-        for(var [game_id, game] of GamesService.games)
+        if(GamesService.games.has(game.id))
         {
-            if(game.hasPlayer(player))
-            {
-                game.checkOnline();
-            }
+            var game = GamesService.games.get(game.id);
+            GamesService.game_players.delete(game.player_1.token);
+            GamesService.game_players.delete(game.player_2.token);
+            GamesService.games.delete(game.id);
+
+            LoggerService.red(`Game '${ game.id }' has ended`);
         }
     }
 
     static isPlayerInGame(player)
     {
-        var game_player = GamesService.getGamePlayer(player);
-        return game_player != null;
+        return GamesService.game_players.has(player.token);
     }
 
     static getGamePlayer(player)
     {
-        for(var [game_id, game] of GamesService.games)
+        if(GamesService.game_players.has(player.token))
         {
-            if(game.hasPlayer(player))
-            {
-                return game.getPlayer(player);
-            }
+            var game_id = GamesService.game_players.get(player.token);
+            var game = GamesService.games.get(game_id);
+
+            return game.getPlayer(player);
         }
         return null;
     }
 
     static handleGameMessage(player, receiver, data)
     {
-        for(var [game_id, game] of GamesService.games)
+        if(GamesService.game_players.has(player.token))
         {
-            if(game.hasPlayer(player))
-            {
-                game.handleMessage(player, receiver, data);
-            }
-        }
-    }
-
-    static playerLeave(player)
-    {
-        for(var [game_id, game] of GamesService.games)
-        {
-            if(game.hasPlayer(player))
-            {
-                game.checkOnline();
-            }
+            console.log(player, receiver, data);
+            var game_id = GamesService.game_players.get(player.token);
+            GamesService.games.get(game_id).handleMessage(player, receiver, data);
         }
     }
 }
