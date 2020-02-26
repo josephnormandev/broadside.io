@@ -1,0 +1,11 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "The actual game that is played in broadside.io",
+  "main": "src/index.js",
+  "scripts": {
+  },
+  "type": "module",
+  "author": "josephnormandev",
+  "license": "ISC"
+}
