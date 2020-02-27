@@ -22,8 +22,10 @@ export default class GamesService
     static createGame(game)
     {
         GamesService.games.set(game.id, game);
-        GamesService.game_players.set(game.player_1.token, game.id);
-        GamesService.game_players.set(game.player_2.token, game.id);
+        for(var player of Object.values(game.players))
+        {
+            GamesService.game_players.set(player.token, game.id);
+        }
 
         LoggerService.cyan(`Game '${ game.id }' has been created`);
     }
@@ -33,8 +35,10 @@ export default class GamesService
         if(GamesService.games.has(game.id))
         {
             var game = GamesService.games.get(game.id);
-            GamesService.game_players.delete(game.player_1.token);
-            GamesService.game_players.delete(game.player_2.token);
+            for(var player of Object.values(game.players))
+            {
+                GamesService.game_players.delete(player.token);
+            }
             GamesService.games.delete(game.id);
 
             LoggerService.red(`Game '${ game.id }' has ended`);

@@ -1,4 +1,4 @@
-import { Simulation } from 'game';
+import { Simulation, Maps } from 'game';
 
 import LoggerService from '../logger/logger.service.js';
 
@@ -22,8 +22,12 @@ export default class Game
     {
         this.id = game.id;
 
-        this.player_1 = new GamePlayer(game.player_1, 1, this);
-        this.player_2 = new GamePlayer(game.player_2, 2, this);
+        this.players = {
+            1: new GamePlayer(game.player_1, 1, this),
+            2: new GamePlayer(game.player_2, 2, this),
+        };
+
+        this.simulation = new Simulation(new Maps.TestMap());
     }
 
     hasPlayer(player)
@@ -33,13 +37,10 @@ export default class Game
 
     getPlayer(player)
     {
-        if(this.player_1.equals(player))
+        for(const game_player of Object.values(this.players))
         {
-            return this.player_1;
-        }
-        else if(this.player_2.equals(player))
-        {
-            return this.player_2;
+            if(game_player.equals(player))
+                return game_player;
         }
         return null;
     }
@@ -48,13 +49,13 @@ export default class Game
     {
         if(Game.Service.receivers.has(receiver))
         {
-            if(this.player_1.equals(player))
+            if(this.players[1].equals(player))
                 Game.Service.receivers.get(receiver).receive(
-                    this, this.player_1, this.player_2, data,
+                    this, this.players[1], this.players[2], data,
                 );
-            else if(this.player_2.equals(player))
+            else if(this.players[2].equals(player))
                 Game.Service.receivers.get(receiver).receive(
-                    this, this.player_2, this.player_1, data,
+                    this, this.players[2], this.players[1], data,
                 );
         }
     }
