@@ -3,6 +3,7 @@ import { Simulation, Maps } from 'game';
 import LoggerService from '../logger/logger.service.js';
 
 import GamePlayer from '../players/game-player.js';
+import gameJoinMessage from '../players/messages/game-join.js';
 
 // This game holds the players and keeps track of the game simulation. This also
 // means that it controls the looping of the engine. It will also hold the game
@@ -27,7 +28,34 @@ export default class Game
             2: new GamePlayer(game.player_2, 2, this),
         };
 
-        this.simulation = new Simulation(new Maps.TestMap());
+        this.simulation = new Simulation();
+        this.simulation.loadFromMap(new Maps.TestMap());
+
+        var self = this;
+        this.game_loop = setInterval(function() {
+            self.update();
+        }, 1000 / 60);
+    }
+
+    update()
+    {
+        this.simulation.update();
+    }
+
+    playerJoin(player)
+    {
+        for(const team_num in this.players)
+        {
+            var game_player = this.players[team_num];
+            if(game_player.equals(player))
+            {
+                game_player.send(gameJoinMessage(
+                    team_num,
+                    this.players,
+                    this.simulation.dumpToMessage(),
+                ));
+            }
+        }
     }
 
     hasPlayer(player)
@@ -43,6 +71,11 @@ export default class Game
                 return game_player;
         }
         return null;
+    }
+
+    playerLeave(player)
+    {
+
     }
 
     handleMessage(player, receiver, data)

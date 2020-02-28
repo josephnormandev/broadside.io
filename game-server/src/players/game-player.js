@@ -9,20 +9,11 @@ export default class GamePlayer extends Player
         GamePlayer.Service = service;
     }
 
-    constructor(player, number, game)
+    constructor(player, team_num)
     {
         super(player);
 
-        this.number = number;
-        this.game = game;
-
-        this.setPosition(0, 0);
-    }
-
-    setPosition(x, y)
-    {
-        this.x = x;
-        this.y = y;
+        this.team_num = team_num;
     }
 
     send(message)

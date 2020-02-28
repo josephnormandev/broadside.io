@@ -1,7 +1,6 @@
 import LoggerService from '../logger/logger.service.js';
 
 import Game from './game.js';
-import * as SetPositionReceiver from '../players/receivers/set-position.js';
 
 export default class GamesService
 {
@@ -16,7 +15,6 @@ export default class GamesService
         GamesService.game_players = new Map();
 
         GamesService.receivers = new Map();
-        GamesService.receivers.set(SetPositionReceiver.receiver, SetPositionReceiver);
     }
 
     static createGame(game)
@@ -45,6 +43,15 @@ export default class GamesService
         }
     }
 
+    static playerJoin(player)
+    {
+        if(GamesService.game_players.has(player.token))
+        {
+            var game_id = GamesService.game_players.get(player.token);
+            GamesService.games.get(game_id).playerJoin(player);
+        }
+    }
+
     static isPlayerInGame(player)
     {
         return GamesService.game_players.has(player.token);
@@ -66,9 +73,17 @@ export default class GamesService
     {
         if(GamesService.game_players.has(player.token))
         {
-            console.log(player, receiver, data);
             var game_id = GamesService.game_players.get(player.token);
             GamesService.games.get(game_id).handleMessage(player, receiver, data);
+        }
+    }
+
+    static playerLeave(player)
+    {
+        if(GamesService.game_players.has(player.token))
+        {
+            var game_id = GamesService.game_players.get(player.token);
+            GamesService.games.get(game_id).playerLeave(player);
         }
     }
 }
