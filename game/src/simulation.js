@@ -11,11 +11,11 @@ export default class Simulation
     {
         switch(object.type)
         {
-            case GameObject.TYPE:
+            case GameObject.TYPE():
                 return GameObject;
-            case Ship.TYPE:
+            case Ship.TYPE():
                 return Ship;
-            case BattleShip.TYPE:
+            case BattleShip.TYPE():
                 return BattleShip;
             default:
                 throw 'Unknown Type!';
@@ -26,6 +26,8 @@ export default class Simulation
     {
         this.engine = Engine.create();
         this.engine.world.gravity.y = 0;
+
+        this.render = null;
 
         this.teams = {
             1: new Map(),
@@ -70,6 +72,15 @@ export default class Simulation
     loadFromMessage(message)
     {
 
+    }
+
+    createRender(element)
+    {
+        this.render = Render.create({
+            element: element,
+            engine: this.engine,
+        });
+        Render.run(this.render);
     }
 
     addObject(team_num, object)

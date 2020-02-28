@@ -5,8 +5,15 @@ import Ship from './ship.js';
 
 export default class BattleShip extends Ship
 {
-    static TYPE = 'battle-ship';
-    static MASS = 500;
+    static TYPE()
+    {
+        return 'game-object';
+    }
+
+    static MASS()
+    {
+        return 500;
+    }
 
     static create(position, velocity, angle)
     {
@@ -18,7 +25,7 @@ export default class BattleShip extends Ship
         });
 
         var battle_ship = {
-            ...Ship.create(body, BattleShip.TYPE, BattleShip.MASS, position, velocity, angle),
+            ...Ship.create(body, BattleShip.TYPE(), BattleShip.MASS(), position, velocity, angle),
         };
 
         return battle_ship;

@@ -3,7 +3,10 @@ const { Body, Vector } = Matter;
 
 export default class GameObject
 {
-    static TYPE = 'game-object';
+    static TYPE()
+    {
+        return 'game-object';
+    }
 
     static create(body, type, position, velocity, angle)
     {

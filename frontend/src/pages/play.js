@@ -1,11 +1,10 @@
 import React from 'react';
 import { Button, Badge } from 'react-bootstrap';
+import { Simulation } from 'game';
 
 import GenericClient from '../workers/client.js';
 import tokenMessage from '../workers/game/messages/token.js';
-import setPositionMessage from '../workers/game/messages/set-position.js';
 import * as ConnectedReceiver from '../workers/game/receivers/connected.js';
-import * as PositionChangeReceiver from '../workers/game/receivers/position-change.js';
 
 import PasswordField from '../forms/fields/password';
 
@@ -23,25 +22,18 @@ export default class PlayPage extends React.Component
         );
 
         this.password = null;
-
         this.state = {
             opened: false,
             connected: false,
             closed: false,
             submitted: false,
-            pos_self: {
-                x: 0,
-                y: 0,
-            },
-            pos_enemy: {
-                x: 0,
-                y: 0,
-            },
         };
 
         this.receivers = new Map();
         this.receivers.set(ConnectedReceiver.receiver, ConnectedReceiver);
-        this.receivers.set(PositionChangeReceiver.receiver, PositionChangeReceiver);
+
+        this.simulation = new Simulation();
+        this.simulation_mount = null;
     }
 
     async componentDidMount()
@@ -79,6 +71,7 @@ export default class PlayPage extends React.Component
             connected: true,
             closed: false,
         });
+        this.simulation.createRender(this.simulation_mount);
     }
 
     handleClose()
@@ -118,39 +111,15 @@ export default class PlayPage extends React.Component
                     </div>
                 } { this.state.submitted &&
                     <div style={{
-                        margin: '0px',
-                        width: '500px',
-                        height: '500px',
-                        backgroundColor: 'black',
-                    }} onClick={ this.handleClick.bind(this) }>
-                        <div style={{
-                            borderRadius: '50%',
-                            width: '25px',
-                            height: '25px',
-                            backgroundColor: 'blue',
-                            position: 'absolute',
-                            left: this.state.pos_self.x,
-                            top: this.state.pos_self.y,
-                        }} />
-                        <div style={{
-                            borderRadius: '50%',
-                            width: '25px',
-                            height: '25px',
-                            backgroundColor: 'red',
-                            position: 'absolute',
-                            left: this.state.pos_enemy.x,
-                            top: this.state.pos_enemy.y,
-                        }} />
-                    </div>
+                        width: '100vw',
+                        height: 'calc(100vh - 50px)',
+                    }} ref={
+                        ref => ( this.simulation_mount = ref)
+                    } />
                 } </>
                 <Badge variant={ variant }>Connection</Badge>
             </div>
         );
-    }
-
-    handleClick(e)
-    {
-        this.client.sendMessage(setPositionMessage(e.pageX, e.pageY));
     }
 
     handleSubmit(e)

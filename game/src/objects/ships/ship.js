@@ -5,7 +5,10 @@ import GameObject from '../game-object.js';
 
 export default class Ship extends GameObject
 {
-    static TYPE = 'ship';
+    static TYPE()
+    {
+        return 'ship';
+    }
 
     static create(body, type, mass, position, velocity, angle)
     {
