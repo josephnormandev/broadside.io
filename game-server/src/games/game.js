@@ -3,7 +3,9 @@ import { Simulation, Maps } from 'game';
 import LoggerService from '../logger/logger.service.js';
 
 import GamePlayer from '../players/game-player.js';
-import gameJoinMessage from '../players/messages/game-join.js';
+import teamAssignmentMessage from '../players/messages/team-assignment.js';
+import bundledMessage from '../players/messages/bundled.js';
+import addObjectMessage from '../players/messages/add-object.js';
 
 // This game holds the players and keeps track of the game simulation. This also
 // means that it controls the looping of the engine. It will also hold the game
@@ -29,7 +31,7 @@ export default class Game
         };
 
         this.simulation = new Simulation();
-        this.simulation.loadFromMap(new Maps.TestMap());
+        this.simulation.createFromMap(new Maps.TestMap());
 
         var self = this;
         this.game_loop = setInterval(function() {
@@ -49,11 +51,17 @@ export default class Game
             var game_player = this.players[team_num];
             if(game_player.equals(player))
             {
-                game_player.send(gameJoinMessage(
-                    team_num,
-                    this.players,
-                    this.simulation.dumpToMessage(),
-                ));
+                game_player.send(teamAssignmentMessage(team_num));
+
+                var object_bases = this.simulation.getObjectBases();
+                var messages = [];
+
+                for(const object_base of Object.values(object_bases))
+                {
+                    messages.push(addObjectMessage(object_base));
+                }
+
+                game_player.send(bundledMessage(messages));
             }
         }
     }

@@ -7,15 +7,22 @@ export default class TestMap
 {
     constructor()
     {
-        this.teams = {
-            1: new Map(),
-            2: new Map(),
-        };
+        this.objects = new Map();
 
-        for(const team of Object.values(this.teams))
-        {
-            var b1 = BattleShip.create(Vector.create(50, 50), 1, 0);
-            team.set(BattleShip.getId(b1), b1);
-        }
+        var b1 = BattleShip.create({
+            team_num: 1,
+            position: Vector.create(50, 50),
+            angle: 1,
+            velocity: Vector.create(5, 5),
+        });
+        this.objects.set(b1.id, b1);
+
+        var b1 = BattleShip.create({
+            team_num: 2,
+            position: Vector.create(100, 100),
+            angle: 1,
+            velocity: Vector.create(5, 5),
+        });
+        this.objects.set(b1.id, b1);
     }
 }

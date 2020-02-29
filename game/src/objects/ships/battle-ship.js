@@ -1,40 +1,49 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import Ship from './ship.js';
+import GameObject from '../game-object.js';
 
-export default class BattleShip extends Ship
+export default class BattleShip extends GameObject
 {
     static TYPE()
     {
-        return 'game-object';
+        return 'battle-ship';
     }
 
-    static MASS()
+    static create(object)
     {
-        return 500;
+        if(object.team_num == null)
+            throw 'Missing Parameter';
+
+        object.isStatic = false;
+        object.mass = 500;
+        var game_object = GameObject.create(
+            object,
+            Body.create({
+                parts: [
+                    Bodies.rectangle(0, 0, 16, 40),
+                    Bodies.circle(0, 0, 12),
+                ],
+            }),
+            BattleShip.TYPE(),
+        );
+        game_object.team_num = object.team_num;
+
+        return game_object;
     }
 
-    static create(position, velocity, angle)
-    {
-        var body = Body.create({
-            parts: [
-                Bodies.rectangle(0, 0, 8, 20),
-                Bodies.circle(0, 0, 12),
-            ],
-        });
-
-        var battle_ship = {
-            ...Ship.create(body, BattleShip.TYPE(), BattleShip.MASS(), position, velocity, angle),
-        };
-
-        return battle_ship;
-    }
-
-    static dump(battle_ship)
+    static getBase(battle_ship)
     {
         return {
-            ...Ship.dump(battle_ship),
+            ...GameObject.getBase(battle_ship),
+            team_num: battle_ship.team_num,
+        };
+    }
+
+    static getUpdates(battle_ship)
+    {
+        return {
+            ...GameObject.getUpdates(battle_ship),
         };
     }
 }

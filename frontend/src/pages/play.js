@@ -5,6 +5,8 @@ import { Simulation } from 'game';
 import GenericClient from '../workers/client.js';
 import tokenMessage from '../workers/game/messages/token.js';
 import * as ConnectedReceiver from '../workers/game/receivers/connected.js';
+import * as BundledReceiver from '../workers/game/receivers/bundled.js';
+import * as AddObjectReceiver from '../workers/game/receivers/add-object.js';
 
 import PasswordField from '../forms/fields/password';
 
@@ -31,6 +33,9 @@ export default class PlayPage extends React.Component
 
         this.receivers = new Map();
         this.receivers.set(ConnectedReceiver.receiver, ConnectedReceiver);
+        this.receivers.set(BundledReceiver.receiver, BundledReceiver);
+        this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver);
+        console.log(this.receivers);
 
         this.simulation = new Simulation();
         this.simulation_mount = null;
@@ -139,7 +144,6 @@ export default class PlayPage extends React.Component
 
     handlePasswordChange(data)
     {
-        console.log(data.value);
         this.password = data.value;
     }
 }

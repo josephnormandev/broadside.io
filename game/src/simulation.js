@@ -2,26 +2,10 @@ import Matter from 'matter-js';
 const { Engine, Render, World, Bodies, Common } = Matter;
 
 import GameObject from './objects/game-object.js';
-import Ship from './objects/ships/ship.js';
-import BattleShip from './objects/ships/battle-ship.js';
+import { getType } from './objects/objects.js';
 
 export default class Simulation
 {
-    static getType(object)
-    {
-        switch(object.type)
-        {
-            case GameObject.TYPE():
-                return GameObject;
-            case Ship.TYPE():
-                return Ship;
-            case BattleShip.TYPE():
-                return BattleShip;
-            default:
-                throw 'Unknown Type!';
-        }
-    }
-
     constructor()
     {
         this.engine = Engine.create();
@@ -29,10 +13,27 @@ export default class Simulation
 
         this.render = null;
 
-        this.teams = {
-            1: new Map(),
-            2: new Map(),
-        };
+        this.objects = new Map();
+    }
+
+    // used in the backend to load all of the settings from a map file
+    createFromMap(map)
+    {
+        for(var [id, object] of map.objects)
+        {
+            this.addObject(object);
+        }
+    }
+
+    // used in the frontend to make this a rendered simulation
+    createRender(element)
+    {
+        this.render = Render.create({
+            element: element,
+            engine: this.engine,
+        });
+        Engine.run(this.engine);
+        Render.run(this.render);
     }
 
     update(time)
@@ -40,52 +41,21 @@ export default class Simulation
         Engine.update(this.engine, time);
     }
 
-    // used in the backend to load all of the settings from a map file
-    loadFromMap(map)
+    // used in the backend to dump all of the objects to a parseable format
+    // to be sent to the frontend
+    getObjectBases()
     {
-        for(const team_num in map.teams)
+        var object_bases = {};
+        for(var [id, object] of this.objects)
         {
-            for(var [id, object] of map.teams[team_num])
-            {
-                this.addObject(team_num, object);
-            }
+            object_bases[id] = getType(object).getBase(object);
         }
+        return object_bases;
     }
 
-    // used in the backend to send to the frontend
-    dumpToMessage()
+    addObject(object)
     {
-        var dumpMessage = {};
-
-        for(const team_num in this.teams)
-        {
-            dumpMessage[team_num] = {};
-            for(var [id, object] of this.teams[team_num])
-            {
-                dumpMessage[team_num][id] = Simulation.getType(object).dump(object);
-            }
-        }
-        return dumpMessage;
-    }
-
-    // used in the frontend to load the instance of the backend to the frontend
-    loadFromMessage(message)
-    {
-
-    }
-
-    createRender(element)
-    {
-        this.render = Render.create({
-            element: element,
-            engine: this.engine,
-        });
-        Render.run(this.render);
-    }
-
-    addObject(team_num, object)
-    {
-        this.teams[team_num].set(GameObject.getId(object), object);
-        World.addBody(this.engine.world, object.body);
+        this.objects.set(object.id, object);
+        World.addBody(this.engine.world, object);
     }
 }
