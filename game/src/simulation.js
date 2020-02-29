@@ -1,5 +1,5 @@
 import Matter from 'matter-js';
-const { Engine, Render, World, Bodies, Common } = Matter;
+const { Engine, Render, World, Bodies, Body, Common } = Matter;
 
 import GameObject from './objects/game-object.js';
 import { getType } from './objects/objects.js';
@@ -19,9 +19,9 @@ export default class Simulation
     // used in the backend to load all of the settings from a map file
     createFromMap(map)
     {
-        for(var [id, object] of map.objects)
+        for(var base_object of map.objects)
         {
-            this.addObject(object);
+            this.addObject(base_object);
         }
     }
 
@@ -39,23 +39,48 @@ export default class Simulation
     update(time)
     {
         Engine.update(this.engine, time);
+
+        var game_object = this.objects.get(3);
+
+        Body.rotate(game_object, .01);
     }
 
     // used in the backend to dump all of the objects to a parseable format
     // to be sent to the frontend
-    getObjectBases()
+    getBaseObjects()
     {
-        var object_bases = {};
+        var base_objects = {};
         for(var [id, object] of this.objects)
         {
-            object_bases[id] = getType(object).getBase(object);
+            base_objects[id] = getType(object).getBaseObject(object);
         }
-        return object_bases;
+        return base_objects;
     }
 
-    addObject(object)
+    getUpdateObjects()
     {
-        this.objects.set(object.id, object);
-        World.addBody(this.engine.world, object);
+        var update_objects = {};
+        for(var [id, object] of this.objects)
+        {
+            update_objects[id] = getType(object).getUpdateObject(object);
+        }
+        return update_objects;
+    }
+
+    // used in the frontend to parse those dumps from the backend
+    addObject(base_object)
+    {
+        var game_object = getType(base_object).create(base_object);
+        this.objects.set(game_object.id, game_object);
+        World.addBody(this.engine.world, game_object);
+    }
+
+    updateObject(update_object)
+    {
+        if(this.objects.has(update_object.id))
+        {
+            var game_object = this.objects.get(update_object.id);
+            getType(game_object).update(game_object, update_object);
+        }
     }
 }

@@ -7,6 +7,7 @@ import tokenMessage from '../workers/game/messages/token.js';
 import * as ConnectedReceiver from '../workers/game/receivers/connected.js';
 import * as BundledReceiver from '../workers/game/receivers/bundled.js';
 import * as AddObjectReceiver from '../workers/game/receivers/add-object.js';
+import * as UpdateObjectReceiver from '../workers/game/receivers/update-object.js';
 
 import PasswordField from '../forms/fields/password';
 
@@ -35,6 +36,7 @@ export default class PlayPage extends React.Component
         this.receivers.set(ConnectedReceiver.receiver, ConnectedReceiver);
         this.receivers.set(BundledReceiver.receiver, BundledReceiver);
         this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver);
+        this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver);
         console.log(this.receivers);
 
         this.simulation = new Simulation();

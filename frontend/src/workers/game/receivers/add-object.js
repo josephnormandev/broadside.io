@@ -1,13 +1,10 @@
-import { Simulation, Objects } from 'game';
-
 export function receive(page, data)
 {
-    var object = data.object != null ? data.object : null;
+    var base_object = data.base_object != null ? data.base_object : null;
 
-    if(object != null)
+    if(base_object != null)
     {
-        var type = Objects.getType(object);
-        page.simulation.addObject(type.create(object));
+        page.simulation.addObject(base_object);
     }
 }
 

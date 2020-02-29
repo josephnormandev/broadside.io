@@ -10,15 +10,15 @@ export default class BattleShip extends GameObject
         return 'battle-ship';
     }
 
-    static create(object)
+    static create(base_object)
     {
-        if(object.team_num == null)
+        if(base_object.team_num == null)
             throw 'Missing Parameter';
 
-        object.isStatic = false;
-        object.mass = 500;
+        base_object.isStatic = true;
+        base_object.mass = 500;
         var game_object = GameObject.create(
-            object,
+            base_object,
             Body.create({
                 parts: [
                     Bodies.rectangle(0, 0, 16, 40),
@@ -27,23 +27,28 @@ export default class BattleShip extends GameObject
             }),
             BattleShip.TYPE(),
         );
-        game_object.team_num = object.team_num;
+        game_object.team_num = base_object.team_num;
 
         return game_object;
     }
 
-    static getBase(battle_ship)
+    static update(battle_ship, update_object)
+    {
+        GameObject.update(battle_ship, update_object);
+    }
+
+    static getBaseObject(battle_ship)
     {
         return {
-            ...GameObject.getBase(battle_ship),
+            ...GameObject.getBaseObject(battle_ship),
             team_num: battle_ship.team_num,
         };
     }
 
-    static getUpdates(battle_ship)
+    static getUpdateObject(battle_ship)
     {
         return {
-            ...GameObject.getUpdates(battle_ship),
+            ...GameObject.getUpdateObject(battle_ship),
         };
     }
 }

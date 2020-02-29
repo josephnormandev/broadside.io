@@ -6,7 +6,8 @@ export function receive(page, data)
     {
         for(var message of messages)
         {
-            page.handleMessage(message.receiver, message.data);
+            if(message.receiver && message.data)
+                page.handleMessage(message.receiver, message.data);
         }
     }
 }

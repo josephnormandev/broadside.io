@@ -6,6 +6,7 @@ import GamePlayer from '../players/game-player.js';
 import teamAssignmentMessage from '../players/messages/team-assignment.js';
 import bundledMessage from '../players/messages/bundled.js';
 import addObjectMessage from '../players/messages/add-object.js';
+import updateObjectMessage from '../players/messages/update-object.js';
 
 // This game holds the players and keeps track of the game simulation. This also
 // means that it controls the looping of the engine. It will also hold the game
@@ -42,6 +43,18 @@ export default class Game
     update()
     {
         this.simulation.update();
+
+        for(const game_player of Object.values(this.players))
+        {
+            var update_objects = this.simulation.getUpdateObjects();
+            var messages = [];
+
+            for(const update_object of Object.values(update_objects))
+            {
+                messages.push(updateObjectMessage(update_object));
+            }
+            game_player.send(bundledMessage(messages));
+        }
     }
 
     playerJoin(player)
@@ -53,12 +66,12 @@ export default class Game
             {
                 game_player.send(teamAssignmentMessage(team_num));
 
-                var object_bases = this.simulation.getObjectBases();
+                var base_objects = this.simulation.getBaseObjects();
                 var messages = [];
 
-                for(const object_base of Object.values(object_bases))
+                for(const base_object of Object.values(base_objects))
                 {
-                    messages.push(addObjectMessage(object_base));
+                    messages.push(addObjectMessage(base_object));
                 }
 
                 game_player.send(bundledMessage(messages));
