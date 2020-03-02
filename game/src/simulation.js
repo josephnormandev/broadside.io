@@ -38,11 +38,11 @@ export default class Simulation
 
     update(time)
     {
-        Engine.update(this.engine, time);
-
         var game_object = this.objects.get(3);
-
         Body.rotate(game_object, .01);
+        getType(game_object).goForward(game_object);
+
+        Engine.update(this.engine, time);
     }
 
     // used in the backend to dump all of the objects to a parseable format

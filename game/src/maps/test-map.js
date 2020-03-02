@@ -11,12 +11,12 @@ export default class TestMap
         this.objects.add({
             type: 'battle-ship',
             team_num: 1,
-            position: Vector.create(50, 50),
+            position: Vector.create(250, 250),
         });
         this.objects.add({
             type: 'battle-ship',
             team_num: 2,
-            position: Vector.create(100, 100),
+            position: Vector.create(250, 300),
         });
     }
 }
