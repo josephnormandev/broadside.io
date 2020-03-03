@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch ../game/src --experimental-modules src/index.js"
+    "start": "nodemon --watch ../game/src --watch src/ --experimental-modules src/index.js"
   },
   "type": "module",
   "author": "",

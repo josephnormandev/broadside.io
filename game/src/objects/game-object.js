@@ -3,10 +3,18 @@ const { Body, Vector } = Matter;
 
 export default class GameObject
 {
-    static create(base_object, body, type)
+    static create(base_object, body)
     {
+        if(base_object.s_id == null)
+            throw 'Missing Parameter - GameObject.s_id';
+        if(base_object.type == null)
+            throw 'Missing Parameter - GameObject.type';
+        if(base_object.position == null)
+            throw 'Missing Parameter - GameObject.position';
+
         var game_object = body;
-        game_object.type = type;
+        game_object.s_id = base_object.s_id;
+        game_object.type = base_object.type;
 
         if(base_object.isStatic != null)
             Body.setStatic(game_object, base_object.isStatic);
@@ -34,7 +42,7 @@ export default class GameObject
     static getBaseObject(game_object)
     {
         return {
-            id: game_object.id,
+            s_id: game_object.s_id,
             type: game_object.type,
             mass: game_object.mass,
             isStatic: game_object.isStatic,
@@ -46,11 +54,15 @@ export default class GameObject
 
     static getUpdateObject(game_object)
     {
-        return {
-            id: game_object.id,
-            position: game_object.position,
-            velocity: game_object.velocity,
-            angle: game_object.angle,
-        };
+        if(!game_object.isStatic)
+        {
+            return {
+                s_id: game_object.s_id,
+                position: game_object.position,
+                velocity: game_object.velocity,
+                angle: game_object.angle,
+            };
+        }
+        return {}; // empty object for static objects
     }
 }

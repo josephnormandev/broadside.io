@@ -38,12 +38,19 @@ export default class Game
         this.game_loop = setInterval(function() {
             self.update();
         }, 1000 / 60);
+        this.send_loop = setInterval(function() {
+            self.send();
+        }, 1000 / 20);
     }
 
     update()
     {
         this.simulation.update();
+    }
 
+    send()
+    {
+        console.log(this.simulation.objects.get(2).position);
         for(const game_player of Object.values(this.players))
         {
             var update_objects = this.simulation.getUpdateObjects();

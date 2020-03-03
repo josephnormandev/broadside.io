@@ -38,7 +38,7 @@ export default class Simulation
 
     update(time)
     {
-        var game_object = this.objects.get(3);
+        var game_object = this.objects.get(1);
         Body.rotate(game_object, .01);
         getType(game_object).goForward(game_object);
 
@@ -71,15 +71,15 @@ export default class Simulation
     addObject(base_object)
     {
         var game_object = getType(base_object).create(base_object);
-        this.objects.set(game_object.id, game_object);
+        this.objects.set(game_object.s_id, game_object);
         World.addBody(this.engine.world, game_object);
     }
 
     updateObject(update_object)
     {
-        if(this.objects.has(update_object.id))
+        if(this.objects.has(update_object.s_id))
         {
-            var game_object = this.objects.get(update_object.id);
+            var game_object = this.objects.get(update_object.s_id);
             getType(game_object).update(game_object, update_object);
         }
     }
