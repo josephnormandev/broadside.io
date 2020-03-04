@@ -14,7 +14,6 @@ export default class Tile extends GameObject
     {
         base_object.type = Tile.TYPE();
         base_object.isStatic = true;
-        //base_object.mass = 500;
         var game_object = GameObject.create(
             base_object,
             Bodies.polygon(0, 0, 6, 20, {

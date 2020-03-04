@@ -50,7 +50,6 @@ export default class Game
 
     send()
     {
-        console.log(this.simulation.objects.get(2).position);
         for(const game_player of Object.values(this.players))
         {
             var update_objects = this.simulation.getUpdateObjects();

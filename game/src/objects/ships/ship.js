@@ -2,6 +2,7 @@ import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
 import GameObject from '../game-object.js';
+import Categories from '../categories.js';
 
 export default class Ship extends GameObject
 {
@@ -14,6 +15,17 @@ export default class Ship extends GameObject
     {
         if(base_object.team_num == null)
             throw 'Missing Parameter - Ship.team_num';
+
+        if(base_object.team_num == 1)
+        {
+            base_object.category = Categories.Team1;
+            base_object.mask = Categories.Team2 | Categories.Water;
+        }
+        else if(base_object.team_num == 2)
+        {
+            base_object.category = Categories.Team2;
+            base_object.mask = Categories.Team1 | Categories.Water;
+        }
 
         base_object.type = Ship.TYPE();
         base_object.isStatic = false;

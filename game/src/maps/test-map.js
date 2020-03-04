@@ -1,6 +1,8 @@
 import Matter from 'matter-js';
 const { Common, Vector } = Matter;
 
+const map = '';
+
 export default class TestMap
 {
     constructor()
@@ -19,16 +21,11 @@ export default class TestMap
             position: Vector.create(250, 200),
         });
         this.objects.add({
-            s_id: 3,
-            type: 'tile',
-            position: Vector.create(300, 300),
-        });
-        // c^2 = 2(a^2)
-
-        this.objects.add({
-            s_id: 4,
-            type: 'tile',
-            position: Vector.create(300 + 30, 300 - Math.cos(Math.PI / 6) * 20),
+            s_id: 5,
+            type: 'world-bound',
+            width: 1000,
+            height: 800,
+            position: Vector.create(500, 400),
         });
     }
 }
