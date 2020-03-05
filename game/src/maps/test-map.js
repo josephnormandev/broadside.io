@@ -2,9 +2,9 @@ import Matter from 'matter-js';
 const { Common, Vector } = Matter;
 
 const map = [
-    ['w', 'w', 'g', 'g', 'w', 'w', 'w', 'w', 'w', 'w'],
-      ['w', 'w', 'g', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
-    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'g', 'g', 'g', 'g', 'g', 'g', 'w', 'w'],
+      ['w', 'w', 'g', 'g', 'g', 'g', 'g', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'g', 'g', 'g', 'w', 'w', 'w'],
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
     ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
@@ -12,9 +12,9 @@ const map = [
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
     ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
-    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['g', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
-    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['g', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
     ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
 ];
@@ -50,7 +50,10 @@ export default class TestMap
                 }
                 else
                 {
-                    position = Vector.create(0, 0);
+                    position = Vector.create(
+                        x * 2 * b + b,
+                        y * a,
+                    );
                 }
                 this.objects.add({
                     s_id: index,
@@ -59,25 +62,28 @@ export default class TestMap
                 });
             }
         }
+        index ++;
 
+        const width = x * 2 * b - b;
+        const height = y * a - a;
         this.objects.add({
             s_id: index ++,
             type: 'world-bound',
-            width: x * 2 * b,
-            height: y * a,
-            position: Vector.create(x * b, y * a / 2),
+            width: width,
+            height: height,
+            position: Vector.create(width / 2, height / 2),
         });
         this.objects.add({
             s_id: index ++,
             type: 'ship',
             team_num: 1,
-            position: Vector.create(250, 250),
+            position: Vector.create(250, 150),
         });
         this.objects.add({
             s_id: index ++,
             type: 'ship',
             team_num: 2,
-            position: Vector.create(250, 200),
+            position: Vector.create(100, 150),
         });
     }
 }

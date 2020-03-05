@@ -16,7 +16,7 @@ export default class GroundTile extends Tile
         base_object.type = GroundTile.TYPE();
         base_object.category = Categories.Ground;
         var tile = Tile.create(base_object);
-        tile.render.fillStyle = '#aaaaaa';
+        tile.render.fillStyle = '#00ff00';
         return tile;
     }
 }

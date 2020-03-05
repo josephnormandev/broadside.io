@@ -39,6 +39,7 @@ export default class Ship extends GameObject
                 ],
             }),
         );
+        game_object.render.fillStyle = '#aaaaaa';
         game_object.team_num = base_object.team_num;
 
         return game_object;
