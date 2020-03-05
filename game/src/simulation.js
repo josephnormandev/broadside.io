@@ -31,6 +31,9 @@ export default class Simulation
         this.render = Render.create({
             element: element,
             engine: this.engine,
+            options: {
+                wireframes: false,
+            }
         });
         Engine.run(this.engine);
         Render.run(this.render);
@@ -38,10 +41,11 @@ export default class Simulation
 
     update(time)
     {
-        var game_object = this.objects.get(1);
+        /*
+        var game_object = this.objects.get(78);
         Body.rotate(game_object, .01);
         getType(game_object).goForward(game_object);
-
+*/
         Engine.update(this.engine, time);
     }
 
@@ -62,7 +66,9 @@ export default class Simulation
         var update_objects = {};
         for(var [id, object] of this.objects)
         {
-            update_objects[id] = getType(object).getUpdateObject(object);
+            var update_object = getType(object).getUpdateObject(object);
+            if(Object.entries(update_object).length != 0)
+                update_objects[id] = update_object;
         }
         return update_objects;
     }

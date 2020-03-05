@@ -2,7 +2,6 @@ import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
 import GameObject from '../game-object.js';
-import Categories from '../categories.js';
 
 export default class Tile extends GameObject
 {
@@ -13,9 +12,12 @@ export default class Tile extends GameObject
 
     static create(base_object)
     {
-        base_object.type = Tile.TYPE();
+        if(base_object.category == null)
+            throw 'Missing Parameter - Tile.category';
+        if(base_object.type == null)
+            throw 'Cannot create of Abstract Tile';
+
         base_object.isStatic = true;
-        base_object.category = Categories.Ground;
         var game_object = GameObject.create(
             base_object,
             Bodies.polygon(0, 0, 6, 20, {

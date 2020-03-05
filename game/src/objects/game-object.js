@@ -18,7 +18,8 @@ export default class GameObject
         game_object.s_id = base_object.s_id;
         game_object.type = base_object.type;
         game_object.collisionFilter.category = base_object.category;
-        
+        game_object.label = game_object.s_id;
+
         if(base_object.mask != null)
             game_object.collisionFilter.mask = base_object.mask;
         if(base_object.isStatic != null)
