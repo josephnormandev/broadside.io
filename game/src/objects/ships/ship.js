@@ -19,13 +19,15 @@ export default class Ship extends GameObject
         if(base_object.team_num == 1)
         {
             base_object.category = Categories.Team1;
-            base_object.mask = Categories.Team2 | Categories.Water;
+            base_object.mask = Categories.Border | Categories.Ground | Categories.Team1;
         }
         else if(base_object.team_num == 2)
         {
             base_object.category = Categories.Team2;
-            base_object.mask = Categories.Team1 | Categories.Water;
+            base_object.mask = Categories.Border | Categories.Ground | Categories.Team2;
         }
+
+        console.log(base_object.mask);
 
         base_object.type = Ship.TYPE();
         base_object.isStatic = false;

@@ -2,6 +2,7 @@ import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
 import GameObject from '../game-object.js';
+import Categories from '../categories.js';
 
 export default class WorldBound extends GameObject
 {
@@ -23,6 +24,7 @@ export default class WorldBound extends GameObject
 
         base_object.type = WorldBound.TYPE();
         base_object.isStatic = true;
+        base_object.category = Categories.Border;
         var game_object = GameObject.create(
             base_object,
             Body.create({

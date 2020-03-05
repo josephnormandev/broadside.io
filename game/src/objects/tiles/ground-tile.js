@@ -7,7 +7,7 @@ export default GroundTile extends Tile
 {
     static TYPE()
     {
-        return 'water-tile';
+        return 'ground-tile';
     }
 
     static create(base_object)

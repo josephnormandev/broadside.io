@@ -13,15 +13,14 @@ export default class GameObject
             throw 'Missing Parameter - GameObject.position';
         if(base_object.category == null)
             throw 'Missing Parameter - GameObject.category';
-        if(base_object.mask == null)
-            throw 'Missing Parameter - GameObject.mask';
 
         var game_object = body;
         game_object.s_id = base_object.s_id;
         game_object.type = base_object.type;
         game_object.collisionFilter.category = base_object.category;
-        game_object.collisionFilter.mask = base_object.mask;
-
+        
+        if(base_object.mask != null)
+            game_object.collisionFilter.mask = base_object.mask;
         if(base_object.isStatic != null)
             Body.setStatic(game_object, base_object.isStatic);
         if(base_object.mass != null)

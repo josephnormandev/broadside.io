@@ -27,5 +27,11 @@ export default class TestMap
             height: 800,
             position: Vector.create(500, 400),
         });
+
+        this.objects.add({
+            s_id: 3,
+            type: 'tile',
+            position: Vector.create(100, 200),
+        });
     }
 }
