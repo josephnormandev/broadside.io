@@ -19,12 +19,12 @@ export default class Ship extends GameObject
         if(base_object.team_num == 1)
         {
             base_object.category = Categories.Team1;
-            base_object.mask = Categories.Border | Categories.Ground | Categories.Team2 | Categories.Team1;
+            base_object.mask = Categories.Border | Categories.Ground | Categories.Team2;
         }
         else if(base_object.team_num == 2)
         {
             base_object.category = Categories.Team2;
-            base_object.mask = Categories.Border | Categories.Ground | Categories.Team1 | Categories.Team2;
+            base_object.mask = Categories.Border | Categories.Ground | Categories.Team1;
         }
 
         base_object.type = Ship.TYPE();
@@ -41,23 +41,14 @@ export default class Ship extends GameObject
         );
         game_object.render.fillStyle = '#aaaaaa';
         game_object.team_num = base_object.team_num;
+        game_object.destinations = [];
 
         return game_object;
     }
 
-    // top is 0, bottom is PI
-    static goForward(ship)
+    static update()
     {
-        var angle = ship.angle;
-        var force = 1;
-        var force_x = force * Math.cos(angle + Math.PI / 2);
-        var force_y = force * Math.sin(angle + Math.PI / 2);
-        Body.setVelocity(ship, Vector.create(force_x, force_y));
-    }
 
-    static update(ship, update_object)
-    {
-        GameObject.update(ship, update_object);
     }
 
     static getBaseObject(ship)
@@ -66,5 +57,11 @@ export default class Ship extends GameObject
             ...GameObject.getBaseObject(ship),
             team_num: ship.team_num,
         };
+    }
+
+    static setDestination(ship, destination)
+    {
+        ship.destinations.push(destination);
+        console.log(ship.destinations);
     }
 }

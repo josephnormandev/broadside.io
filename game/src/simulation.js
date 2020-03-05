@@ -1,8 +1,9 @@
 import Matter from 'matter-js';
 const { Engine, Render, World, Bodies, Body, Common } = Matter;
 
-import GameObject from './objects/game-object.js';
-import { getType } from './objects/objects.js';
+import { getType, GameObject } from './objects/objects.js';
+
+import { SetPositionCommand } from './commands/commands.js';
 
 export default class Simulation
 {
@@ -14,6 +15,9 @@ export default class Simulation
         this.render = null;
 
         this.objects = new Map();
+
+        this.handlers = new Map();
+        this.handlers.set(SetPositionCommand.name, SetPositionCommand.handle);
     }
 
     // used in the backend to load all of the settings from a map file
@@ -41,11 +45,6 @@ export default class Simulation
 
     update(time)
     {
-        /*
-        var game_object = this.objects.get(78);
-        Body.rotate(game_object, .01);
-        getType(game_object).goForward(game_object);
-*/
         Engine.update(this.engine, time);
     }
 
@@ -73,6 +72,14 @@ export default class Simulation
         return update_objects;
     }
 
+    handleCommand(team_num, command)
+    {
+        if(this.handlers.has(command.name))
+        {
+            this.handlers.get(command.name)(this, team_num, command.data);
+        }
+    }
+
     // used in the frontend to parse those dumps from the backend
     addObject(base_object)
     {
@@ -86,7 +93,7 @@ export default class Simulation
         if(this.objects.has(update_object.s_id))
         {
             var game_object = this.objects.get(update_object.s_id);
-            getType(game_object).update(game_object, update_object);
+            getType(game_object).updateFromServer(game_object, update_object);
         }
     }
 }

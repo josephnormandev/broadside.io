@@ -103,6 +103,8 @@ export default class PlayPage extends React.Component
             <div>
                 <> { !this.state.submitted &&
                     <div>
+                        <h6>Player 1's Password: <i>1234</i></h6>
+                        <h6>Player 2's Password: <i>abcd</i></h6>
                         <PasswordField
                             key={ 'password' }
                             field={{
@@ -130,7 +132,10 @@ export default class PlayPage extends React.Component
                         ref => ( this.simulation_mount = ref)
                     } />
                 } </>
-                <Badge variant={ variant }>Connection</Badge>
+                <Badge variant={ variant }>Connection</Badge><br />
+                <small><b>Green:</b> Connected and logged in, play the game!</small><br />
+                <small><b>Yellow:</b> Connected, need to sign in</small><br />
+                <small><b>Red:</b> Disconnected, try refreshing</small><br />
             </div>
         );
     }

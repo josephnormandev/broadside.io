@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "game": "file:../game",
-    "matter-js": "^0.14.2",
     "nodemon": "^2.0.2",
     "request": "^2.88.2",
     "ws": "^7.2.1"

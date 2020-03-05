@@ -1,8 +1,8 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import GameObject from '../game-object.js';
-import Categories from '../categories.js';
+import GameObject from './game-object.js';
+import Categories from './categories.js';
 
 export default class WorldBound extends GameObject
 {

@@ -35,14 +35,9 @@ export default class GameObject
         return game_object;
     }
 
-    static update(game_object, update_object)
+    static update()
     {
-        if(update_object.position != null)
-            Body.setPosition(game_object, update_object.position);
-        if(update_object.velocity != null)
-            Body.setVelocity(game_object, update_object.velocity);
-        if(update_object.angle != null)
-            Body.setAngle(game_object, update_object.angle);
+        
     }
 
     static getBaseObject(game_object)
@@ -70,5 +65,15 @@ export default class GameObject
             };
         }
         return {}; // empty object for static objects
+    }
+
+    static updateFromServer(game_object, update_object)
+    {
+        if(update_object.position != null)
+            Body.setPosition(game_object, update_object.position);
+        if(update_object.velocity != null)
+            Body.setVelocity(game_object, update_object.velocity);
+        if(update_object.angle != null)
+            Body.setAngle(game_object, update_object.angle);
     }
 }

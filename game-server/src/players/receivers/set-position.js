@@ -1,7 +1,7 @@
-import Matter from 'matter-js';
-const { Body, Vector } = Matter;
+import { Commands } from 'game';
+const { SetPositionCommand } = Commands;
 
-export function receive(game, data)
+export function receive(game, player, data)
 {
     var s_id = data.s_id != null ? data.s_id : null;
     var x = data.x != null ? data.x : null;
@@ -9,10 +9,7 @@ export function receive(game, data)
 
     if(s_id != null && x != null && y != null)
     {
-        if(game.simulation.objects.has(s_id))
-        {
-            Body.setPosition(game.simulation.objects.get(s_id), Vector.create(x, y));
-        }
+        game.simulation.handleCommand(player.team_num, SetPositionCommand.command(s_id, x, y));
     }
 }
 

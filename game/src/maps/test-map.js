@@ -52,19 +52,9 @@ export default class TestMap
                 var position = null;
 
                 if(y % 2 == 0)
-                {
-                    position = Vector.create(
-                        x * 2 * b,
-                        y * a,
-                    );
-                }
+                    position = Vector.create(x * 2 * b, y * a);
                 else
-                {
-                    position = Vector.create(
-                        x * 2 * b + b,
-                        y * a,
-                    );
-                }
+                    position = Vector.create(x * 2 * b + b, y * a);
                 this.objects.add({
                     s_id: index,
                     type: type,

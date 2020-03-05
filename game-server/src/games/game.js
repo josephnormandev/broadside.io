@@ -109,8 +109,14 @@ export default class Game
     {
         if(Game.Service.receivers.has(receiver))
         {
+            var game_player = null;
+            for(const team_num in this.players)
+            {
+                if(this.players[team_num].equals(player))
+                    game_player = this.players[team_num];
+            }
             Game.Service.receivers.get(receiver).receive(
-                this, data,
+                this, game_player, data,
             );
         }
     }
