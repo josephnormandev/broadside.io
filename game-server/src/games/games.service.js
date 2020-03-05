@@ -2,6 +2,8 @@ import LoggerService from '../logger/logger.service.js';
 
 import Game from './game.js';
 
+import * as SetPositionReceiver from '../players/receivers/set-position.js';
+
 export default class GamesService
 {
     static games;
@@ -15,6 +17,7 @@ export default class GamesService
         GamesService.game_players = new Map();
 
         GamesService.receivers = new Map();
+        GamesService.receivers.set(SetPositionReceiver.receiver, SetPositionReceiver);
     }
 
     static createGame(game)

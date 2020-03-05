@@ -109,14 +109,9 @@ export default class Game
     {
         if(Game.Service.receivers.has(receiver))
         {
-            if(this.players[1].equals(player))
-                Game.Service.receivers.get(receiver).receive(
-                    this, this.players[1], this.players[2], data,
-                );
-            else if(this.players[2].equals(player))
-                Game.Service.receivers.get(receiver).receive(
-                    this, this.players[2], this.players[1], data,
-                );
+            Game.Service.receivers.get(receiver).receive(
+                this, data,
+            );
         }
     }
 }

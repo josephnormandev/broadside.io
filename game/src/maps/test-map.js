@@ -17,6 +17,16 @@ const map = [
     ['g', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
       ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
     ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+      ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+      ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+      ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+      ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+      ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
 ];
 
 export default class TestMap
@@ -77,7 +87,19 @@ export default class TestMap
             s_id: index ++,
             type: 'ship',
             team_num: 1,
+            position: Vector.create(200, 150),
+        });
+        this.objects.add({
+            s_id: index ++,
+            type: 'ship',
+            team_num: 1,
             position: Vector.create(250, 150),
+        });
+        this.objects.add({
+            s_id: index ++,
+            type: 'ship',
+            team_num: 2,
+            position: Vector.create(150, 150),
         });
         this.objects.add({
             s_id: index ++,

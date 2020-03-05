@@ -4,7 +4,9 @@ import { Simulation } from 'game';
 
 import GenericClient from '../workers/client.js';
 import tokenMessage from '../workers/game/messages/token.js';
+import setPositionMessage from '../workers/game/messages/set-position.js';
 import * as ConnectedReceiver from '../workers/game/receivers/connected.js';
+import * as TeamAssignmentReceiver from '../workers/game/receivers/team-assignment.js';
 import * as BundledReceiver from '../workers/game/receivers/bundled.js';
 import * as AddObjectReceiver from '../workers/game/receivers/add-object.js';
 import * as UpdateObjectReceiver from '../workers/game/receivers/update-object.js';
@@ -34,11 +36,13 @@ export default class PlayPage extends React.Component
 
         this.receivers = new Map();
         this.receivers.set(ConnectedReceiver.receiver, ConnectedReceiver);
+        this.receivers.set(TeamAssignmentReceiver.receiver, TeamAssignmentReceiver);
         this.receivers.set(BundledReceiver.receiver, BundledReceiver);
         this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver);
         this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver);
         console.log(this.receivers);
 
+        this.team_num = null;
         this.simulation = new Simulation();
         this.simulation_mount = null;
     }
@@ -120,13 +124,26 @@ export default class PlayPage extends React.Component
                     <div style={{
                         width: '100vw',
                         height: 'calc(100vh - 50px)',
-                    }} ref={
+                    }} onClick={
+                        this.handleClick.bind(this)
+                    } ref={
                         ref => ( this.simulation_mount = ref)
                     } />
                 } </>
                 <Badge variant={ variant }>Connection</Badge>
             </div>
         );
+    }
+
+    handleClick(e)
+    {
+        for(var [s_id, object] of this.simulation.objects)
+        {
+            if(object.team_num == this.team_num)
+            {
+                this.client.sendMessage(setPositionMessage(s_id, e.pageX, e.pageY));
+            }
+        }
     }
 
     handleSubmit(e)

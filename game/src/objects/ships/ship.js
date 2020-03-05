@@ -19,12 +19,12 @@ export default class Ship extends GameObject
         if(base_object.team_num == 1)
         {
             base_object.category = Categories.Team1;
-            base_object.mask = Categories.Border | Categories.Ground | Categories.Team2;
+            base_object.mask = Categories.Border | Categories.Ground | Categories.Team2 | Categories.Team1;
         }
         else if(base_object.team_num == 2)
         {
             base_object.category = Categories.Team2;
-            base_object.mask = Categories.Border | Categories.Ground | Categories.Team1;
+            base_object.mask = Categories.Border | Categories.Ground | Categories.Team1 | Categories.Team2;
         }
 
         base_object.type = Ship.TYPE();
@@ -45,6 +45,7 @@ export default class Ship extends GameObject
         return game_object;
     }
 
+    // top is 0, bottom is PI
     static goForward(ship)
     {
         var angle = ship.angle;
