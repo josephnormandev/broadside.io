@@ -1,7 +1,7 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import { GameObject, WaterTile, getOfType, } from '../objects.js';
+import { GameObject, WaterTile, GroundTile, getOfType, } from '../objects.js';
 import Categories from '../categories.js';
 
 export default class Ship extends GameObject
@@ -49,6 +49,8 @@ export default class Ship extends GameObject
     static update(ship)
     {
         // put code here for moving toward the destination etc.
+        if(ship.destinations.length > 0)
+            Body.setPosition(ship, ship.destinations.shift());
     }
 
     static getBaseObject(ship)
@@ -62,12 +64,17 @@ export default class Ship extends GameObject
     static setDestination(ship, destination)
     {
         var water_tiles = getOfType(ship.simulation.objects, WaterTile.TYPE());
+        var ground_tiles = getOfType(ship.simulation.objects, GroundTile.TYPE());
 
-        var shortest_path = WaterTile.getShortestPath(water_tiles, ship.position, destination);
+        var shortest_path = WaterTile.getShortestTilePath(water_tiles, ship.position, destination);
 
+        ship.destinations = [];
         if(shortest_path != null)
         {
-            
+            for(var water_tile_id of shortest_path)
+            {
+                ship.destinations.push(water_tiles.get(water_tile_id).position);
+            }
         }
     }
 }

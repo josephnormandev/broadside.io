@@ -18,6 +18,8 @@ export default class Simulation
 
         this.handlers = new Map();
         this.handlers.set(SetPositionCommand.name, SetPositionCommand.handle);
+
+        this.loops = 0;
     }
 
     // used in the backend to load all of the settings from a map file
@@ -47,11 +49,16 @@ export default class Simulation
     {
         Engine.update(this.engine, time);
 
-        for(var [s_id, game_object] of this.objects)
+        this.loops ++;
+
+        if(this.loops % 60 == 0)
         {
-            if(isType(game_object, Ship.TYPE()))
+            for(var [s_id, game_object] of this.objects)
             {
-                Ship.update(game_object);
+                if(isType(game_object, Ship.TYPE()))
+                {
+                    Ship.update(game_object);
+                }
             }
         }
     }

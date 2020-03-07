@@ -125,7 +125,7 @@ export default class PlayPage extends React.Component
                 } { this.state.submitted &&
                     <div style={{
                         width: '100vw',
-                        height: 'calc(100vh - 50px)',
+                        height: 'calc(100vh - 150px)',
                     }} onClick={
                         this.handleClick.bind(this)
                     } ref={

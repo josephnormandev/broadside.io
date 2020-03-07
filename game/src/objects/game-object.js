@@ -1,5 +1,5 @@
 import Matter from 'matter-js';
-const { Body, Vector } = Matter;
+const { Body, Bounds, Vector } = Matter;
 
 export default class GameObject
 {
@@ -36,9 +36,16 @@ export default class GameObject
         return game_object;
     }
 
-    static update()
+    static getObjectAtPosition(game_objects, position)
     {
-
+        for(var [s_id, game_object] of game_objects)
+        {
+            if(Bounds.contains(game_object.bounds, position))
+            {
+                return game_object;
+            }
+        }
+        return null;
     }
 
     static getBaseObject(game_object)
