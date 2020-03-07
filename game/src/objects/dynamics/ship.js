@@ -1,7 +1,7 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import GameObject from '../game-object.js';
+import { GameObject, WaterTile, getOfType, } from '../objects.js';
 import Categories from '../categories.js';
 
 export default class Ship extends GameObject
@@ -11,7 +11,7 @@ export default class Ship extends GameObject
         return 'ship';
     }
 
-    static create(base_object)
+    static create(simulation, base_object)
     {
         if(base_object.team_num == null)
             throw 'Missing Parameter - Ship.team_num';
@@ -31,7 +31,7 @@ export default class Ship extends GameObject
         base_object.isStatic = false;
         base_object.mass = 500;
         var game_object = GameObject.create(
-            base_object,
+            simulation, base_object,
             Body.create({
                 parts: [
                     Bodies.rectangle(0, 0, 16, 40),
@@ -46,9 +46,9 @@ export default class Ship extends GameObject
         return game_object;
     }
 
-    static update()
+    static update(ship)
     {
-
+        // put code here for moving toward the destination etc.
     }
 
     static getBaseObject(ship)
@@ -61,7 +61,13 @@ export default class Ship extends GameObject
 
     static setDestination(ship, destination)
     {
-        ship.destinations.push(destination);
-        console.log(ship.destinations);
+        var water_tiles = getOfType(ship.simulation.objects, WaterTile.TYPE());
+
+        var shortest_path = WaterTile.getShortestPath(water_tiles, ship.position, destination);
+
+        if(shortest_path != null)
+        {
+            
+        }
     }
 }

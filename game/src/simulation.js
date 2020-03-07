@@ -1,7 +1,7 @@
 import Matter from 'matter-js';
 const { Engine, Render, World, Bodies, Body, Common } = Matter;
 
-import { getType, GameObject } from './objects/objects.js';
+import { isType, getType, Ship, GameObject } from './objects/objects.js';
 
 import { SetPositionCommand } from './commands/commands.js';
 
@@ -46,6 +46,14 @@ export default class Simulation
     update(time)
     {
         Engine.update(this.engine, time);
+
+        for(var [s_id, game_object] of this.objects)
+        {
+            if(isType(game_object, Ship.TYPE()))
+            {
+                Ship.update(game_object);
+            }
+        }
     }
 
     // used in the backend to dump all of the objects to a parseable format
@@ -83,7 +91,7 @@ export default class Simulation
     // used in the frontend to parse those dumps from the backend
     addObject(base_object)
     {
-        var game_object = getType(base_object).create(base_object);
+        var game_object = getType(base_object).create(this, base_object);
         this.objects.set(game_object.s_id, game_object);
         World.addBody(this.engine.world, game_object);
     }

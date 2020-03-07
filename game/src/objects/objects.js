@@ -26,9 +26,32 @@ function getType(object)
     }
 }
 
+const types = {
+    'game-object': ['game-object', 'ship', 'tile', 'water-tile', 'ground-tile', 'world-bound'],
+    'ship': ['ship'],
+    'tile': ['tile', 'water-tile', 'ground-tile'],
+    'water-tile': ['water-tile'],
+    'ground-tile': ['ground-tile'],
+    'world-bound': ['world-bound'],
+};
+
 function isType(object, type)
 {
+    if(types[type] != null)
+        return types[type].includes(object.type);
+}
 
+function getOfType(objects, type)
+{
+    var type_objects = new Map();
+    for(var [s_id, object] of objects)
+    {
+        if(isType(object, type))
+        {
+            type_objects.set(s_id, object)
+        }
+    }
+    return type_objects;
 }
 
 export {
@@ -40,4 +63,5 @@ export {
     WorldBound,
     getType,
     isType,
+    getOfType,
 };

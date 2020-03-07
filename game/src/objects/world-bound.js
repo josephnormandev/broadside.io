@@ -11,7 +11,7 @@ export default class WorldBound extends GameObject
         return 'world-bound';
     }
 
-    static create(base_object)
+    static create(simulation, base_object)
     {
         if(base_object.width == null)
             throw 'Missing Parameter - WorldBound.width';
@@ -26,7 +26,7 @@ export default class WorldBound extends GameObject
         base_object.isStatic = true;
         base_object.category = Categories.Border;
         var game_object = GameObject.create(
-            base_object,
+            simulation, base_object,
             Body.create({
                 parts: [
                     Bodies.rectangle(width / 2, 0 - border / 2, width, border), // top rectangle

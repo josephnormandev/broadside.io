@@ -13,9 +13,9 @@ export function command(s_id, x, y)
 }
 
 import Matter from 'matter-js';
-const { Body, Vector } = Matter;
+const { Vector } = Matter;
 
-import { Ship } from '../objects/objects.js';
+import { isType, Ship } from '../objects/objects.js';
 
 export function handle(simulation, team_num, data)
 {
@@ -27,7 +27,9 @@ export function handle(simulation, team_num, data)
     {
         var game_object = simulation.objects.get(s_id);
 
-        if(game_object.team_num != null && game_object.team_num == team_num)
-            Body.setPosition(game_object, Vector.create(x, y));
+        if(isType(game_object, Ship.TYPE()))
+        {
+            Ship.setDestination(game_object, Vector.create(x, y))
+        }
     }
 }

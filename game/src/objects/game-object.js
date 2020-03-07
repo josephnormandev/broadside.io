@@ -3,18 +3,19 @@ const { Body, Vector } = Matter;
 
 export default class GameObject
 {
-    static create(base_object, body)
+    static create(simulation, base_object, body)
     {
         if(base_object.s_id == null)
             throw 'Missing Parameter - GameObject.s_id';
         if(base_object.type == null)
-            throw 'Missing Parameter - GameObject.type';
+            throw 'Cannot create of Abstract GameObject';
         if(base_object.position == null)
             throw 'Missing Parameter - GameObject.position';
         if(base_object.category == null)
             throw 'Missing Parameter - GameObject.category';
 
         var game_object = body;
+        game_object.simulation = simulation;
         game_object.s_id = base_object.s_id;
         game_object.type = base_object.type;
         game_object.collisionFilter.category = base_object.category;
@@ -37,7 +38,7 @@ export default class GameObject
 
     static update()
     {
-        
+
     }
 
     static getBaseObject(game_object)

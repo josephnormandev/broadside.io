@@ -11,11 +11,11 @@ export default class WaterTile extends Tile
         return 'water-tile';
     }
 
-    static create(base_object)
+    static create(simulation, base_object)
     {
         base_object.type = WaterTile.TYPE();
         base_object.category = Categories.Water;
-        var tile = Tile.create(base_object);
+        var tile = Tile.create(simulation, base_object);
         tile.render.fillStyle = '#0000ff';
         return tile;
     }
