@@ -46,7 +46,7 @@ export default class Ship extends GameObject
         return game_object;
     }
 
-    static update(ship)
+    static tick(ship)
     {
         // put code here for moving toward the destination etc.
         if(ship.destinations.length > 0)

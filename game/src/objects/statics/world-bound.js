@@ -1,10 +1,9 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import GameObject from './game-object.js';
-import Categories from './categories.js';
+import { Static, Categories, addType } from '../objects.js';
 
-export default class WorldBound extends GameObject
+export default class WorldBound extends Static
 {
     static TYPE()
     {
@@ -22,10 +21,9 @@ export default class WorldBound extends GameObject
         const height = base_object.height;
         const border = 5;
 
-        base_object.type = WorldBound.TYPE();
-        base_object.isStatic = true;
+        base_object.type = []; addType(base_object.type, WorldBound.TYPE());
         base_object.category = Categories.Border;
-        var game_object = GameObject.create(
+        var world_bound = Static.create(
             simulation, base_object,
             Body.create({
                 parts: [
@@ -36,15 +34,16 @@ export default class WorldBound extends GameObject
                 ],
             }),
         );
-        game_object.width = width;
-        game_object.height = height;
-        return game_object;
+        world_bound.width = width;
+        world_bound.height = height;
+        
+        return world_bound;
     }
 
     static getBaseObject(world_bound)
     {
         return {
-            ...GameObject.getBaseObject(world_bound),
+            ...Static.getBaseObject(world_bound),
             width: world_bound.width,
             height: world_bound.height,
         };

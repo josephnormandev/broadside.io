@@ -1,5 +1,5 @@
-import * as SetPositionCommand from './set-position.js';
+//import * as SetPositionCommand from './set-position.js';
 
 export {
-    SetPositionCommand,
+    //SetPositionCommand,
 };

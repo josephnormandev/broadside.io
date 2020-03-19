@@ -1,44 +1,47 @@
 import GameObject from './game-object.js';
 
-import Ship from './dynamics/ship.js';
+import Dynamic from './dynamics/dynamic.js';
+//import Ship from './dynamics/directable/ship.js';
 
-import Tile from './tiles/tile.js';
-import WaterTile from './tiles/water-tile.js';
-import GroundTile from './tiles/ground-tile.js';
-import WorldBound from './world-bound.js';
+import Static from './statics/static.js';
+import WorldBound from './statics/world-bound.js';
+import Tile from './statics/tiles/tile.js';
+import WaterTile from './statics/tiles/water-tile.js';
+import GroundTile from './statics/tiles/ground-tile.js';
 
 function getType(object)
 {
-    switch(object.type)
+    switch(object.type[0])
     {
-        case Ship.TYPE():
-            return Ship;
+        case Dynamic.TYPE():
+            return Dynamic;
+        case Static.TYPE():
+            return Static;
+        case WorldBound.TYPE():
+            return WorldBound;
         case Tile.TYPE():
             return Tile;
         case GroundTile.TYPE():
             return GroundTile;
         case WaterTile.TYPE():
             return WaterTile;
-        case WorldBound.TYPE():
-            return WorldBound;
         default:
             throw 'Unknown Type!';
     }
 }
 
-const types = {
-    'game-object': ['game-object', 'ship', 'tile', 'water-tile', 'ground-tile', 'world-bound'],
-    'ship': ['ship'],
-    'tile': ['tile', 'water-tile', 'ground-tile'],
-    'water-tile': ['water-tile'],
-    'ground-tile': ['ground-tile'],
-    'world-bound': ['world-bound'],
-};
+function addType(type_array, type)
+{
+    type_array.push(type);
+}
 
 function isType(object, type)
 {
-    if(types[type] != null)
-        return types[type].includes(object.type);
+    if(object.type.includes(type))
+    {
+        return true;
+    }
+    return false;
 }
 
 function getOfType(objects, type)
@@ -54,14 +57,19 @@ function getOfType(objects, type)
     return type_objects;
 }
 
+import Categories from './categories.js';
+
 export {
     GameObject,
-    Ship,
+    Dynamic,
+    Static,
+    WorldBound,
     Tile,
     WaterTile,
     GroundTile,
-    WorldBound,
     getType,
     isType,
+    addType,
     getOfType,
+    Categories,
 };

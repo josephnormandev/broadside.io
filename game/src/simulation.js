@@ -1,9 +1,9 @@
 import Matter from 'matter-js';
 const { Engine, Render, World, Bodies, Body, Common } = Matter;
 
-import { isType, getType, Ship, GameObject } from './objects/objects.js';
+import { isType, getType, Dynamic } from './objects/objects.js';
 
-import { SetPositionCommand } from './commands/commands.js';
+//import { SetPositionCommand } from './commands/commands.js';
 
 export default class Simulation
 {
@@ -17,7 +17,7 @@ export default class Simulation
         this.objects = new Map();
 
         this.handlers = new Map();
-        this.handlers.set(SetPositionCommand.name, SetPositionCommand.handle);
+        // this.handlers.set(SetPositionCommand.name, SetPositionCommand.handle);
 
         this.loops = 0;
     }
@@ -55,9 +55,9 @@ export default class Simulation
         {
             for(var [s_id, game_object] of this.objects)
             {
-                if(isType(game_object, Ship.TYPE()))
+                if(isType(game_object, Dynamic.TYPE()))
                 {
-                    Ship.update(game_object);
+                    Dynamic.tick(game_object);
                 }
             }
         }
@@ -72,6 +72,7 @@ export default class Simulation
         {
             base_objects[id] = getType(object).getBaseObject(object);
         }
+        console.log(base_objects);
         return base_objects;
     }
 
@@ -80,9 +81,8 @@ export default class Simulation
         var update_objects = {};
         for(var [id, object] of this.objects)
         {
-            var update_object = getType(object).getUpdateObject(object);
-            if(Object.entries(update_object).length != 0)
-                update_objects[id] = update_object;
+            if(isType(object, Dynamic.TYPE()))
+                update_objects.push(getType(object).getUpdateObject(object));
         }
         return update_objects;
     }
@@ -108,7 +108,7 @@ export default class Simulation
         if(this.objects.has(update_object.s_id))
         {
             var game_object = this.objects.get(update_object.s_id);
-            getType(game_object).updateFromServer(game_object, update_object);
+            getType(game_object).update(game_object, update_object);
         }
     }
 }

@@ -1,9 +1,9 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import GameObject from '../game-object.js';
+import { Static, Categories, addType } from '../../objects.js';
 
-export default class Tile extends GameObject
+export default class Tile extends Static
 {
     static TYPE()
     {
@@ -19,21 +19,23 @@ export default class Tile extends GameObject
         if(base_object.adjacents == null)
             throw 'Missing Parameter - Tile.adjacents';
 
-        base_object.isStatic = true;
-        var game_object = GameObject.create(
+        addType(base_object.type, Tile.TYPE());
+
+        var tile = Static.create(
             simulation, base_object,
             Bodies.polygon(0, 0, 6, 20, {
                 angle: Math.PI / 2,
             }),
         );
-        game_object.adjacents = base_object.adjacents;
-        return game_object;
+        tile.adjacents = base_object.adjacents;
+
+        return tile;
     }
 
     static getBaseObject(tile)
     {
         return {
-            ...GameObject.getBaseObject(tile),
+            ...Static.getBaseObject(tile),
             adjacents: tile.adjacents,
         };
     }

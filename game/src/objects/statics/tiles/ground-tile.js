@@ -1,8 +1,7 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import Tile from './tile.js';
-import Categories from '../categories.js';
+import { Tile, Categories, addType } from '../../objects.js';
 
 export default class GroundTile extends Tile
 {
@@ -13,10 +12,11 @@ export default class GroundTile extends Tile
 
     static create(simulation, base_object)
     {
-        base_object.type = GroundTile.TYPE();
+        base_object.type = []; addType(base_object.type, GroundTile.TYPE());
         base_object.category = Categories.Ground;
-        var tile = Tile.create(simulation, base_object);
-        tile.render.fillStyle = '#00ff00';
-        return tile;
+
+        var ground_tile = Tile.create(simulation, base_object);
+        ground_tile.render.fillStyle = '#00ff00';
+        return ground_tile;
     }
 }

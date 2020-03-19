@@ -52,7 +52,7 @@ export default class TestMap
             {
                 index = y * width + x;
 
-                var type = (map[y][x] == 'g' ? 'ground-tile' : 'water-tile');
+                var type = [(map[y][x] == 'g' ? 'ground-tile' : 'water-tile')];
 
                 var position = null;
                 if(y % 2 == 0)
@@ -98,6 +98,7 @@ export default class TestMap
                     s_id: index,
                     type: type,
                     position: position,
+                    angle: 0,
                     adjacents: adjacents,
                 });
             }
@@ -108,22 +109,25 @@ export default class TestMap
         const map_height = y * a - a;
         this.objects.add({
             s_id: index ++,
-            type: 'world-bound',
+            type: ['world-bound'],
             width: map_width,
             height: map_height,
             position: Vector.create(map_width / 2, map_height / 2),
-        });
+            angle: 0,
+        });/*
         this.objects.add({
             s_id: index ++,
-            type: 'ship',
+            type: ['ship'],
             team_num: 1,
             position: Vector.create(200, 150),
+            angle: 0,
         });
         this.objects.add({
             s_id: index ++,
-            type: 'ship',
+            type: ['ship'],
             team_num: 2,
             position: Vector.create(150, 150),
-        });
+            angle: 0,
+        });*/
     }
 }
