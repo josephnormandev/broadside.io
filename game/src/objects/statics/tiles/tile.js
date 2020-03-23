@@ -23,9 +23,7 @@ export default class Tile extends Static
 
         var tile = Static.create(
             simulation, base_object,
-            Bodies.polygon(0, 0, 6, 20, {
-                angle: Math.PI / 2,
-            }),
+            Bodies.polygon(0, 0, 6, 20),
         );
         tile.adjacents = base_object.adjacents;
 

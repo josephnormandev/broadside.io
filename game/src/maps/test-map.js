@@ -98,7 +98,7 @@ export default class TestMap
                     s_id: index,
                     type: type,
                     position: position,
-                    angle: 0,
+                    angle: Math.PI / 2,
                     adjacents: adjacents,
                 });
             }
@@ -113,7 +113,7 @@ export default class TestMap
             width: map_width,
             height: map_height,
             position: Vector.create(map_width / 2, map_height / 2),
-            angle: 0,
+            angle: Math.PI,
         });/*
         this.objects.add({
             s_id: index ++,
