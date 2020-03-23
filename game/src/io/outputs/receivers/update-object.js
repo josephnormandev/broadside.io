@@ -1,11 +1,10 @@
-export function receive(page, data)
+export function receive(renderer, data)
 {
-    console.log(receiver);
     var update_object = data.update_object != null ? data.update_object : null;
 
     if(update_object != null)
     {
-        page.simulation.updateObject(update_object);
+        renderer.updateObject(update_object);
     }
 }
 

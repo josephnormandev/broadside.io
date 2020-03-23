@@ -1,15 +1,11 @@
 import React from 'react';
 import { Button, Badge } from 'react-bootstrap';
-import { Simulation } from 'game';
+import { Renderer } from 'game';
 
 import GenericClient from '../workers/client.js';
 import tokenMessage from '../workers/game/messages/token.js';
-import setPositionMessage from '../workers/game/messages/set-position.js';
 import * as ConnectedReceiver from '../workers/game/receivers/connected.js';
-import * as TeamAssignmentReceiver from '../workers/game/receivers/team-assignment.js';
 import * as BundledReceiver from '../workers/game/receivers/bundled.js';
-import * as AddObjectReceiver from '../workers/game/receivers/add-object.js';
-import * as UpdateObjectReceiver from '../workers/game/receivers/update-object.js';
 
 import PasswordField from '../forms/fields/password';
 
@@ -36,15 +32,10 @@ export default class PlayPage extends React.Component
 
         this.receivers = new Map();
         this.receivers.set(ConnectedReceiver.receiver, ConnectedReceiver);
-        this.receivers.set(TeamAssignmentReceiver.receiver, TeamAssignmentReceiver);
         this.receivers.set(BundledReceiver.receiver, BundledReceiver);
-        this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver);
-        this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver);
-        console.log(this.receivers);
 
-        this.team_num = null;
-        this.simulation = new Simulation();
-        this.simulation_mount = null;
+        this.renderer = null;
+        this.renderer_mount = null;
     }
 
     async componentDidMount()
@@ -73,6 +64,10 @@ export default class PlayPage extends React.Component
         {
             this.receivers.get(receiver).receive(this, data);
         }
+        else if(this.renderer != null)
+        {
+            this.renderer.handleMessage(receiver, data);
+        }
     }
 
     handleConnected()
@@ -82,7 +77,7 @@ export default class PlayPage extends React.Component
             connected: true,
             closed: false,
         });
-        this.simulation.createRender(this.simulation_mount);
+        this.renderer = new Renderer(this.renderer_mount);
     }
 
     handleClose()
@@ -126,10 +121,8 @@ export default class PlayPage extends React.Component
                     <div style={{
                         width: '100vw',
                         height: 'calc(100vh - 150px)',
-                    }} onClick={
-                        this.handleClick.bind(this)
-                    } ref={
-                        ref => ( this.simulation_mount = ref)
+                    }} ref={
+                        ref => ( this.renderer_mount = ref)
                     } />
                 } </>
                 <Badge variant={ variant }>Connection</Badge><br />
@@ -138,17 +131,6 @@ export default class PlayPage extends React.Component
                 <small><b>Red:</b> Disconnected, try refreshing</small><br />
             </div>
         );
-    }
-
-    handleClick(e)
-    {
-        for(var [s_id, object] of this.simulation.objects)
-        {
-            if(object.team_num == this.team_num)
-            {
-                this.client.sendMessage(setPositionMessage(s_id, e.pageX, e.pageY));
-            }
-        }
     }
 
     handleSubmit(e)

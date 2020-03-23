@@ -1,10 +1,10 @@
-export function receive(page, data)
+export function receive(renderer, data)
 {
     var base_object = data.base_object != null ? data.base_object : null;
 
     if(base_object != null)
     {
-        page.simulation.addObject(base_object);
+        renderer.addObject(base_object);
     }
 }
 

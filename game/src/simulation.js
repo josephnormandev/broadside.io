@@ -3,99 +3,57 @@ const { Engine, Render, World, Bodies, Body, Common } = Matter;
 
 import { isType, getType, Dynamic } from './objects/objects.js';
 
-//import { SetPositionCommand } from './commands/commands.js';
+import { bundledMessage, addObjectMessage, teamAssignmentMessage, updateObjectMessage } from './io/outputs/outputs.js';
+import { BundledReceiver } from './io/inputs/inputs.js';
 
 export default class Simulation
 {
-    constructor()
+    constructor(game, map)
     {
         this.engine = Engine.create();
         this.engine.world.gravity.y = 0;
 
-        this.render = null;
-
         this.objects = new Map();
 
-        this.handlers = new Map();
-        // this.handlers.set(SetPositionCommand.name, SetPositionCommand.handle);
-
-        this.loops = 0;
-    }
-
-    // used in the backend to load all of the settings from a map file
-    createFromMap(map)
-    {
+        this.game = game;
         for(var base_object of map.objects)
         {
             this.addObject(base_object);
         }
-    }
 
-    // used in the frontend to make this a rendered simulation
-    createRender(element)
-    {
-        this.render = Render.create({
-            element: element,
-            engine: this.engine,
-            options: {
-                wireframes: false,
-            }
-        });
-        Engine.run(this.engine);
-        Render.run(this.render);
+        var self = this;
+        this.game_loop = setInterval(function() {
+            self.update(1000 / 60);
+        }, 1000 / 60);
+        this.send_loop = setInterval(function() {
+            self.send(1000 / 20);
+        }, 1000 / 20);
+
+        this.receivers = new Map();
+        this.receivers.set(BundledReceiver.receiver, BundledReceiver);
     }
 
     update(time)
     {
         Engine.update(this.engine, time);
 
-        this.loops ++;
-
-        if(this.loops % 60 == 0)
+        for(var [s_id, game_object] of this.objects)
         {
-            for(var [s_id, game_object] of this.objects)
+            if(isType(game_object, Dynamic.TYPE()))
             {
-                if(isType(game_object, Dynamic.TYPE()))
-                {
-                    Dynamic.tick(game_object);
-                }
+                Dynamic.tick(game_object);
             }
         }
     }
 
-    // used in the backend to dump all of the objects to a parseable format
-    // to be sent to the frontend
-    getBaseObjects()
+    handleMessage(team_num, receiver, data)
     {
-        var base_objects = {};
-        for(var [id, object] of this.objects)
+        if(this.receivers.has(receiver))
         {
-            base_objects[id] = getType(object).getBaseObject(object);
-        }
-        console.log(base_objects);
-        return base_objects;
-    }
-
-    getUpdateObjects()
-    {
-        var update_objects = {};
-        for(var [id, object] of this.objects)
-        {
-            if(isType(object, Dynamic.TYPE()))
-                update_objects.push(getType(object).getUpdateObject(object));
-        }
-        return update_objects;
-    }
-
-    handleCommand(team_num, command)
-    {
-        if(this.handlers.has(command.name))
-        {
-            this.handlers.get(command.name)(this, team_num, command.data);
+            this.receivers.get(receiver).receive(this, team_num, data);
         }
     }
 
-    // used in the frontend to parse those dumps from the backend
     addObject(base_object)
     {
         var game_object = getType(base_object).create(this, base_object);
@@ -103,12 +61,37 @@ export default class Simulation
         World.addBody(this.engine.world, game_object);
     }
 
-    updateObject(update_object)
+    send(time)
     {
-        if(this.objects.has(update_object.s_id))
+        for(var team_num of [1, 2])
         {
-            var game_object = this.objects.get(update_object.s_id);
-            getType(game_object).update(game_object, update_object);
+            this.game.sendPlayerMessage(
+                team_num,
+                this.getUpdateObjectMessages(team_num),
+            );
         }
+    }
+
+    getBaseObjectMessages(team_num)
+    {
+        var base_object_messages = [];
+        base_object_messages.push(teamAssignmentMessage(team_num));
+
+        for(var [id, object] of this.objects)
+        {
+            base_object_messages.push(addObjectMessage(getType(object).getBaseObject(object)));
+        }
+        return bundledMessage(base_object_messages);
+    }
+
+    getUpdateObjectMessages(team_num)
+    {
+        var update_object_messages = [];
+        for(var [id, object] of this.objects)
+        {
+            if(isType(object, Dynamic.TYPE()))
+                update_object_messages.push(updateObjectMessage(getType(object).getUpdateObject(object)));
+        }
+        return bundledMessage(update_object_messages);
     }
 }

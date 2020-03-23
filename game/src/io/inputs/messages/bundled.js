@@ -4,6 +4,6 @@ export default function bundled(messages)
         receiver: 'bundled',
         data: {
             messages: messages,
-        }
+        },
     };
 }
