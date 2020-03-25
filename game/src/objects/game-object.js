@@ -32,15 +32,13 @@ export default class GameObject
         var game_object = body;
         game_object.simulation = simulation;
         game_object.s_id = base_object.s_id;
-        game_object.type = base_object.type;
+        Body.setPosition(game_object, base_object.position);
+        Body.setAngle(game_object, base_object.angle);
         game_object.collisionFilter.category = base_object.category;
+        game_object.type = base_object.type;
 
         if(base_object.mask != null)
             game_object.collisionFilter.mask = base_object.mask;
-        if(base_object.position != null)
-            Body.setPosition(game_object, base_object.position);
-        if(base_object.angle != null)
-            Body.setAngle(game_object, base_object.angle);
 
         return game_object;
     }

@@ -114,20 +114,20 @@ export default class TestMap
             height: map_height,
             position: Vector.create(map_width / 2, map_height / 2),
             angle: Math.PI,
-        });/*
+        });
         this.objects.add({
             s_id: index ++,
-            type: ['ship'],
+            type: ['destroyer'],
             team_num: 1,
-            position: Vector.create(200, 150),
+            position: Vector.create(200, 350),
             angle: 0,
         });
         this.objects.add({
             s_id: index ++,
-            type: ['ship'],
+            type: ['aircraft-carrier'],
             team_num: 2,
             position: Vector.create(150, 150),
             angle: 0,
-        });*/
+        });
     }
 }

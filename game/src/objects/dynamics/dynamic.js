@@ -3,7 +3,7 @@ const { Body, Bounds, Vector } = Matter;
 
 import { GameObject, addType } from '../objects.js';
 
-export default class Dynamic
+export default class Dynamic extends GameObject
 {
     static TYPE()
     {
@@ -35,14 +35,14 @@ export default class Dynamic
 
     static update(dynamic, update_object)
     {
-        if(base_object.position != null)
-            Body.setPosition(dynamic, base_object.position);
-        if(base_object.angle != null)
-            Body.setAngle(dynamic, base_object.angle);
+        if(update_object.position != null)
+            Body.setPosition(dynamic, update_object.position);
+        if(update_object.angle != null)
+            Body.setAngle(dynamic, update_object.angle);
         if(update_object.velocity != null)
             Body.setVelocity(dynamic, update_object.velocity);
-        if(base_object.angularVelocity != null)
-            Body.setAngularVelocity(dynamic, base_object.angularVelocity);
+        if(update_object.angularVelocity != null)
+            Body.setAngularVelocity(dynamic, update_object.angularVelocity);
     }
 
     static tick(dynamic)

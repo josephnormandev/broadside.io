@@ -1,7 +1,7 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
-import { Static, Categories, addType } from '../../objects.js';
+import { Static, addType } from '../../objects.js';
 
 export default class Tile extends Static
 {

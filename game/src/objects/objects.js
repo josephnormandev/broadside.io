@@ -1,7 +1,9 @@
 import GameObject from './game-object.js';
 
 import Dynamic from './dynamics/dynamic.js';
-//import Ship from './dynamics/directable/ship.js';
+import Ship from './dynamics/ships/ship.js';
+import Destroyer from './dynamics/ships/destroyer.js';
+import AircraftCarrier from './dynamics/ships/aircraft-carrier.js';
 
 import Static from './statics/static.js';
 import WorldBound from './statics/world-bound.js';
@@ -15,6 +17,12 @@ function getType(object)
     {
         case Dynamic.TYPE():
             return Dynamic;
+        case Ship.TYPE():
+            return Ship;
+        case Destroyer.TYPE():
+            return Destroyer;
+        case AircraftCarrier.TYPE():
+            return AircraftCarrier;
         case Static.TYPE():
             return Static;
         case WorldBound.TYPE():
@@ -62,6 +70,9 @@ import Categories from './categories.js';
 export {
     GameObject,
     Dynamic,
+    Ship,
+    Destroyer,
+    AircraftCarrier,
     Static,
     WorldBound,
     Tile,

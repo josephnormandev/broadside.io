@@ -1,6 +1,3 @@
-import Matter from 'matter-js';
-const { Body, Bodies, Vector } = Matter;
-
 import { Tile, Categories, addType } from '../../objects.js';
 
 export default class GroundTile extends Tile

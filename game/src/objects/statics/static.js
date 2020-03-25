@@ -3,7 +3,7 @@ const { Body, Bounds, Vector } = Matter;
 
 import { GameObject, addType } from '../objects.js';
 
-export default class Static
+export default class Static extends GameObject
 {
     static TYPE()
     {
