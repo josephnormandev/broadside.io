@@ -8,6 +8,7 @@
   "author": "josephnormandev",
   "license": "ISC",
   "dependencies": {
-    "matter-js": "^0.14.2"
+    "matter-js": "^0.14.2",
+    "three": "^0.115.0"
   }
 }

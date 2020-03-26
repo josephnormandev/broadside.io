@@ -127,7 +127,7 @@ export default class TestMap
             type: ['aircraft-carrier'],
             team_num: 2,
             position: Vector.create(150, 150),
-            angle: 0,
+            angle: 1,
         });
     }
 }

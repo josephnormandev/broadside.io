@@ -1,5 +1,7 @@
 import Matter from 'matter-js';
-const { Engine, Render, World, Bodies, Body, Common } = Matter;
+const { Engine, World, Bodies, Body, Common } = Matter;
+
+import * as THREE from 'three';
 
 import { getType } from './objects/objects.js';
 
@@ -7,25 +9,19 @@ import { AddObjectReceiver, BundledReceiver, RemoveObjectReceiver, TeamAssignmen
 
 export default class Renderer
 {
-    constructor(element)
+    constructor(page)
     {
-        this.team_num = null;
+        this.page = page;
 
         this.engine = Engine.create();
         this.engine.world.gravity.y = 0;
 
+        this.scene = new THREE.Scene();
+        this.render = new THREE.WebGLRenderer();
+
         this.objects = new Map();
 
-        this.render = Render.create({
-            element: element,
-            engine: this.engine,
-            options: {
-                wireframes: false,
-            },
-        });
-
         Engine.run(this.engine);
-        Render.run(this.render);
 
         this.receivers = new Map();
         this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver);
@@ -33,6 +29,19 @@ export default class Renderer
         this.receivers.set(RemoveObjectReceiver.receiver, RemoveObjectReceiver);
         this.receivers.set(TeamAssignmentReceiver.receiver, TeamAssignmentReceiver);
         this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver);
+
+        this.team_num = null;
+    }
+
+    mount(mount)
+    {
+        this.render.setSize(mount.clientWidth, mount.clientHeight);
+        mount.appendChild(this.render.domElement);
+    }
+
+    sendMessage(message)
+    {
+        this.page.client.sendMessage(message);
     }
 
     handleMessage(receiver, data)

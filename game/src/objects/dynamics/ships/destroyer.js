@@ -23,6 +23,7 @@ export default class Destroyer extends Ship
             Body.create({
                 parts: [
                     Bodies.rectangle(0, 0, 32, 80),
+                    Bodies.circle(0, 0, 24),
                 ],
             }),
         );

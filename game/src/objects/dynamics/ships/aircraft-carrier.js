@@ -22,8 +22,9 @@ export default class AircraftCarrier extends Ship
             simulation, base_object,
             Body.create({
                 parts: [
-                    Bodies.rectangle(0, 0, 32, 160),
-                    Bodies.circle(0, 0, 48),
+                    Bodies.rectangle(0, 0, 40, 100),
+                    Bodies.circle(0, -30, 24),
+                    Bodies.circle(0, 30, 24),
                 ],
             }),
         );

@@ -56,6 +56,12 @@ export default class PlayPage extends React.Component
                 closed: true,
             });
         }
+        window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    componentWillUnmount()
+    {
+        window.removeEventListener('resize', this.handleResize.bind(this));
     }
 
     handleMessage(receiver, data)
@@ -77,7 +83,8 @@ export default class PlayPage extends React.Component
             connected: true,
             closed: false,
         });
-        this.renderer = new Renderer(this.renderer_mount);
+        this.renderer = new Renderer(this);
+        this.renderer.mount(this.renderer_mount);
     }
 
     handleClose()
@@ -120,7 +127,7 @@ export default class PlayPage extends React.Component
                 } { this.state.submitted &&
                     <div style={{
                         width: '100vw',
-                        height: 'calc(100vh - 150px)',
+                        height: 'calc(100vh - 100px)',
                     }} ref={
                         ref => ( this.renderer_mount = ref)
                     } />
@@ -131,6 +138,14 @@ export default class PlayPage extends React.Component
                 <small><b>Red:</b> Disconnected, try refreshing</small><br />
             </div>
         );
+    }
+
+    handleResize()
+    {
+        while (this.renderer_mount.firstChild)
+            this.renderer_mount.removeChild(this.renderer_mount.firstChild);
+
+        this.renderer.mount(this.renderer_mount);
     }
 
     handleSubmit(e)
