@@ -62,6 +62,9 @@ export default class PlayPage extends React.Component
     componentWillUnmount()
     {
         window.removeEventListener('resize', this.handleResize.bind(this));
+
+        if(this.state.connected)
+            this.renderer.unmount();
     }
 
     handleMessage(receiver, data)
@@ -142,9 +145,7 @@ export default class PlayPage extends React.Component
 
     handleResize()
     {
-        while (this.renderer_mount.firstChild)
-            this.renderer_mount.removeChild(this.renderer_mount.firstChild);
-
+        this.renderer.unmount(this.renderer_mount);
         this.renderer.mount(this.renderer_mount);
     }
 

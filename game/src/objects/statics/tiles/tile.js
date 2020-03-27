@@ -1,6 +1,8 @@
 import Matter from 'matter-js';
 const { Body, Bodies, Vector } = Matter;
 
+import * as THREE from 'three';
+
 import { Static, addType } from '../../objects.js';
 
 export default class Tile extends Static
@@ -28,6 +30,17 @@ export default class Tile extends Static
         tile.adjacents = base_object.adjacents;
 
         return tile;
+    }
+
+    static create3D(tile)
+    {
+        tile.mesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(10, 10),
+            new THREE.MeshBasicMaterial({ color: 0x0000ff }),
+        );
+        tile.simulation.scene.add(tile.mesh);
+
+        tile.mesh.position.set(tile.position.x, 0, tile.position.y);
     }
 
     static getBaseObject(tile)

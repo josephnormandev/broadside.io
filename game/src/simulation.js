@@ -1,9 +1,9 @@
 import Matter from 'matter-js';
 const { Engine, Render, World, Bodies, Body, Common } = Matter;
 
-import { isType, getType, Dynamic } from './objects/objects.js';
+import { isType, getType, Dynamic, Tile } from './objects/objects.js';
 
-import { bundledMessage, addObjectMessage, teamAssignmentMessage, updateObjectMessage } from './io/outputs/outputs.js';
+import { bundledMessage, endMapStreamMessage, addObjectMessage, teamAssignmentMessage, updateObjectMessage } from './io/outputs/outputs.js';
 import { BundledReceiver } from './io/inputs/inputs.js';
 
 export default class Simulation
@@ -77,10 +77,21 @@ export default class Simulation
         var base_object_messages = [];
         base_object_messages.push(teamAssignmentMessage(team_num));
 
+        // send TILES first as part of the map
         for(var [id, object] of this.objects)
         {
-            base_object_messages.push(addObjectMessage(getType(object).getBaseObject(object)));
+            if(isType(object, Tile.TYPE()))
+                base_object_messages.push(addObjectMessage(getType(object).getBaseObject(object)));
         }
+        base_object_messages.push(endMapStreamMessage());
+
+        // send the rest
+        for(var [id, object] of this.objects)
+        {
+            if(isType(object, Tile.TYPE()))
+                base_object_messages.push(addObjectMessage(getType(object).getBaseObject(object)));
+        }
+
         return bundledMessage(base_object_messages);
     }
 
