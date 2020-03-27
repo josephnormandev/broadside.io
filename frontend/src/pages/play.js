@@ -145,8 +145,11 @@ export default class PlayPage extends React.Component
 
     handleResize()
     {
-        this.renderer.unmount(this.renderer_mount);
-        this.renderer.mount(this.renderer_mount);
+        if(this.state.connected)
+        {
+            this.renderer.unmount(this.renderer_mount);
+            this.renderer.mount(this.renderer_mount);
+        }
     }
 
     handleSubmit(e)

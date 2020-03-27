@@ -12,10 +12,17 @@ export default class Tile extends Static
         return 'tile';
     }
 
+    static RADIUS()
+    {
+        return 10;
+    }
+
     static create(simulation, base_object)
     {
         if(base_object.category == null)
             throw 'Missing Parameter - Tile.category';
+        if(base_object.color == null)
+            throw 'Missing Parameter - Tile.color';
         if(base_object.type == null)
             throw 'Cannot create of Abstract Tile';
         if(base_object.adjacents == null)
@@ -25,22 +32,44 @@ export default class Tile extends Static
 
         var tile = Static.create(
             simulation, base_object,
-            Bodies.polygon(0, 0, 6, 20),
+            Bodies.polygon(0, 0, 6, Tile.RADIUS()),
         );
         tile.adjacents = base_object.adjacents;
+        tile.color = base_object.color;
 
         return tile;
     }
 
     static create3D(tile)
     {
-        tile.mesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(10, 10),
-            new THREE.MeshBasicMaterial({ color: 0x0000ff }),
+        const vertices = [];
+        vertices.push(new THREE.Vector3(0, 0, 0)); // center
+        vertices.push(new THREE.Vector3(- Tile.RADIUS(), 0, 0)); // left
+        vertices.push(new THREE.Vector3(- Tile.RADIUS() * Math.cos(Math.PI / 3), Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // top left
+        vertices.push(new THREE.Vector3(Tile.RADIUS() * Math.cos(Math.PI / 3), Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // top right
+        vertices.push(new THREE.Vector3(Tile.RADIUS(), 0, 0)); // right
+        vertices.push(new THREE.Vector3(Tile.RADIUS() * Math.cos(Math.PI / 3), - Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // bottom right
+        vertices.push(new THREE.Vector3(-Tile.RADIUS() * Math.cos(Math.PI / 3), - Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // bottom left
+        const faces = [];
+        faces.push(new THREE.Face3(0, 1, 2));
+        faces.push(new THREE.Face3(0, 2, 3));
+        faces.push(new THREE.Face3(0, 3, 4));
+        faces.push(new THREE.Face3(0, 4, 5));
+        faces.push(new THREE.Face3(0, 5, 6));
+        faces.push(new THREE.Face3(0, 6, 1));
+
+        var geometry = new THREE.Geometry();
+        geometry.vertices = vertices;
+        geometry.faces = faces;
+
+        tile.mesh = new THREE.Mesh(geometry,
+            new THREE.MeshBasicMaterial({
+                color: tile.color,
+            }),
         );
         tile.simulation.scene.add(tile.mesh);
 
-        tile.mesh.position.set(tile.position.x, 0, tile.position.y);
+        tile.mesh.position.set(tile.position.x, tile.position.y, 0 );
     }
 
     static getBaseObject(tile)

@@ -7,7 +7,7 @@ export function receive(renderer, data)
     var ground_tiles = getOfType(renderer.objects, GroundTile.TYPE());
     for(var [s_id, ground_tile] of ground_tiles)
     {
-
+        GroundTile.create3D(ground_tile);
     }
 
     var water_tiles = getOfType(renderer.objects, WaterTile.TYPE());

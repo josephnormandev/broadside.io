@@ -1,6 +1,8 @@
 import Matter from 'matter-js';
 const { Common, Vector } = Matter;
 
+import { Tile } from '../objects/objects.js';
+
 const map = [
     ['w', 'w', 'g', 'g', 'g', 'g', 'g', 'g', 'w', 'w'],
       ['w', 'w', 'g', 'g', 'g', 'g', 'g', 'w', 'w', 'w'],
@@ -35,9 +37,9 @@ export default class TestMap
     {
         this.objects = new Set();
 
-        const radius = 20;
+        const radius = Tile.RADIUS();
         const a = Math.cos(Math.PI / 6) * radius;
-        const b = 3 / 2* radius;
+        const b = 3 / 2 * radius;
 
         var index = 0;
         var y;

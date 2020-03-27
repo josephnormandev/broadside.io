@@ -58,6 +58,7 @@ export default class Renderer
         if(this.mounted)
         {
             this.render.render(this.scene, this.inputs.camera);
+            this.inputs.update();
         }
     }
 

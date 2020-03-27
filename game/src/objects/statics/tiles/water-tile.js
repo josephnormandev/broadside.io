@@ -14,10 +14,9 @@ export default class WaterTile extends Tile
     {
         base_object.type = []; addType(base_object.type, WaterTile.TYPE());
         base_object.category = Categories.Water;
+        base_object.color = '#0000ff';
 
         var water_tile = Tile.create(simulation, base_object);
-        water_tile.render.fillStyle = '#0000ff';
-
         return water_tile;
     }
 }
