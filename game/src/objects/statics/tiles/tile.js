@@ -45,11 +45,11 @@ export default class Tile extends Static
         const vertices = [];
         vertices.push(new THREE.Vector3(0, 0, 0)); // center
         vertices.push(new THREE.Vector3(- Tile.RADIUS(), 0, 0)); // left
-        vertices.push(new THREE.Vector3(- Tile.RADIUS() * Math.cos(Math.PI / 3), Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // top left
-        vertices.push(new THREE.Vector3(Tile.RADIUS() * Math.cos(Math.PI / 3), Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // top right
+        vertices.push(new THREE.Vector3(- Tile.RADIUS() * Math.cos(Math.PI / 3), 0, Tile.RADIUS() * Math.sin(Math.PI / 3))); // top left
+        vertices.push(new THREE.Vector3(Tile.RADIUS() * Math.cos(Math.PI / 3), 0, Tile.RADIUS() * Math.sin(Math.PI / 3))); // top right
         vertices.push(new THREE.Vector3(Tile.RADIUS(), 0, 0)); // right
-        vertices.push(new THREE.Vector3(Tile.RADIUS() * Math.cos(Math.PI / 3), - Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // bottom right
-        vertices.push(new THREE.Vector3(-Tile.RADIUS() * Math.cos(Math.PI / 3), - Tile.RADIUS() * Math.sin(Math.PI / 3), 0)); // bottom left
+        vertices.push(new THREE.Vector3(Tile.RADIUS() * Math.cos(Math.PI / 3), 0, - Tile.RADIUS() * Math.sin(Math.PI / 3))); // bottom right
+        vertices.push(new THREE.Vector3(-Tile.RADIUS() * Math.cos(Math.PI / 3), 0, - Tile.RADIUS() * Math.sin(Math.PI / 3))); // bottom left
         const faces = [];
         faces.push(new THREE.Face3(0, 1, 2));
         faces.push(new THREE.Face3(0, 2, 3));
@@ -69,7 +69,7 @@ export default class Tile extends Static
         );
         tile.simulation.scene.add(tile.mesh);
 
-        tile.mesh.position.set(tile.position.x, tile.position.y, 0 );
+        tile.mesh.position.set(tile.position.x, 0, tile.position.y);
     }
 
     static getBaseObject(tile)
