@@ -1,6 +1,8 @@
 import Matter from 'matter-js';
 const { Body, Bounds, Vector } = Matter;
 
+import * as THREE from 'three';
+
 import { GameObject, addType } from '../objects.js';
 
 export default class Dynamic extends GameObject
@@ -33,6 +35,8 @@ export default class Dynamic extends GameObject
         return dynamic;
     }
 
+    static tick(dynamic) { }
+
     static update(dynamic, update_object)
     {
         if(update_object.position != null)
@@ -45,9 +49,10 @@ export default class Dynamic extends GameObject
             Body.setAngularVelocity(dynamic, update_object.angularVelocity);
     }
 
-    static tick(dynamic)
+    static updateRender(dynamic)
     {
-        // ha ha do nothing
+        dynamic.mesh.position.set(dynamic.position.x, 0, dynamic.position.y);
+        dynamic.mesh.rotation.set(0, dynamic.angle, 0, "YXZ");
     }
 
     static getBaseObject(dynamic)

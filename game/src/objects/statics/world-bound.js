@@ -23,6 +23,7 @@ export default class WorldBound extends Static
 
         base_object.type = []; addType(base_object.type, WorldBound.TYPE());
         base_object.category = Categories.Border;
+        base_object.rendered = false;
         var world_bound = Static.create(
             simulation, base_object,
             Body.create({
@@ -36,7 +37,7 @@ export default class WorldBound extends Static
         );
         world_bound.width = width;
         world_bound.height = height;
-        
+
         return world_bound;
     }
 

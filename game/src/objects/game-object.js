@@ -43,6 +43,10 @@ export default class GameObject
         return game_object;
     }
 
+    static create3D(scene, game_object) { } // optional method
+
+    static draw(game_object) { } // optional method
+
     static getObjectAtPosition(game_objects, position)
     {
         for(var [s_id, game_object] of game_objects)
@@ -60,6 +64,7 @@ export default class GameObject
         return {
             s_id: game_object.s_id,
             type: game_object.type,
+            rendered: game_object.rendered,
             position: game_object.position,
             angle: game_object.angle,
         };

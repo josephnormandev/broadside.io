@@ -88,7 +88,7 @@ export default class Simulation
         // send the rest
         for(var [id, object] of this.objects)
         {
-            if(isType(object, Tile.TYPE()))
+            if(!isType(object, Tile.TYPE()))
                 base_object_messages.push(addObjectMessage(getType(object).getBaseObject(object)));
         }
 

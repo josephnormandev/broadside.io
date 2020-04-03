@@ -67,38 +67,63 @@ export default class TestMap
 
                 if(y % 2 != 0)
                 {
-                    if(y - 2 >= 0) // top
-                        adjacents.push((y - 2) * width + x);
                     if(y - 1 >= 0) // top-left
                         adjacents.push((y - 1) * width + x);
-                    if(y + 1 < height) // bottom-left
-                        adjacents.push((y + 1) * width + x);
-                    if(y + 2 < height) // bottom
-                        adjacents.push((y + 2) * width + x);
-                    if(x + 1 < width && y + 1 < height) // bottom-right
-                        adjacents.push((y + 1) * width + (x + 1));
+                    else
+                        adjacents.push(null);
+                    if(y - 2 >= 0) // top
+                        adjacents.push((y - 2) * width + x);
+                    else
+                        adjacents.push(null);
                     if(x + 1 < width && y - 1 >= 0) // top-right
                         adjacents.push((y - 1) * width + (x + 1));
+                    else
+                        adjacents.push(null);
+                    if(x + 1 < width && y + 1 < height) // bottom-right
+                        adjacents.push((y + 1) * width + (x + 1));
+                    else
+                        adjacents.push(null);
+                    if(y + 2 < height) // bottom
+                        adjacents.push((y + 2) * width + x);
+                    else
+                        adjacents.push(null);
+                    if(y + 1 < height) // bottom-left
+                        adjacents.push((y + 1) * width + x);
+                    else
+                        adjacents.push(null);
                 }
                 else
                 {
-                    if(y - 2 >= 0) // top
-                        adjacents.push((y - 2) * width + x);
                     if(y - 1 >= 0 && x - 1 >= 0) // top-left
                         adjacents.push((y - 1) * width + (x - 1));
-                    if(y + 1 < height && x - 1 >= 0) // bottom-left
-                        adjacents.push((y + 1) * width + (x - 1));
-                    if(y + 2 < height) // bottom
-                        adjacents.push((y + 2) * width + x);
-                    if(y + 1 < height) // bottom-right
-                        adjacents.push((y + 1) * width + x);
+                    else
+                        adjacents.push(null);
+                    if(y - 2 >= 0) // top
+                        adjacents.push((y - 2) * width + x);
+                    else
+                        adjacents.push(null);
                     if(y - 1 >= 0) // top-right
                         adjacents.push((y - 1) * width + x);
+                    else
+                        adjacents.push(null);
+                    if(y + 1 < height) // bottom-right
+                        adjacents.push((y + 1) * width + x);
+                    else
+                        adjacents.push(null);
+                    if(y + 2 < height) // bottom
+                        adjacents.push((y + 2) * width + x);
+                    else
+                        adjacents.push(null);
+                    if(y + 1 < height && x - 1 >= 0) // bottom-left
+                        adjacents.push((y + 1) * width + (x - 1));
+                    else
+                        adjacents.push(null);
                 }
 
                 this.objects.add({
                     s_id: index,
                     type: type,
+                    height: 5,
                     position: position,
                     angle: Math.PI / 2,
                     adjacents: adjacents,
@@ -121,7 +146,7 @@ export default class TestMap
             s_id: index ++,
             type: ['destroyer'],
             team_num: 1,
-            position: Vector.create(200, 350),
+            position: Vector.create(100, 50),
             angle: 0,
         });
         this.objects.add({

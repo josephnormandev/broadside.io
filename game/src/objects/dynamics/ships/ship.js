@@ -1,6 +1,8 @@
 import Matter from 'matter-js';
 const { Body } = Matter;
 
+import * as THREE from 'three';
+
 import { Categories, Dynamic, WaterTile, GroundTile, getOfType, addType } from '../../objects.js';
 
 export default class Ship extends Dynamic
@@ -41,6 +43,17 @@ export default class Ship extends Dynamic
         // put code here for moving toward the destination etc.
         if(ship.destinations.length > 0)
             Body.setPosition(ship, ship.destinations.shift());
+    }
+
+    static create3D(scene, ship)
+    {
+        ship.mesh = new THREE.Mesh(
+            new THREE.SphereGeometry(5, 10, 10),
+            new THREE.MeshBasicMaterial({
+                color: 0xffff00
+            }),
+        );
+        scene.add(ship.mesh);
     }
 
     static getBaseObject(ship)

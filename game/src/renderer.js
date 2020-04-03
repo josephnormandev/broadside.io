@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 import Inputs from './camera-inputs.js';
 
-import { getType } from './objects/objects.js';
+import { isType, getType, getOfType, Dynamic, WaterTile } from './objects/objects.js';
 
 import { AddObjectReceiver, BundledReceiver, EndMapStreamReceiver, RemoveObjectReceiver, TeamAssignmentReceiver, UpdateObjectReceiver } from './io/outputs/outputs.js';
 
@@ -21,6 +21,10 @@ export default class Renderer
         this.mounted = false;
         this.scene = new THREE.Scene();
         this.render = new THREE.WebGLRenderer();
+        this.render.physicallyCorrectLights = true;
+        this.render.shadowMap.enabled = true;
+        this.render.autoClearColor = false;
+
         this.inputs = new Inputs(this);
 
         this.scene.add(new THREE.AxesHelper(5));
@@ -46,9 +50,11 @@ export default class Renderer
         this.render.setSize(mount.clientWidth, mount.clientHeight);
         mount.appendChild(this.render.domElement);
 
-        this.inputs.mount(mount);
+        this.inputs.mount(mount, this.scene);
 
         this.mounted = true;
+
+        var self = this;
     }
 
     animate()
@@ -57,8 +63,23 @@ export default class Renderer
 
         if(this.mounted)
         {
-            this.render.render(this.scene, this.inputs.camera);
+            for(var [s_id, object] of this.objects)
+            {
+                if(isType(object, Dynamic.TYPE()))
+                {
+                    getType(object).updateRender(object);
+                }
+                getType(object).draw(object);
+            }
+
+            var water_tiles = getOfType(this.objects, WaterTile.TYPE());
+            for(var [s_id, water_tile] of water_tiles)
+            {
+                WaterTile.averageHeights(water_tile, water_tiles);
+            }
+
             this.inputs.update();
+            this.render.render(this.scene, this.inputs.camera);
         }
     }
 
@@ -66,7 +87,7 @@ export default class Renderer
     {
         while (mount.firstChild)
             mount.removeChild(mount.firstChild);
-        this.inputs.unmount(mount);
+        this.inputs.unmount(mount, this.scene);
 
         this.mounted = false;
     }
@@ -89,6 +110,8 @@ export default class Renderer
         var game_object = getType(base_object).create(this, base_object);
         this.objects.set(game_object.s_id, game_object);
         World.addBody(this.engine.world, game_object);
+
+        getType(game_object).create3D(this.scene, game_object);
     }
 
     updateObject(update_object)
