@@ -18,14 +18,13 @@ export default class Renderer
         this.engine = Engine.create();
         this.engine.world.gravity.y = 0;
 
-        this.mounted = false;
         this.scene = new THREE.Scene();
         this.render = new THREE.WebGLRenderer();
         this.render.physicallyCorrectLights = true;
         this.render.shadowMap.enabled = true;
         this.render.autoClearColor = false;
 
-        this.inputs = new Inputs(this);
+        this.inputs = new Inputs();
 
         this.scene.add(new THREE.AxesHelper(5));
 
@@ -48,11 +47,7 @@ export default class Renderer
     mount(mount)
     {
         this.render.setSize(mount.clientWidth, mount.clientHeight);
-        mount.appendChild(this.render.domElement);
-
-        this.inputs.mount(mount, this.scene);
-
-        this.mounted = true;
+        this.inputs.mount(mount, this.render.domElement, this.scene);
 
         var self = this;
     }
@@ -61,7 +56,7 @@ export default class Renderer
     {
         requestAnimationFrame(this.animate.bind(this));
 
-        if(this.mounted)
+        if(this.inputs.mounted)
         {
             for(var [s_id, object] of this.objects)
             {
@@ -83,13 +78,9 @@ export default class Renderer
         }
     }
 
-    unmount(mount)
+    unmount()
     {
-        while (mount.firstChild)
-            mount.removeChild(mount.firstChild);
-        this.inputs.unmount(mount, this.scene);
-
-        this.mounted = false;
+        this.inputs.unmount(this.scene);
     }
 
     sendMessage(message)

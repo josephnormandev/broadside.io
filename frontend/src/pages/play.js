@@ -132,7 +132,7 @@ export default class PlayPage extends React.Component
                         width: '100vw',
                         height: 'calc(100vh - 100px)',
                     }} ref={
-                        ref => ( this.renderer_mount = ref)
+                        ref => (this.renderer_mount = ref)
                     } />
                 } </>
                 <Badge variant={ variant }>Connection</Badge><br />
