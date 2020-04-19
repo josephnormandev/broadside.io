@@ -5,7 +5,7 @@ export default class CameraInputs
     constructor()
     {
         this.mount_element = null;
-        this.camera = new THREE.PerspectiveCamera(75, 1, .1, 1000);
+        this.camera = new THREE.PerspectiveCamera(90, 1, .1, 1000);
         this.camera.position.set(50, 50, 50);
         this.camera.rotation.set(- Math.PI / 4, Math.PI / 4, 0 ,'YXZ');
 
@@ -23,15 +23,16 @@ export default class CameraInputs
         // have to make this "bound" version of these handlers
         this.mouseMove = this.mouseMove.bind(this);
         this.mouseClick = this.mouseClick.bind(this);
+        this.mouseScroll = this.mouseScroll.bind(this);
         this.keyDown = this.keyDown.bind(this);
         this.keyUp = this.keyUp.bind(this);
 
         // keeps track of inputs
         this.raycaster = new THREE.Raycaster();
         this.mouse_position = new THREE.Vector2();
+        this.zoom = 1;
         this.keys = new Set();
         this.selected = new Set();
-        this.zoom = 0;
     }
 
     mount(mount, render_element, scene)
@@ -50,6 +51,7 @@ export default class CameraInputs
         // add event listeners using the react ref
         this.mount_element.addEventListener('mousemove', this.mouseMove);
         this.mount_element.addEventListener('click', this.mouseClick);
+        this.mount_element.addEventListener('mousewheel', this.mouseScroll);
         window.addEventListener('keydown', this.keyDown);
         window.addEventListener('keyup', this.keyUp);
 
@@ -64,18 +66,20 @@ export default class CameraInputs
 
     update()
     {
-        if(this.keys.has(38) || this.keys.has(87))
-            this.camera.position.z -= .5;
-        if(this.keys.has(40) || this.keys.has(83))
-            this.camera.position.z += .5;
-        if(this.keys.has(37) || this.keys.has(65))
-            this.camera.position.x -= .5;
-        if(this.keys.has(39) || this.keys.has(68))
-            this.camera.position.x += .5;
-        if(this.keys.has(16))
-            this.camera.position.y -= .5;
-        if(this.keys.has(32))
-            this.camera.position.y += .5;
+
+        // control how the camera zooms in
+        this.camera.position.lerp(new THREE.Vector3(
+            this.camera.position.x,
+            this.zoom * 45 + 25,
+            this.camera.position.z,
+        ), .1);
+        const targetQuat = new THREE.Quaternion();
+        targetQuat.setFromEuler(new THREE.Euler(
+            - Math.PI * .3 + this.zoom * Math.PI * .12,
+            this.camera.rotation.y,
+            this.camera.rotation.z, "YXZ"
+        ));
+        this.camera.quaternion.slerp(targetQuat, .1);
 
         this.sun_light.position.set(-500, 1000, 500);
         this.sun_light.position.add(this.camera.position);
@@ -91,6 +95,7 @@ export default class CameraInputs
 
         this.mount_element.removeEventListener('mousemove', this.mouseMove);
         this.mount_element.removeEventListener('click', this.mouseClick);
+        this.mount_element.removeEventListener('scroll', this.mouseScroll);
         window.removeEventListener('keydown', this.keyDown);
         window.removeEventListener('keyup', this.keyUp);
 
@@ -116,7 +121,15 @@ export default class CameraInputs
 
     mouseScroll(e)
     {
-        console.log(e);
+        const ZOOM_SENSITIVITY = .5; // will need to be changed later to reflect
+                                    // players controls
+
+        this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY;
+
+        if(this.zoom > 1) this.zoom = 1;
+        if(this.zoom < 0) this.zoom = 0;
+
+        console.log(this.zoom);
     }
 
     keyDown(e)

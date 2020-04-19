@@ -67,12 +67,6 @@ export default class Renderer
                 getType(object).draw(object);
             }
 
-            var water_tiles = getOfType(this.objects, WaterTile.TYPE());
-            for(var [s_id, water_tile] of water_tiles)
-            {
-                WaterTile.averageHeights(water_tile, water_tiles);
-            }
-
             this.inputs.update();
             this.render.render(this.scene, this.inputs.camera);
         }
