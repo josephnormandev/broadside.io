@@ -55,6 +55,7 @@ export default class TestMap
                 index = y * width + x;
 
                 var type = [(map[y][x] == 'g' ? 'ground-tile' : 'water-tile')];
+                var tile_height = (map[y][x] == 'g' ? 5 : -5);
 
                 var position = null;
                 if(y % 2 == 0)
@@ -123,7 +124,7 @@ export default class TestMap
                 this.objects.add({
                     s_id: index,
                     type: type,
-                    height: 5,
+                    height: tile_height,
                     position: position,
                     angle: Math.PI / 2,
                     adjacents: adjacents,

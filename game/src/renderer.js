@@ -28,6 +28,14 @@ export default class Renderer
 
         this.scene.add(new THREE.AxesHelper(5));
 
+        var test_plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(30, 30, 5),
+            new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+        );
+        test_plane.position.set(0, 10, 0);
+        test_plane.rotation.set(0, 0, 0);
+        this.scene.add(test_plane);
+
         this.objects = new Map();
 
         Engine.run(this.engine);
@@ -60,10 +68,6 @@ export default class Renderer
         {
             for(var [s_id, object] of this.objects)
             {
-                if(isType(object, Dynamic.TYPE()))
-                {
-                    getType(object).updateRender(object);
-                }
                 getType(object).draw(object);
             }
 

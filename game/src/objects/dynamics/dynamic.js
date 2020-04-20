@@ -49,12 +49,6 @@ export default class Dynamic extends GameObject
             Body.setAngularVelocity(dynamic, update_object.angularVelocity);
     }
 
-    static updateRender(dynamic)
-    {
-        dynamic.mesh.position.set(dynamic.position.x, 0, dynamic.position.y);
-        dynamic.mesh.rotation.set(0, dynamic.angle, 0, "YXZ");
-    }
-
     static getBaseObject(dynamic)
     {
         return {

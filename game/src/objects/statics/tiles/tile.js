@@ -27,6 +27,8 @@ export default class Tile extends Static
             throw 'Cannot create of Abstract Tile';
         if(base_object.adjacents == null)
             throw 'Missing Parameter - Tile.adjacents';
+        if(base_object.height == null)
+            throw 'Missing Parameter - Tile.height';
 
         addType(base_object.type, Tile.TYPE());
 
@@ -36,6 +38,7 @@ export default class Tile extends Static
         );
         tile.adjacents = base_object.adjacents;
         tile.color = base_object.color;
+        tile.height = base_object.height;
 
         return tile;
     }
@@ -87,6 +90,7 @@ export default class Tile extends Static
         return {
             ...Static.getBaseObject(tile),
             adjacents: tile.adjacents,
+            height: tile.height,
         };
     }
 

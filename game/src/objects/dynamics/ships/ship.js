@@ -53,6 +53,9 @@ export default class Ship extends Dynamic
                 color: 0xffff00
             }),
         );
+
+        ship.mesh.position.set(ship.position.x, 0, ship.position.y);
+        ship.mesh.rotation.set(0, ship.angle, 0, "YXZ");
         scene.add(ship.mesh);
     }
 

@@ -27,6 +27,7 @@ export default class WaterTile extends Tile
         Tile.create3D(scene, water_tile, new THREE.MeshStandardMaterial({
             roughness: .13,
             transparent: true,
+            opacity: .6,
             vertexColors: THREE.FaceColors,
             flatShading: true,
         }));
