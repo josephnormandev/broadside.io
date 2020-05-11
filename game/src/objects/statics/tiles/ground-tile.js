@@ -13,7 +13,7 @@ export default class GroundTile extends Tile
     {
         base_object.type = []; addType(base_object.type, GroundTile.TYPE());
         base_object.category = Categories.Ground;
-        base_object.color = '#3db020';
+        base_object.surface_color = '#3db020';
 
         var ground_tile = Tile.create(simulation, base_object);
         return ground_tile;
@@ -21,12 +21,25 @@ export default class GroundTile extends Tile
 
     static create3D(scene, ground_tile)
     {
-        Tile.create3D(scene, ground_tile, new THREE.MeshStandardMaterial({
-            roughness: .95,
-            transparent: false,
-            vertexColors: THREE.FaceColors,
-            flatShading: true,
-        }));
-        ground_tile.vertices[0].y = ground_tile.height;
+		var {
+			mesh,
+			vertices,
+			faces,
+		} = Tile.createHexagonMesh(
+			ground_tile,
+			ground_tile.height,
+			ground_tile.surface_color,
+			new THREE.MeshStandardMaterial({
+	            roughness: .95,
+	            transparent: false,
+	            vertexColors: THREE.FaceColors,
+	            flatShading: true,
+			})
+		);
+		ground_tile.surface_mesh = mesh;
+		ground_tile.surface_vertices = vertices;
+		ground_tile.surface_faces = faces;
+
+		scene.add(ground_tile.surface_mesh);
     }
 }

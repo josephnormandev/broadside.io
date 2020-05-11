@@ -136,8 +136,6 @@ export default class CameraInputs
 
         if(this.zoom > 1) this.zoom = 1;
         if(this.zoom < 0) this.zoom = 0;
-
-        console.log(this.zoom);
     }
 
     keyDown(e)

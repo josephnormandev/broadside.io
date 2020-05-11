@@ -3,7 +3,8 @@ const { Engine, World, Bodies, Body, Common } = Matter;
 
 import * as THREE from 'three';
 
-import Inputs from './camera-inputs.js';
+import Inputs from './three-utils/camera-inputs.js';
+import { Sky } from './three-utils/sky.js';
 
 import { isType, getType, getOfType, Dynamic, WaterTile } from './objects/objects.js';
 
@@ -28,14 +29,6 @@ export default class Renderer
 
         this.scene.add(new THREE.AxesHelper(5));
 
-        var test_plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(30, 30, 5),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 }),
-        );
-        test_plane.position.set(0, 10, 0);
-        test_plane.rotation.set(0, 0, 0);
-        this.scene.add(test_plane);
-
         this.objects = new Map();
 
         Engine.run(this.engine);
@@ -50,6 +43,11 @@ export default class Renderer
         this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver);
 
         this.team_num = null;
+
+		// dummy AF test sky
+		var sky = new Sky();
+		sky.scale.setScalar(450000);
+		this.scene.add(sky);
     }
 
     mount(mount)
