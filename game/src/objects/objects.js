@@ -10,6 +10,8 @@ import WorldBound from './statics/world-bound.js';
 import Tile from './statics/tiles/tile.js';
 import WaterTile from './statics/tiles/water-tile.js';
 import GroundTile from './statics/tiles/ground-tile.js';
+import GrassTile from './statics/tiles/ground-tiles/grass-tile.js';
+import SandTile from './statics/tiles/ground-tiles/sand-tile.js';
 
 function getType(object)
 {
@@ -29,10 +31,14 @@ function getType(object)
             return WorldBound;
         case Tile.TYPE():
             return Tile;
-        case GroundTile.TYPE():
-            return GroundTile;
         case WaterTile.TYPE():
             return WaterTile;
+        case GroundTile.TYPE():
+            return GroundTile;
+        case GrassTile.TYPE():
+            return GrassTile;
+        case SandTile.TYPE():
+            return SandTile;
         default:
             throw 'Unknown Type!';
     }
@@ -78,6 +84,8 @@ export {
     Tile,
     WaterTile,
     GroundTile,
+	GrassTile,
+	SandTile,
     getType,
     isType,
     addType,

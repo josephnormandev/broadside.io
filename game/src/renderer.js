@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import Inputs from './three-utils/camera-inputs.js';
 import { Sky } from './three-utils/sky.js';
 
-import { isType, getType, getOfType, Dynamic, WaterTile } from './objects/objects.js';
+import { isType, getType, getOfType, Dynamic } from './objects/objects.js';
 
 import { AddObjectReceiver, BundledReceiver, EndMapStreamReceiver, RemoveObjectReceiver, TeamAssignmentReceiver, UpdateObjectReceiver } from './io/outputs/outputs.js';
 

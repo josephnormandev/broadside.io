@@ -11,11 +11,14 @@ export default class GroundTile extends Tile
 
     static create(simulation, base_object)
     {
-        base_object.type = []; addType(base_object.type, GroundTile.TYPE());
+		if(base_object.rocky_color == null)
+			throw 'Missing Parameter - GroundTile.rocky_color';
+
+        addType(base_object.type, GroundTile.TYPE());
         base_object.category = Categories.Ground;
-        base_object.surface_color = '#3db020';
 
         var ground_tile = Tile.create(simulation, base_object);
+		ground_tile.rocky_color = base_object.rocky_color;
         return ground_tile;
     }
 
@@ -42,4 +45,9 @@ export default class GroundTile extends Tile
 
 		scene.add(ground_tile.surface_mesh);
     }
+
+	static applyRockiness(ground_tile)
+	{
+		
+	}
 }

@@ -171,9 +171,6 @@ export default class Tile extends Static
             var height_2 = (adjacent_2 != null && others.has(adjacent_2)) ? others.get(adjacent_2).height : 0;
 
             tile.surface_vertices[vertex_id].y = (height_1 != 0 && height_2 != 0) ? (height_1 + height_2) / 2 : 0;
-
-
-			if(tile.type.includes('water-tile')) console.log(height_1, height_2);
 		}
         tile.surface_mesh.geometry.verticesNeedUpdate = true;
     }

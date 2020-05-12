@@ -16,7 +16,7 @@ export default class Simulation
         this.objects = new Map();
 
         this.game = game;
-        for(var base_object of map.objects)
+        for(var base_object of map)
         {
             this.addObject(base_object);
         }

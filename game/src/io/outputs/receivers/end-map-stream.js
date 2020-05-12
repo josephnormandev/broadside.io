@@ -8,6 +8,7 @@ export function receive(renderer, data)
     for(var [s_id, ground_tile] of ground_tiles)
     {
         GroundTile.averageSurfaceHeights(ground_tile, ground_tiles);
+        GroundTile.applyRockiness(ground_tile);
     }
 
     var water_tiles = getOfType(renderer.objects, WaterTile.TYPE());

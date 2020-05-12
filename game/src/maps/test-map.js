@@ -54,7 +54,7 @@ export default class TestMap
             {
                 index = y * width + x;
 
-                var type = [(map[y][x] == 'g' ? 'ground-tile' : 'water-tile')];
+                var type = [(map[y][x] == 'g' ? 'sand-tile' : 'water-tile')];
                 var tile_height = (map[y][x] == 'g' ? 5 : -5);
 
                 var position = null;

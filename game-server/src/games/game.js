@@ -24,7 +24,7 @@ export default class Game
             2: new GamePlayer(game.player_2, 2, this),
         };
 
-        this.simulation = new Simulation(this, new Maps.TestMap());
+        this.simulation = new Simulation(this, Maps.loadMap());
     }
 
     sendPlayerMessage(team_num, message)
