@@ -56,7 +56,7 @@ export default class WaterTile extends Tile
 			random_height,
 			water_tile.water_color,
 			new THREE.MeshStandardMaterial({
-	            roughness: .13,
+	            roughness: .1,
 	            transparent: true,
 	            opacity: .6,
 	            vertexColors: THREE.FaceColors,

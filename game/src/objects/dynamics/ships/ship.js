@@ -49,9 +49,13 @@ export default class Ship extends Dynamic
     {
         ship.mesh = new THREE.Mesh(
             new THREE.SphereGeometry(5, 10, 10),
-            new THREE.MeshBasicMaterial({
-                color: 0xffff00
-            }),
+			new THREE.MeshStandardMaterial({
+	            roughness: .1,
+	            transparent: true,
+	            opacity: .6,
+	            vertexColors: THREE.FaceColors,
+	            flatShading: false,
+	        })
         );
 
         ship.mesh.position.set(ship.position.x, 0, ship.position.y);

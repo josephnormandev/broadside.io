@@ -30,7 +30,7 @@ export default class CameraInputs
         // keeps track of inputs
         this.raycaster = new THREE.Raycaster();
         this.mouse_position = new THREE.Vector2();
-        this.zoom = .7;
+        this.zoom = 1;
         this.keys = new Set();
         this.selected = new Set();
     }
@@ -41,12 +41,13 @@ export default class CameraInputs
         this.mount_element.appendChild(render_element);
 
 		const aspect = this.mount_element.clientWidth / this.mount_element.clientHeight;
-		const d = 50;
+		console.log(this.mount_element.clientWidth, this.mount_element.clientHeight, aspect);
+		const d = 100;
 
         this.camera.left = aspect * -d;
         this.camera.right = aspect * d;
-        this.camera.top = aspect * d;
-        this.camera.bottom = aspect * -d;
+        this.camera.top = 1 * d;
+        this.camera.bottom = 1 * -d;
         this.camera.updateProjectionMatrix();
 
         scene.add(this.camera);
@@ -90,7 +91,7 @@ export default class CameraInputs
 
         this.sun_light.position.set(-500, 1000, 500);
         this.sun_light.position.add(this.camera.position);
-        this.sun_light_target.position.copy(this.camera.position);
+        this.sun_light_target.position.set(0, 0, 0);
     }
 
     unmount(scene)
@@ -131,10 +132,10 @@ export default class CameraInputs
         const ZOOM_SENSITIVITY = -.5; // will need to be changed later to reflect
                                     // players controls
 
-        this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY;
+        this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY * 2;
 
-        if(this.zoom > 1) this.zoom = 1;
-        if(this.zoom < .7) this.zoom = .7;
+        if(this.zoom > 2) this.zoom = 2;
+        if(this.zoom < 1) this.zoom = 1;
     }
 
     keyDown(e)
