@@ -30,7 +30,7 @@ export default class CameraInputs
         // keeps track of inputs
         this.raycaster = new THREE.Raycaster();
         this.mouse_position = new THREE.Vector2();
-        this.zoom = 1;
+        this.zoom = .7;
         this.keys = new Set();
         this.selected = new Set();
     }
@@ -82,7 +82,7 @@ export default class CameraInputs
             this.camera.position.x += .5;
 
         // control how the camera zooms in
-        this.camera.zoom = this.zoom;
+		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, this.zoom, .1);
 		this.camera.updateProjectionMatrix();
 
 		console.log(this.zoom);
