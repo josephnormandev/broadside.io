@@ -48,6 +48,24 @@ export default class GroundTile extends Tile
 
 	static applyRockiness(ground_tile)
 	{
-		
+		for(var surface_face of ground_tile.surface_faces)
+		{
+			const h1 = ground_tile.surface_vertices[surface_face.a].y;
+			const h2 = ground_tile.surface_vertices[surface_face.b].y;
+		 	const h3 = ground_tile.surface_vertices[surface_face.c].y;
+
+			const min = Math.min(h1, h2, h3);
+			const max = Math.max(h1, h2, h3);
+
+			if(max - min > 5)
+			{
+				surface_face.color.setStyle(ground_tile.rocky_color);
+				surface_face.color.add(new THREE.Color(
+	                THREE.Math.randFloat(-.04, .04),
+	                THREE.Math.randFloat(-.04, .04),
+	                THREE.Math.randFloat(-.04, .04)
+	            ));
+			}
+		}
 	}
 }

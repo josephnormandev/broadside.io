@@ -5,9 +5,9 @@ export default class CameraInputs
     constructor()
     {
         this.mount_element = null;
-        this.camera = new THREE.PerspectiveCamera(90, 1, .1, 1000);
-        this.camera.position.set(50, 50, 50);
-        this.camera.rotation.set(- Math.PI / 4, Math.PI / 4, 0 ,'YXZ');
+        this.camera = new THREE.OrthographicCamera(0, 0, 0, 0, 1, 1000);
+        this.camera.position.set(100, 100, 100);
+		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // world elements
         this.sun_light = new THREE.DirectionalLight(0xFFF6DA, 3);
@@ -40,7 +40,13 @@ export default class CameraInputs
         this.mount_element = mount;
         this.mount_element.appendChild(render_element);
 
-        this.camera.aspect = this.mount_element.clientWidth / this.mount_element.clientHeight;
+		const aspect = this.mount_element.clientWidth / this.mount_element.clientHeight;
+		const d = 50;
+
+        this.camera.left = aspect * -d;
+        this.camera.right = aspect * d;
+        this.camera.top = aspect * d;
+        this.camera.bottom = aspect * -d;
         this.camera.updateProjectionMatrix();
 
         scene.add(this.camera);
@@ -76,18 +82,11 @@ export default class CameraInputs
             this.camera.position.x += .5;
 
         // control how the camera zooms in
-        this.camera.position.lerp(new THREE.Vector3(
-            this.camera.position.x,
-            this.zoom * 45 + 25,
-            this.camera.position.z,
-        ), .1);
-        const targetQuat = new THREE.Quaternion();
-        targetQuat.setFromEuler(new THREE.Euler(
-            - Math.PI * .3 + this.zoom * Math.PI * .12,
-            this.camera.rotation.y,
-            this.camera.rotation.z, "YXZ"
-        ));
-        this.camera.quaternion.slerp(targetQuat, .1);
+        this.camera.zoom = this.zoom;
+		this.camera.updateProjectionMatrix();
+
+		console.log(this.zoom);
+
 
         this.sun_light.position.set(-500, 1000, 500);
         this.sun_light.position.add(this.camera.position);
@@ -135,7 +134,7 @@ export default class CameraInputs
         this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY;
 
         if(this.zoom > 1) this.zoom = 1;
-        if(this.zoom < 0) this.zoom = 0;
+        if(this.zoom < .7) this.zoom = .7;
     }
 
     keyDown(e)
