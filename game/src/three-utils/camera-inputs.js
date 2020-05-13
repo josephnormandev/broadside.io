@@ -128,7 +128,7 @@ export default class CameraInputs
 
     mouseScroll(e)
     {
-        const ZOOM_SENSITIVITY = .5; // will need to be changed later to reflect
+        const ZOOM_SENSITIVITY = -.5; // will need to be changed later to reflect
                                     // players controls
 
         this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY;
