@@ -162,15 +162,24 @@ export default class Tile extends Static
 
     static averageSurfaceHeights(tile, others)
     {
-        for(var vertex_id = 1; vertex_id < tile.surface_vertices.length; vertex_id ++)
+        for(var vertex_id of [1, 2, 3, 4, 5, 6])
         {
             var adjacent_1 = tile.adjacents[vertex_id - 1];
             var adjacent_2 = tile.adjacents[vertex_id != 1 ? vertex_id - 2 : 5];
 
-            var height_1 = (adjacent_1 != null && others.has(adjacent_1)) ? others.get(adjacent_1).height : 0;
-            var height_2 = (adjacent_2 != null && others.has(adjacent_2)) ? others.get(adjacent_2).height : 0;
+            var height_0 = tile.height;
+            var height_1 = (adjacent_1 != null && others.has(adjacent_1)) ? others.get(adjacent_1).height : null;
+            var height_2 = (adjacent_2 != null && others.has(adjacent_2)) ? others.get(adjacent_2).height : null;
 
-            tile.surface_vertices[vertex_id].y = (height_1 != 0 && height_2 != 0) ? (height_1 + height_2) / 2 : 0;
+			var avg_height = 0;
+
+			if(height_1 != null && height_2 != null)
+				avg_height = (height_0 + height_1 + height_2) / 3;
+			else
+				console.log(height_0, height_1, height_2);
+
+            tile.surface_vertices[vertex_id].y = avg_height;
+
 		}
         tile.surface_mesh.geometry.verticesNeedUpdate = true;
     }

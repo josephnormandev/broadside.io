@@ -5,7 +5,7 @@ export default class CameraInputs
     constructor()
     {
         this.mount_element = null;
-        this.camera = new THREE.OrthographicCamera(0, 0, 0, 0, 1, 1000);
+        this.camera = new THREE.OrthographicCamera(0, 0, 0, 0, -1000, 1000);
         this.camera.position.set(100, 100, 100);
 		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -86,9 +86,6 @@ export default class CameraInputs
 		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, this.zoom, .1);
 		this.camera.updateProjectionMatrix();
 
-		console.log(this.zoom);
-
-
         this.sun_light.position.set(-500, 1000, 500);
         this.sun_light.position.add(this.camera.position);
         this.sun_light_target.position.set(0, 0, 0);
@@ -135,7 +132,7 @@ export default class CameraInputs
         this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY * 2;
 
         if(this.zoom > 2) this.zoom = 2;
-        if(this.zoom < 1) this.zoom = 1;
+        if(this.zoom < .1) this.zoom = .1;
     }
 
     keyDown(e)

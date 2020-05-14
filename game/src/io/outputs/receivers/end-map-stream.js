@@ -1,6 +1,6 @@
 export const receiver = 'end-map-stream';
 
-import { getOfType, GroundTile, WaterTile } from '../../../objects/objects.js';
+import { getOfType, Tile, GroundTile, WaterTile } from '../../../objects/objects.js';
 
 export function receive(renderer, data)
 {

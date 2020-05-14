@@ -69,7 +69,6 @@ export default class WaterTile extends Tile
 
 		scene.add(water_tile.surface_mesh);
 		scene.add(water_tile.water_mesh);
-
     }
 
     static draw(water_tile)

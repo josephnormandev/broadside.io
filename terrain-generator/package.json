@@ -12,6 +12,7 @@
   "dependencies": {
     "ds-heightmap": "^0.2.3",
     "game": "file:../game",
+    "heightmap-generator": "^1.0.5",
     "matter-js": "^0.14.2",
     "matterjs": "^0.1.3"
   }

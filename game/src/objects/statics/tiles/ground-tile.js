@@ -57,7 +57,7 @@ export default class GroundTile extends Tile
 			const min = Math.min(h1, h2, h3);
 			const max = Math.max(h1, h2, h3);
 
-			if(max - min > 5)
+			if(max - min > 7)
 			{
 				surface_face.color.setStyle(ground_tile.rocky_color);
 				surface_face.color.add(new THREE.Color(
