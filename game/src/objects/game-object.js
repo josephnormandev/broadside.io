@@ -61,7 +61,6 @@ export default class GameObject
 
     static getBaseObject(game_object)
     {
-		console.log(game_object.type);
         return {
             s_id: game_object.s_id,
             type: game_object.type,
