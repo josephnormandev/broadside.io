@@ -74,13 +74,13 @@ export default class CameraInputs
     update()
     {
         if(this.keys.has(38) || this.keys.has(87))
-            this.camera.position.z -= .5;
+            this.camera.position.z -= 5;
         if(this.keys.has(40) || this.keys.has(83))
-            this.camera.position.z += .5;
+            this.camera.position.z += 5;
         if(this.keys.has(37) || this.keys.has(65))
-            this.camera.position.x -= .5;
+            this.camera.position.x -= 5;
         if(this.keys.has(39) || this.keys.has(68))
-            this.camera.position.x += .5;
+            this.camera.position.x += 5;
 
         // control how the camera zooms in
 		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, this.zoom, .1);

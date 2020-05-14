@@ -1,9 +1,5 @@
-main-server/node_modules/
 main-server/config.json
 
-game-server/node_modules/
 game-server/config.json
 
-frontend/node_modules/
-
-game/node_modules/
+*/node_modules/
