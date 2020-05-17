@@ -11,7 +11,7 @@ export default class SandTile extends GroundTile
 	{
 		base_object.type = []; addType(base_object.type, SandTile.TYPE());
         base_object.surface_color = '#edd9af';
-		base_object.rocky_color = '#b29082';
+		base_object.rocky_color = '#D6C298';
 
 		var sand_tile = GroundTile.create(simulation, base_object);
 		return sand_tile;

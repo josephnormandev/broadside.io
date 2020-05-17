@@ -3,8 +3,7 @@ const { Engine, World, Bodies, Body, Common } = Matter;
 
 import * as THREE from 'three';
 
-import Inputs from './three-utils/camera-inputs.js';
-import { Sky } from './three-utils/sky.js';
+import Inputs from './inputs/inputs.js';
 
 import { isType, getType, getOfType, Dynamic } from './objects/objects.js';
 
@@ -43,11 +42,6 @@ export default class Renderer
         this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver);
 
         this.team_num = null;
-
-		// dummy AF test sky
-		var sky = new Sky();
-		sky.scale.setScalar(450000);
-		this.scene.add(sky);
     }
 
     mount(mount)
@@ -70,7 +64,7 @@ export default class Renderer
             }
 
             this.inputs.update();
-            this.render.render(this.scene, this.inputs.camera);
+            this.render.render(this.scene, this.inputs.camera.get());
         }
     }
 

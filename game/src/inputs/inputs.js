@@ -1,38 +1,35 @@
 import * as THREE from 'three';
 
-export default class CameraInputs
+import Camera from './camera.js';
+import Cursor from './cursor.js';
+import Lighting from './lighting.js';
+
+export default class Inputs
 {
     constructor()
     {
         this.mount_element = null;
-        this.camera = new THREE.OrthographicCamera(0, 0, 0, 0, -1000, 1000);
-        this.camera.position.set(100, 100, 100);
-		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-        // world elements
-        this.sun_light = new THREE.DirectionalLight(0xFFF6DA, 3);
-        this.sun_light_target = new THREE.Object3D();
-        this.sun_light.target = this.sun_light_target;
-        this.sun_light.castShadow = true;
-        this.sun_light.shadow.mapSize.copy(new THREE.Vector2(2000, 2000));
-        this.sun_light.shadow.camera.zoom = .02;
-        this.sun_light.shadow.camera.far = 2000;
+		// important elements to the Input stuff
+		this.camera = new Camera(Camera.ISOMETRIC());
+		this.cursor = new Cursor();
+		this.lighting = new Lighting();
 
-        this.ambient_light = new THREE.AmbientLight(0xFFF6DA);
-
-        // have to make this "bound" version of these handlers
+        // EVENT HANDLERS
         this.mouseMove = this.mouseMove.bind(this);
         this.mouseClick = this.mouseClick.bind(this);
         this.mouseScroll = this.mouseScroll.bind(this);
         this.keyDown = this.keyDown.bind(this);
         this.keyUp = this.keyUp.bind(this);
 
-        // keeps track of inputs
-        this.raycaster = new THREE.Raycaster();
+        // INPUTS
         this.mouse_position = new THREE.Vector2();
-        this.zoom = 1;
         this.keys = new Set();
-        this.selected = new Set();
+
+		// OUTPUTS
+        this.raycaster = new THREE.Raycaster();
+		this.position = new THREE.Vector3(100, 100, 100);
+        this.zoom = 1;
     }
 
     mount(mount, render_element, scene)
@@ -40,20 +37,9 @@ export default class CameraInputs
         this.mount_element = mount;
         this.mount_element.appendChild(render_element);
 
-		const aspect = this.mount_element.clientWidth / this.mount_element.clientHeight;
-		console.log(this.mount_element.clientWidth, this.mount_element.clientHeight, aspect);
-		const d = 100;
-
-        this.camera.left = aspect * -d;
-        this.camera.right = aspect * d;
-        this.camera.top = 1 * d;
-        this.camera.bottom = 1 * -d;
-        this.camera.updateProjectionMatrix();
-
-        scene.add(this.camera);
-        scene.add(this.sun_light);
-        scene.add(this.sun_light_target);
-        scene.add(this.ambient_light);
+		this.camera.mount(mount, scene);
+		this.cursor.mount(mount, scene);
+		this.lighting.mount(mount, scene);
 
         // add event listeners using the react ref
         this.mount_element.addEventListener('mousemove', this.mouseMove);
@@ -63,7 +49,6 @@ export default class CameraInputs
         window.addEventListener('keyup', this.keyUp);
 
         this.keys.clear();
-        this.selected.clear();
     }
 
     get mounted()
@@ -74,29 +59,24 @@ export default class CameraInputs
     update()
     {
         if(this.keys.has(38) || this.keys.has(87))
-            this.camera.position.z -= 5;
+            this.position.z -= 5;
         if(this.keys.has(40) || this.keys.has(83))
-            this.camera.position.z += 5;
+            this.position.z += 5;
         if(this.keys.has(37) || this.keys.has(65))
-            this.camera.position.x -= 5;
+            this.position.x -= 5;
         if(this.keys.has(39) || this.keys.has(68))
-            this.camera.position.x += 5;
+            this.position.x += 5;
 
-        // control how the camera zooms in
-		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, this.zoom, .1);
-		this.camera.updateProjectionMatrix();
-
-        this.sun_light.position.set(-500, 1000, 500);
-        this.sun_light.position.add(this.camera.position);
-        this.sun_light_target.position.set(0, 0, 0);
+		this.camera.updateCamera(this.position, this.zoom);
+		this.cursor.updateCursor(this.mouse_position);
+		this.lighting.updateLighting(this.position);
     }
 
     unmount(scene)
     {
-        scene.remove(this.camera);
-        scene.remove(this.sun_light);
-        scene.remove(this.sun_light_target);
-        scene.remove(this.ambient_light);
+		this.cursor.unmount(scene);
+		this.camera.unmount(scene);
+		this.lighting.unmount(scene);
 
         this.mount_element.removeEventListener('mousemove', this.mouseMove);
         this.mount_element.removeEventListener('click', this.mouseClick);
@@ -107,7 +87,6 @@ export default class CameraInputs
         this.mount_element = null;
 
         this.keys.clear();
-        this.selected.clear();
     }
 
     mouseMove(e)
@@ -118,10 +97,7 @@ export default class CameraInputs
 
     mouseClick(e)
     {
-        this.raycaster.setFromCamera(this.mouse_position, this.camera);
 
-        // from here, check all of the objects to see if the mesh is being selected
-        console.log(this.mouse_position);
     }
 
     mouseScroll(e)

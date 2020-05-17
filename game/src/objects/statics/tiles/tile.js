@@ -175,8 +175,6 @@ export default class Tile extends Static
 
 			if(height_1 != null && height_2 != null)
 				avg_height = (height_0 + height_1 + height_2) / 3;
-			else
-				console.log(height_0, height_1, height_2);
 
             tile.surface_vertices[vertex_id].y = avg_height;
 
