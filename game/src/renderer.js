@@ -9,6 +9,8 @@ import { isType, getType, getOfType, Dynamic } from './objects/objects.js';
 
 import { AddObjectReceiver, BundledReceiver, EndMapStreamReceiver, RemoveObjectReceiver, TeamAssignmentReceiver, UpdateObjectReceiver } from './io/outputs/outputs.js';
 
+// essentially a simulation except it's for the frontend and therefore deals
+// with inputs and rendering
 export default class Renderer
 {
     constructor(page)
@@ -19,10 +21,6 @@ export default class Renderer
         this.engine.world.gravity.y = 0;
 
         this.scene = new THREE.Scene();
-        this.render = new THREE.WebGLRenderer();
-        this.render.physicallyCorrectLights = true;
-        this.render.shadowMap.enabled = true;
-        this.render.autoClearColor = false;
 
         this.inputs = new Inputs();
 
@@ -46,10 +44,7 @@ export default class Renderer
 
     mount(mount)
     {
-        this.render.setSize(mount.clientWidth, mount.clientHeight);
-        this.inputs.mount(mount, this.render.domElement, this.scene);
-
-        var self = this;
+        this.inputs.mount(mount, this.scene);
     }
 
     animate()
@@ -64,7 +59,7 @@ export default class Renderer
             }
 
             this.inputs.update();
-            this.render.render(this.scene, this.inputs.camera.get());
+			this.inputs.render(this.scene);
         }
     }
 

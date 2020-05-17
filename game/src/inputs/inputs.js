@@ -4,10 +4,13 @@ import Camera from './camera.js';
 import Cursor from './cursor.js';
 import Lighting from './lighting.js';
 
+// a wrapper class for all things inputs. This is basically the one object
+// that defines simulation on the frontend
 export default class Inputs
 {
-    constructor()
+    constructor(simulation)
     {
+		this.simulation = simulation;
         this.mount_element = null;
 
 		// important elements to the Input stuff
@@ -32,14 +35,14 @@ export default class Inputs
         this.zoom = 1;
     }
 
-    mount(mount, render_element, scene)
+    mount(mount, scene)
     {
-        this.mount_element = mount;
-        this.mount_element.appendChild(render_element);
+		this.mount_element = mount;
+		this.mount_element.appendChild(this.camera.render_element);
 
-		this.camera.mount(mount, scene);
-		this.cursor.mount(mount, scene);
-		this.lighting.mount(mount, scene);
+		this.camera.mount(this.mount_element, scene);
+		this.cursor.mount(this.mount_element, scene);
+		this.lighting.mount(this.mount_element, scene);
 
         // add event listeners using the react ref
         this.mount_element.addEventListener('mousemove', this.mouseMove);
@@ -72,6 +75,11 @@ export default class Inputs
 		this.lighting.updateLighting(this.position);
     }
 
+	render(scene)
+	{
+		this.camera.render(scene);
+	}
+
     unmount(scene)
     {
 		this.cursor.unmount(scene);
@@ -102,13 +110,13 @@ export default class Inputs
 
     mouseScroll(e)
     {
-        const ZOOM_SENSITIVITY = -.5; // will need to be changed later to reflect
+        const ZOOM_SENSITIVITY = .8; // will need to be changed later to reflect
                                     // players controls
 
-        this.zoom += e.deltaY / 300 * ZOOM_SENSITIVITY * 2;
+        this.zoom += e.deltaY / -300 * ZOOM_SENSITIVITY * 1;
 
-        if(this.zoom > 2) this.zoom = 2;
-        if(this.zoom < .1) this.zoom = .1;
+        if(this.zoom > 1.5) this.zoom = 1.5;
+        if(this.zoom < .4) this.zoom = .4;
     }
 
     keyDown(e)

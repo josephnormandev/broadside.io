@@ -29,11 +29,12 @@ export default class Camera
 		}
 		else
 			throw 'Camera mode not provided';
-	}
 
-	get()
-	{
-		return this.camera;
+
+        this.renderer = new THREE.WebGLRenderer();
+        this.renderer.physicallyCorrectLights = true;
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.autoClearColor = false;
 	}
 
 	mount(mount, scene)
@@ -60,6 +61,8 @@ export default class Camera
 
 			scene.add(this.camera);
 		}
+
+        this.renderer.setSize(mount.clientWidth, mount.clientHeight);
 	}
 
 	updateCamera(position, zoom)
@@ -68,6 +71,16 @@ export default class Camera
 
 		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, zoom, .1);
 		this.camera.updateProjectionMatrix();
+	}
+
+	render(scene)
+	{
+		this.renderer.render(scene, this.camera);
+	}
+
+	get render_element()
+	{
+		return this.renderer.domElement;
 	}
 
 	unmount(scene)
