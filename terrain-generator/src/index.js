@@ -115,4 +115,16 @@ for(var y = 0; y < height; y ++)
 	}
 }
 
+const map_width_b = map_width * 2 * b - b;
+const map_height = height * a - a;
+
+TILE_OUT.push({
+	s_id: index ++,
+	type: ['world-bound'],
+	width: map_width_b,
+	height: map_height,
+	position: Vector.create(map_width_b / 2, map_height / 2),
+	angle: 0,
+});
+
 Maps.saveMap(TILE_OUT);

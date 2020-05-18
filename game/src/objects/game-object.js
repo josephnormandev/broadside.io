@@ -45,7 +45,7 @@ export default class GameObject
 
     static create3D(scene, game_object) { } // optional method
 
-    static draw(game_object) { } // optional method
+    static draw(scene, game_object) { } // optional method
 
     static getObjectAtPosition(game_objects, position)
     {
@@ -69,4 +69,10 @@ export default class GameObject
             angle: game_object.angle,
         };
     }
+
+	// any object that doesn't override this is non-selectable
+	static checkRaycast(game_object, raycaster)
+	{
+		return false;
+	}
 }

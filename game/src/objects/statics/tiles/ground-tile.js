@@ -46,6 +46,14 @@ export default class GroundTile extends Tile
 		scene.add(ground_tile.surface_mesh);
     }
 
+	static checkRaycast(ground_tile, raycaster)
+	{
+		const result = raycaster.intersectObject(ground_tile.surface_mesh, false);
+
+		if(result.length != 0)
+			return true;
+	}
+
 	static applyRockiness(ground_tile)
 	{
 		for(var surface_face of ground_tile.surface_faces)

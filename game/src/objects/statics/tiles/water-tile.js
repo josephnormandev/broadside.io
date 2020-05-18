@@ -71,7 +71,15 @@ export default class WaterTile extends Tile
 		scene.add(water_tile.water_mesh);
     }
 
-    static draw(water_tile)
+	static checkRaycast(water_tile, raycaster)
+	{
+		const result = raycaster.intersectObject(water_tile.water_mesh, false);
+
+		if(result.length != 0)
+			return true;
+	}
+
+    static draw(scene, water_tile)
     {
         if(water_tile.bob == true)
         {

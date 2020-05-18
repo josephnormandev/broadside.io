@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 import Inputs from './inputs/inputs.js';
 
-import { isType, getType, getOfType, Dynamic } from './objects/objects.js';
+import { isType, getType, getOfType, Dynamic, Tile } from './objects/objects.js';
 
 import { AddObjectReceiver, BundledReceiver, EndMapStreamReceiver, RemoveObjectReceiver, TeamAssignmentReceiver, UpdateObjectReceiver } from './io/outputs/outputs.js';
 
@@ -22,7 +22,7 @@ export default class Renderer
 
         this.scene = new THREE.Scene();
 
-        this.inputs = new Inputs();
+        this.inputs = new Inputs(this);
 
         this.scene.add(new THREE.AxesHelper(5));
 
@@ -55,7 +55,7 @@ export default class Renderer
         {
             for(var [s_id, object] of this.objects)
             {
-                getType(object).draw(object);
+                getType(object).draw(this.scene, object);
             }
 
             this.inputs.update();
@@ -89,6 +89,17 @@ export default class Renderer
 
         getType(game_object).create3D(this.scene, game_object);
     }
+
+	getRaycastObjects(raycaster)
+	{
+		const selected = [];
+		for(const [s_id, object] of this.objects)
+		{
+			if(getType(object).checkRaycast(object, raycaster))
+				selected.push(object);
+		}
+		return selected;
+	}
 
     updateObject(update_object)
     {

@@ -17,7 +17,7 @@ export default class Camera
 		this.mode = mode;
 		if(this.mode == Camera.PERSPECTIVE())
 		{
-			this.camera = new THREE.PerspectiveCamera(75, 1, .1, 1000);
+			this.camera = new THREE.PerspectiveCamera(90, 1, .1, 1000);
 			this.camera.position.set(100, 100, 100);
 			this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 		}
@@ -35,6 +35,16 @@ export default class Camera
         this.renderer.physicallyCorrectLights = true;
         this.renderer.shadowMap.enabled = true;
         this.renderer.autoClearColor = false;
+	}
+
+	get()
+	{
+		return this.camera;
+	}
+
+	get render_element()
+	{
+		return this.renderer.domElement;
 	}
 
 	mount(mount, scene)
@@ -76,11 +86,6 @@ export default class Camera
 	render(scene)
 	{
 		this.renderer.render(scene, this.camera);
-	}
-
-	get render_element()
-	{
-		return this.renderer.domElement;
 	}
 
 	unmount(scene)
