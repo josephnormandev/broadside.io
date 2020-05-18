@@ -64,25 +64,28 @@ export default class Inputs
 
     update()
     {
-		const rate = 1;
-		const edge = .9;
+		const rate = (this.pointer_lock == true ? 10 : 0);
 
-		if(this.mouse_position.x > edge)
-			if(this.mouse_position.y > edge) // top right
-				this.position.z -= rate;
-			else if(this.mouse_position.y < -edge)
+		const width = this.mount_element.clientWidth;
+		const height = this.mount_element.clientHeight;
+		const edge = 10;
+
+		if(this.mouse_position.x > width - edge) // right side
+			if(this.mouse_position.y > height - edge) // bot right
 				this.position.x += rate;
+			else if(this.mouse_position.y < edge) // top right
+				this.position.z -= rate;
 			else // right
 			{
 				this.position.x += rate / Math.sqrt(2);
 				this.position.z -= rate / Math.sqrt(2);
 			}
-		else if(this.mouse_position.x < -edge)
+		else if(this.mouse_position.x < edge)
 		{
-			if(this.mouse_position.y > edge) // top left
-				this.position.x -= rate;
-			else if(this.mouse_position.y < -edge) // bottom left
+			if(this.mouse_position.y > height - edge) // bot left
 				this.position.z += rate;
+			else if(this.mouse_position.y < edge) // top left
+				this.position.x -= rate;
 			else // left
 			{
 				this.position.x -= rate / Math.sqrt(2);
@@ -91,17 +94,19 @@ export default class Inputs
 		}
 		else
 		{
-			if(this.mouse_position.y > edge) // top
-			{
-				this.position.x -= rate / Math.sqrt(2);
-				this.position.z -= rate / Math.sqrt(2);
-			}
-			else if(this.mouse_position.y < -edge) // bottom
+			if(this.mouse_position.y > height - edge) // bot
 			{
 				this.position.x += rate / Math.sqrt(2);
 				this.position.z += rate / Math.sqrt(2);
 			}
+			else if(this.mouse_position.y < edge) // top
+			{
+				this.position.x -= rate / Math.sqrt(2);
+				this.position.z -= rate / Math.sqrt(2);
+			}
 		}
+
+		console.log(this.mouse_position)
 
 		this.camera.updateCamera(this.position, this.zoom);
 		this.cursor.updateCursor(this.mouse_position);
@@ -135,17 +140,21 @@ export default class Inputs
     {
 		if(this.pointer_lock == true)
 		{
-			console.log(this.mouse_position);
+			this.mouse_position.x += e.movementX;
+			this.mouse_position.y += e.movementY;
+
+			this.mouse_position.x = Math.max(0, Math.min(this.mount_element.clientWidth, this.mouse_position.x));
+			this.mouse_position.y = Math.max(0, Math.min(this.mount_element.clientHeight, this.mouse_position.y));
 		}
     }
 
     mouseClick(e)
     {
-		this.mouse_position.x = (e.clientX / this.mount_element.clientWidth) * 2 - 1;
-		this.mouse_position.y = -(e.clientY / this.mount_element.clientHeight) * 2 + 1;
-
 		if(this.pointer_lock == false)
 		{
+			this.mouse_position.x = e.clientX;
+			this.mouse_position.y = e.clientY;
+
 			const element = this.camera.render_element;
 			element.requestPointerLock = element.requestPointerLock
 										|| element.mozRequestPointerLock
@@ -154,7 +163,12 @@ export default class Inputs
 		}
 		else
 		{
-			this.raycaster.setFromCamera(this.mouse_position, this.camera.get());
+			// (e.clientX / this.mount_element.clientWidth) * 2 - 1;
+			//-(e.clientY / this.mount_element.clientHeight) * 2 + 1;
+			this.raycaster.setFromCamera(new THREE.Vector2(
+				(this.mouse_position.x / this.mount_element.clientWidth) * 2 - 1,
+				-(this.mouse_position.y / this.mount_element.clientHeight) * 2 + 1,
+			), this.camera.get());
 
 			console.log(this.simulation.getRaycastObjects(this.raycaster));
 		}
@@ -173,7 +187,7 @@ export default class Inputs
         this.zoom += e.deltaY / -300 * ZOOM_SENSITIVITY * 1;
 
         if(this.zoom > 1.5) this.zoom = 1.5;
-        if(this.zoom < .4) this.zoom = .4;
+        if(this.zoom < .5) this.zoom = .5;
     }
 
     keyDown(e)
