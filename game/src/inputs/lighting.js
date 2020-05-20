@@ -30,7 +30,7 @@ export default class Lighting
 		this.sun_light_target.position.add(position);
 	}
 
-	unmount(scene)
+	unmount(mount, scene)
 	{
 		scene.remove(this.sun_light);
 		scene.remove(this.sun_light_target);

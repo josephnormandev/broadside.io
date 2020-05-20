@@ -37,14 +37,14 @@ export default class Camera
         this.renderer.autoClearColor = false;
 	}
 
-	get()
-	{
-		return this.camera;
-	}
-
 	get render_element()
 	{
 		return this.renderer.domElement;
+	}
+
+	get position()
+	{
+		return this.camera.position;
 	}
 
 	mount(mount, scene)
@@ -75,9 +75,9 @@ export default class Camera
         this.renderer.setSize(mount.clientWidth, mount.clientHeight);
 	}
 
-	updateCamera(position, zoom)
+	updateCamera(position_diff, zoom)
 	{
-		this.camera.position.copy(position);
+		this.camera.position.add(position_diff);
 
 		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, zoom, .1);
 		this.camera.updateProjectionMatrix();
@@ -88,7 +88,7 @@ export default class Camera
 		this.renderer.render(scene, this.camera);
 	}
 
-	unmount(scene)
+	unmount(mount, scene)
 	{
 		scene.remove(this.camera);
 	}
