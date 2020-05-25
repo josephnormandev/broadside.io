@@ -1,6 +1,6 @@
-const Config = {
-    player_ws_port: 8081,
-};
+import Config from '../../config.json';
+
+import LoggerService from '../logger/logger.service.js';
 
 export default class ConfigService
 {
@@ -15,7 +15,7 @@ export default class ConfigService
 
         if(result != null)
             return result;
-        throw `Missing config key ${ key }`;
-        console.exit(1);
+        LoggerService.red(`Missing key: ${ key }`);
+        process.exit(1);
     }
 }

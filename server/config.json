@@ -1,0 +1,7 @@
+{
+	"player_ws_port": 8081,
+	"http_port": 8080,
+	"cookie_secret": "this is your basic, average secret",
+	"cookie_max_age": 10800000,
+	"mongodb_url": "mongodb://admin:yoloswag624@jnorman.dev:27017/broadside?authSource=admin"
+}
