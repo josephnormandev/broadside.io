@@ -6,7 +6,7 @@ import ConfigService from '../config/config.service.js';
 
 export default class AppService
 {
-	static http_server;
+	static server;
 	static app;
 
 	static features = [
@@ -42,7 +42,7 @@ export default class AppService
             }
         }
 
-        AppService.http_server = HTTP.createServer(AppService.app);
-        AppService.http_server.listen(ConfigService.get('http_port'));
+        AppService.server = HTTP.createServer(AppService.app);
+        AppService.server.listen(ConfigService.get('http_port'));
 	}
 }
