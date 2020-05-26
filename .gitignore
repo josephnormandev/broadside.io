@@ -1,8 +1,2 @@
-main-server/config.json
-
-main-server/cert.pem
-main-server/key.pem
-
-game-server/config.json
-
 */node_modules/
+*/config.json
