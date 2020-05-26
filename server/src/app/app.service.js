@@ -1,6 +1,7 @@
 import HTTP from 'http';
 import Express from 'express';
 import BodyParser from 'body-parser';
+import Path from 'path';
 
 import ConfigService from '../config/config.service.js';
 
@@ -21,6 +22,7 @@ export default class AppService
         AppService.app.use(BodyParser.urlencoded({
             extended: true,
         }));
+		AppService.app.use(Express.static(ConfigService.get('build_path')));
         // AppService.app.use(AuthService.session_parser);
 
 		for(var feature of AppService.features)
@@ -41,6 +43,10 @@ export default class AppService
                 );
             }
         }
+
+		AppService.app.get('/*', function(req, res) {
+			res.sendFile(Path.join(ConfigService.get('build_path'), 'index.html'));
+		});
 
         AppService.server = HTTP.createServer(AppService.app);
         AppService.server.listen(ConfigService.get('http_port'));
