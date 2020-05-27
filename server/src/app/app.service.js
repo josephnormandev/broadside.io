@@ -3,8 +3,11 @@ import Express from 'express';
 import BodyParser from 'body-parser';
 import Path from 'path';
 
+import AuthService from '../auth/auth.service.js';
 import ConfigService from '../config/config.service.js';
 
+import * as Login from '../players/features/login.js';
+import * as Logout from '../players/features/logout.js';
 import * as FrontendOr404 from './features/frontend-or-404.js';
 
 import error500 from './errors/error500.js';
@@ -17,6 +20,8 @@ export default class AppService
 	static app;
 
 	static features = [
+		Login,
+		Logout,
 		FrontendOr404, // last
 	];
 
@@ -30,10 +35,7 @@ export default class AppService
         AppService.app.use(BodyParser.urlencoded({
             extended: true,
         }));
-        // AppService.app.use(AuthService.session_parser);
-		AppService.app.use(function (err, req, res, next) {
-			error500(req, res);
-		});
+        AppService.app.use(AuthService.session_parser);
 
 		if(AppService.use_build == true)
 		{
@@ -59,8 +61,9 @@ export default class AppService
             }
         }
 
-		AppService.app.get('/*', function(req, res) {
-			res.sendFile(Path.join(ConfigService.get('build_path'), 'index.html'));
+		AppService.app.use(function (err, req, res, next) {
+			console.log(err)
+			error500(req, res);
 		});
 
         AppService.server = HTTP.createServer(AppService.app);

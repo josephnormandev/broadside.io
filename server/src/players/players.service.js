@@ -26,4 +26,11 @@ export default class PlayersService
 			_id: id,
 		});
 	}
+
+	static async getPlayerByEmail(email)
+	{
+		return await PlayersService.model.findOne({
+			email: email,
+		});
+	}
 }
