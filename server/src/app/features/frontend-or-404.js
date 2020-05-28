@@ -13,7 +13,6 @@ async function frontendOr404(req, res)
 	}
 	else
 	{
-		console.log('tet')
 		error404(req, res);
 	}
 }

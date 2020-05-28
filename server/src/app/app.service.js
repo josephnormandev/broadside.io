@@ -9,7 +9,9 @@ import ConfigService from '../config/config.service.js';
 import * as Login from '../players/features/login.js';
 import * as Logout from '../players/features/logout.js';
 import * as FrontendOr404 from './features/frontend-or-404.js';
+import * as PostError404 from './features/post-error404.js';
 
+import error404 from './errors/error404.js';
 import error500 from './errors/error500.js';
 
 export default class AppService
@@ -22,7 +24,8 @@ export default class AppService
 	static features = [
 		Login,
 		Logout,
-		FrontendOr404, // last
+		FrontendOr404, // last (for GET)
+		PostError404, // last (for POST)
 	];
 
 	static async initialize()
