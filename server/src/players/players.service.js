@@ -33,4 +33,11 @@ export default class PlayersService
 			email: email,
 		});
 	}
+
+	static async getPlayerByUsername(username)
+	{
+		return await PlayersService.model.findOne({
+			username: username,
+		});
+	}
 }
