@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Button, Spinner, Alert } from 'react-bootstrap';
 
-import TextField from './fields/text-field';
-import PasswordField from './fields/password-field';
+import TextField from './fields/text';
+import PasswordField from './fields/password';
 
 export default class GenericForm extends React.Component
 {
