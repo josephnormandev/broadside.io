@@ -31,12 +31,12 @@ class LoginPage extends React.Component
 		if(status === 200)
 		{
 			// successful login
-			this.props.history.push('/');
+			this.props.history.push('/lobby');
 		}
 		else if(status === 401)
 		{
 			// shouldn't be trying to login (already logged in)
-			this.props.history.push('/');
+			this.props.history.push('/lobby');
 		}
 		return false;
 	}

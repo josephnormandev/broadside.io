@@ -21,11 +21,21 @@ export default class Pages extends React.Component
             <div>
                 <Router>
                     <Switch>
-                        <Route exact path="/login" component={ LoginPage } />
-                        <Route exact path="/logout" component={ LogoutPage } />
-                        <Route exact path="/register" component={ RegisterPage } />
-                        <Route exact path="/lobby" component={ LobbyPage } />
-                        <Route exact path="/logout" component={ PlayPage } />
+                        <Route exact path="/login">
+							<LoginPage />
+						</Route>
+                        <Route exact path="/logout">
+							<LogoutPage />
+						</Route>
+                        <Route exact path="/register">
+							<RegisterPage />
+						</Route>
+                        <Route exact path="/lobby">
+							<LobbyPage />
+						</Route>
+                        <Route exact path="/play">
+							<PlayPage />
+						</Route>
                     </Switch>
                 </Router>
             </div>

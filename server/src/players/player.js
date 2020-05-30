@@ -28,6 +28,7 @@ export default class Player extends DatabaseObject
 			username: this.username,
 			email: this.email,
 			admin: this.admin,
+			inGame: false,
 		};
 	}
 

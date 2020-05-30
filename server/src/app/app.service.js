@@ -9,6 +9,7 @@ import ConfigService from '../config/config.service.js';
 import * as Login from '../players/features/login.js';
 import * as Logout from '../players/features/logout.js';
 import * as Register from '../players/features/register.js';
+import * as Me from '../players/features/me.js';
 import * as FrontendOr404 from './features/frontend-or-404.js';
 import * as PostError404 from './features/post-error404.js';
 
@@ -26,6 +27,7 @@ export default class AppService
 		Login,
 		Logout,
 		Register,
+		Me,
 		FrontendOr404, // last (for GET)
 		PostError404, // last (for POST)
 	];
