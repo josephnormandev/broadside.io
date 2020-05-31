@@ -2,12 +2,15 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 import get from '../../workers/get';
+import Client from '../../workers/client';
 
 class LogoutPage extends React.Component
 {
 	async componentDidMount()
 	{
-		const response = await get('players/logout');
+		await Client.close();
+		
+		const response = await get('/players/logout');
 
 		if(response.status === 200)
 		{

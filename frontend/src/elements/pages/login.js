@@ -3,7 +3,9 @@ import { withRouter } from 'react-router-dom';
 
 import GenericForm from '../../forms/generic-form';
 
+import checkMe from '../../workers/check-me';
 import post from '../../workers/post';
+import Client from '../../workers/client';
 
 class LoginPage extends React.Component
 {
@@ -24,6 +26,30 @@ class LoginPage extends React.Component
 			required: false,
 			placeholder: 'Your password here',
 		}];
+
+		this.state = {
+			authorized: false,
+		};
+	}
+
+	async componentDidMount()
+	{
+		const { logged_in, in_game } = await checkMe();
+
+		if(logged_in && !in_game)
+		{
+			return this.props.history.push('/lobby');
+		}
+		else if(logged_in && in_game)
+		{
+			return this.props.history.push('/game');
+		}
+
+		await Client.close();
+
+		this.setState({
+			authorized: true,
+		});
 	}
 
 	async handleSuccess(status, response)
@@ -50,17 +76,23 @@ class LoginPage extends React.Component
 	{
 		return (
 			<div>
-				<h1>
-					Login Page
-				</h1>
-				<GenericForm
-					url="/players/login"
-					method={ post }
-					fields={ this.fields }
-					values={{ }}
-					onSuccess={ this.handleSuccess.bind(this) }
-					onForbidden={ this.handleForbidden.bind(this) }
-				/>
+				<> { this.state.authorized &&
+					<div>
+						<h1>
+							Login Page
+						</h1>
+						<GenericForm
+							url="/players/login"
+							method={ post }
+							fields={ this.fields }
+							values={{ }}
+							onSuccess={ this.handleSuccess.bind(this) }
+							onForbidden={ this.handleForbidden.bind(this) }
+						/>
+					</div>
+				} { !this.state.authorized &&
+					<h2>Authorizing...</h2>
+				} </>
 			</div>
 		);
 	}

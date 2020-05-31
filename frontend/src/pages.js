@@ -8,11 +8,13 @@ import LogoutPage from './elements/pages/logout';
 import LobbyPage from './elements/pages/lobby';
 import PlayPage from './elements/pages/play';
 
+import Client from './workers/client.js';
+
 export default class Pages extends React.Component
 {
     async componentDidMount()
     {
-
+		Client.initialize();
     }
 
     render()

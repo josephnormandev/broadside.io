@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import GenericForm from '../../forms/generic-form';
 
+import checkMe from '../../workers/check-me';
 import post from '../../workers/post';
 
 class RegisterPage extends React.Component
@@ -30,6 +31,28 @@ class RegisterPage extends React.Component
 			required: false,
 			placeholder: 'n00bmaster69',
 		}];
+
+		this.state = {
+			authorized: false,
+		};
+	}
+
+	async componentDidMount()
+	{
+		const { logged_in, in_game } = await checkMe();
+
+		if(logged_in && !in_game)
+		{
+			return this.props.history.push('/lobby');
+		}
+		else if(logged_in && in_game)
+		{
+			return this.props.history.push('/game');
+		}
+
+		this.setState({
+			authorized: true,
+		});
 	}
 
 	async handleSuccess(status, response)

@@ -1,6 +1,8 @@
 import Websocket from 'ws';
 
 import AppService from '../app/app.service.js';
+import AuthService from '../auth/auth.service.js';
+import ConfigService from '../config/config.service.js';
 
 export default class WebsocketService
 {
@@ -14,13 +16,13 @@ export default class WebsocketService
 		WebsocketService.players = new Map();
 		WebsocketService.receivers = new Map();
 
-		const server = AppService.server;
-		WebsocketService.server = new Websocket.Server({ server });
-		WebsocketService.server.on('connection', WebsocketService.onConnection);
-	}
-
-	static async onConnection(socket, req)
-	{
-		console.log(socket, req);
+		WebsocketService.server = new Websocket.Server({
+			port: ConfigService.get('ws_port'),
+		}).on('connection', async function(socket, req) {
+			console.log('Connected');
+			socket.on('close', function() {
+				console.log('Disconnected');
+			});
+		});
 	}
 }

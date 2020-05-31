@@ -1,75 +1,88 @@
-export default class GenericClient
+export default class Client
 {
-    constructor(ip, port, onMessage, onClose)
-    {
-        this.ip = ip;
-        this.port = port;
+	static initialize()
+	{
+		Client.client = null;
+		Client.opened = false;
 
-        this.client = null;
-        this.opened = false;
+		Client.onMessage = null;
+		Client.onClose = null;
+	}
 
-        this.onMessage = onMessage;
-        this.onClose = onClose;
-    }
+	static open(onMessage, onClose)
+	{
+		Client.onMessage = onMessage;
+		Client.onClose = onClose;
 
-    async open()
-    {
-        const url = `ws://${ this.ip }:${ this.port }`;
-        this.client = new WebSocket(url);
+		if(!Client.isOpen())
+		{
+			const url = `ws://192.168.1.4:8081`;
+			Client.client = new WebSocket(url);
 
-        var self = this;
-        return (new Promise(function(resolve) {
-            self.client.addEventListener('open', function(e) {
-                self.handleOpen();
-                resolve(true);
-            });
-            self.client.addEventListener('message', function(e) {
-                self.handleMessage(e.data);
-                resolve(true);
-            });
-            self.client.addEventListener('close', function(e) {
-                if(!self.open)
-                    resolve(false);
-                else
-                    self.handleClose();
-            });
-        }));
-    }
+			return (new Promise(function(resolve) {
+				Client.client.addEventListener('open', function(e) {
+					Client.handleOpen();
+					resolve(true);
+				});
+				Client.client.addEventListener('message', function(e) {
+					Client.handleMessage(e.data);
+				});
+				Client.client.addEventListener('close', function(e) {
+					if(!Client.opened)
+						resolve(false);
+					else
+						Client.handleClose();
+				});
+			}));
+		}
+		else
+		{
+			return true;
+		}
+	}
 
-    close()
-    {
-        this.client.close();
-    }
+	static close()
+	{
+		if(Client.isOpen())
+		{
+			Client.onMessage = null;
+			Client.onClose = null;
 
-    isOpen()
-    {
-        return this.opened && this.client.readyState === this.client.OPEN;
-    }
+			Client.client.close();
+		}
+	}
 
-    sendMessage(message)
-    {
-        if(this.isOpen())
-        {
-            this.client.send(JSON.stringify(message));
-        }
-    }
+	static isOpen()
+	{
+		return Client.opened && Client.client.readyState === Client.client.OPEN;
+	}
 
-    handleOpen()
-    {
-        this.opened = true;
-    }
+	static sendMessage(message)
+	{
+		if(Client.isOpen())
+		{
+			Client.client.send(JSON.stringify(message));
+		}
+	}
 
-    handleMessage(message)
-    {
-        message = JSON.parse(message);
+	static handleOpen()
+	{
+		Client.opened = true;
+	}
 
-        if(message.receiver && message.data)
-            this.onMessage(message.receiver, message.data);
-    }
+	static handleMessage(message)
+	{
+		message = JSON.parse(message);
 
-    handleClose()
-    {
-        this.opened = false;
-        this.onClose();
-    }
+		if(message.receiver && message.data)
+			if(Client.onMessage != null)
+				Client.onMessage(message.receiver, message.data);
+	}
+
+	static handleClose()
+	{
+		Client.opened = false;
+		if(Client.onClose != null)
+			Client.onClose();
+	}
 }
