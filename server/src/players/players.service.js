@@ -1,18 +1,34 @@
+import Websocket from 'ws';
+
+import AuthService from '../auth/auth.service.js';
+import ConfigService from '../config/config.service.js';
 import DatabaseService from '../database/database.service.js';
+import LoggerService from '../logger/logger.service.js';
 
 import Player from './player.js';
+import OnlinePlayer from './online-player.js';
 
 export default class PlayersService
 {
 	static model;
 
-	static initialize()
+	static server;
+	static players;
+	static receivers;
+
+	static async initialize()
 	{
 		Player.initialize(PlayersService);
+		OnlinePlayer.initialize(PlayersService);
 
-		PlayersService.model = DatabaseService.createModel(
-			'Player', Player,
-		);
+		PlayersService.initializeDatabase();
+		PlayersService.initializeWebsocket();
+	}
+
+	// DATABASE RELATED
+	static async initializeDatabase()
+	{
+		PlayersService.model = DatabaseService.createModel('Player', Player);
 	}
 
 	static async createPlayer(data)
@@ -39,5 +55,77 @@ export default class PlayersService
 		return await PlayersService.model.findOne({
 			username: username,
 		});
+	}
+
+	// WEBSOCKET SERVER RELATED
+	static initializeWebsocket()
+	{
+		PlayersService.server = new Websocket.Server({
+			port: ConfigService.get('ws_port'),
+			verifyClient: function(info, callback) {
+				AuthService.session_parser(info.req, {}, async function() {
+					const player_id = info.req.session.player_id;
+					if(player_id != null)
+					{
+						const player = await PlayersService.getPlayerById(player_id);
+
+						if(player != null)
+						{
+							info.req.player = player;
+							return callback(!player.online);
+						}
+					}
+					callback(false);
+				});
+			},
+		}).on('connection', async function(socket, req) {
+			const player = req.player;
+
+			PlayersService.playerConnect(player, socket);
+
+			socket.on('message', function(message) {
+				var message = JSON.parse(message);
+
+				if(message.receiver != null && message.data != null)
+				{
+					PlayersService.handlePlayerMessage(
+						player,
+						message.receiver,
+						message.data
+					);
+				}
+			});
+			socket.on('close', function() {
+				PlayersService.playerDisconnect(player);
+			});
+		});
+
+		PlayersService.players = new Map();
+		PlayersService.receivers = new Map();
+	}
+
+	static async playerConnect(player, socket)
+	{
+		PlayersService.players.set(player.id, new OnlinePlayer(player, socket));
+		LoggerService.green(`Player '${ player.username }' Connected`);
+	}
+
+	static isPlayerOnline(player)
+	{
+		return player.id != null && PlayersService.players.has(player.id);
+	}
+
+	static async handlePlayerMessage(player, receiver, data)
+	{
+		//
+	}
+
+	static async playerDisconnect(player)
+	{
+		if(PlayersService.players.has(player.id))
+		{
+			PlayersService.players.delete(player.id);
+			LoggerService.red(`Player '${ player.username }' Disconnected`);
+		}
 	}
 }

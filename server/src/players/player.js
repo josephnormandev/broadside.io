@@ -28,8 +28,19 @@ export default class Player extends DatabaseObject
 			username: this.username,
 			email: this.email,
 			admin: this.admin,
-			inGame: false,
+			online: this.online,
+			inGame: this.inGame,
 		};
+	}
+
+	get online()
+	{
+		return Player.Service.isPlayerOnline(this);
+	}
+
+	get inGame()
+	{
+		return false;
 	}
 
 	static hashPassword(password)
