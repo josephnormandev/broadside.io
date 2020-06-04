@@ -2,6 +2,8 @@ import PasswordHash from 'password-hash';
 
 import DatabaseObject from '../database/database-object.js';
 
+import QueueingService from '../queueing/queueing.service.js';
+
 export default class Player extends DatabaseObject
 {
 	static Service = null;
@@ -36,6 +38,11 @@ export default class Player extends DatabaseObject
 	get online()
 	{
 		return Player.Service.isPlayerOnline(this);
+	}
+
+	get inQueue()
+	{
+		return QueueingService.inQueue(this);
 	}
 
 	get inGame()

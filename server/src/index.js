@@ -5,6 +5,7 @@ import AuthService from './auth/auth.service.js';
 import AppService from './app/app.service.js';
 
 import PlayersService from './players/players.service.js';
+import QueueingService from './queueing/queueing.service.js';
 
 (async function() {
 	await LoggerService.initialize();
@@ -14,4 +15,5 @@ import PlayersService from './players/players.service.js';
 	await AppService.initialize();
 
 	await PlayersService.initialize();
+	await QueueingService.initialize();
 })();

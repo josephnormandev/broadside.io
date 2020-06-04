@@ -4,6 +4,7 @@ import AuthService from '../auth/auth.service.js';
 import ConfigService from '../config/config.service.js';
 import DatabaseService from '../database/database.service.js';
 import LoggerService from '../logger/logger.service.js';
+import QueueingService from '../queueing/queueing.service.js';
 
 import Player from './player.js';
 import OnlinePlayer from './online-player.js';
@@ -14,7 +15,6 @@ export default class PlayersService
 
 	static server;
 	static players;
-	static receivers;
 
 	static async initialize()
 	{
@@ -101,7 +101,6 @@ export default class PlayersService
 		});
 
 		PlayersService.players = new Map();
-		PlayersService.receivers = new Map();
 	}
 
 	static async playerConnect(player, socket)
@@ -117,7 +116,19 @@ export default class PlayersService
 
 	static async handlePlayerMessage(player, receiver, data)
 	{
-		//
+		const online_player = PlayersService.players.get(player.id);
+
+		if(player.inGame)
+		{
+
+		}
+		else
+		{
+			if(QueueingService.receivers.has(receiver))
+			{
+				QueueingService.receivers.get(receiver)(online_player, data);
+			}
+		}
 	}
 
 	static async playerDisconnect(player)
