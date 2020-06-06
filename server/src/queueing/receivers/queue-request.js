@@ -5,14 +5,19 @@ import queueRequestPendingMessage from '../messages/queue-request-pending.js';
 
 export async function receive(online_player, data)
 {
-	if(!online_player.inGame && !online_player.inQueue)
+
+	if(online_player.inGame)
 	{
-		QueueingService.queue(online_player);
+		online_player.send(queueRequestFailMessage());
+	}
+	else if(online_player.inQueue)
+	{
 		online_player.send(queueRequestPendingMessage());
 	}
 	else
 	{
-		online_player.send(queueRequestFailMessage());
+		QueueingService.queue(online_player);
+		online_player.send(queueRequestPendingMessage());
 	}
 }
 

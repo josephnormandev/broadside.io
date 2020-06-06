@@ -137,6 +137,8 @@ export default class PlayersService
 		{
 			PlayersService.players.delete(player.id);
 			LoggerService.red(`Player '${ player.username }' Disconnected`);
+
+			QueueingService.removeFromQueue(player);
 		}
 	}
 }

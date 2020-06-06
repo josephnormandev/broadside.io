@@ -4,13 +4,13 @@ import queueRequestSuccessMessage from './messages/queue-request-success.js';
 
 export default class QueueingService
 {
-	static queue;
+	static queueing_player;
 
 	static receivers;
 
 	static initialize()
 	{
-		QueueingService.queue = [];
+		QueueingService.queueing_player = null;
 
 		QueueingService.receivers = new Map();
 		QueueingService.receivers.set(QueueRequestReceiver.receiver, QueueRequestReceiver.receive);
@@ -18,29 +18,36 @@ export default class QueueingService
 
 	static queue(online_player)
 	{
-		if(QueueingService.queue.length > 0)
+		if(QueueingService.queueing_player == null)
 		{
-			QueueingService.queue.push(online_player);
+			QueueingService.queueing_player = online_player;
 		}
 		else
 		{
-			const other_player = QueueingService.queue.first();
+			const queueing_player = QueueingService.queueing_player;
 
-			console.log(`Making a game with ${ other_player.username } && ${ online_player.username }`);
-			other_player.send(queueRequestSuccessMessage());
+			console.log(`Making a game with ${ queueing_player.username } && ${ online_player.username }`);
+			queueing_player.send(queueRequestSuccessMessage());
 			online_player.send(queueRequestSuccessMessage());
+
+			// make the game using gameservice
 		}
+	}
+
+	// called from
+	static removeFromQueue(player)
+	{
+		if(QueueingService.queueing_player != null && QueueingService.queueing_player.equals(player))
+		{
+			QueueingService.queueing_player = null;
+			return true;
+		}
+		return false;
 	}
 
 	static inQueue(player)
 	{
-		for(var online_player of QueueingService.queue)
-		{
-			if(online_player.equals(player))
-			{
-				return true;
-			}
-		}
-		return false;
+		return QueueingService.queueing_player != null
+			&& QueueingService.queueing_player.equals(player);
 	}
 }
