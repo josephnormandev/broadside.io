@@ -3,6 +3,7 @@ import PasswordHash from 'password-hash';
 import DatabaseObject from '../database/database-object.js';
 
 import QueueingService from '../queueing/queueing.service.js';
+import GamesService from '../games/games.service.js';
 
 export default class Player extends DatabaseObject
 {
@@ -31,6 +32,7 @@ export default class Player extends DatabaseObject
 			email: this.email,
 			admin: this.admin,
 			online: this.online,
+			inQueue: this.inQueue,
 			inGame: this.inGame,
 		};
 	}
@@ -47,7 +49,7 @@ export default class Player extends DatabaseObject
 
 	get inGame()
 	{
-		return false;
+		return GamesService.inGame(this);
 	}
 
 	static hashPassword(password)

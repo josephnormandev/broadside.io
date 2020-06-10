@@ -1,3 +1,6 @@
+import GamesService from '../games/games.service.js';
+import LoggerService from '../logger/logger.service.js';
+
 import * as QueueRequestReceiver from './receivers/queue-request.js';
 
 import queueRequestSuccessMessage from './messages/queue-request-success.js';
@@ -18,6 +21,7 @@ export default class QueueingService
 
 	static queue(online_player)
 	{
+		LoggerService.blue(`Queueing '${ online_player.username }'`);
 		if(QueueingService.queueing_player == null)
 		{
 			QueueingService.queueing_player = online_player;
@@ -26,28 +30,42 @@ export default class QueueingService
 		{
 			const queueing_player = QueueingService.queueing_player;
 
-			console.log(`Making a game with ${ queueing_player.username } && ${ online_player.username }`);
 			queueing_player.send(queueRequestSuccessMessage());
 			online_player.send(queueRequestSuccessMessage());
 
-			// make the game using gameservice
-		}
-	}
-
-	// called from
-	static removeFromQueue(player)
-	{
-		if(QueueingService.queueing_player != null && QueueingService.queueing_player.equals(player))
-		{
 			QueueingService.queueing_player = null;
-			return true;
+			GamesService.createGame([ online_player ], [ queueing_player ]);
 		}
-		return false;
 	}
 
 	static inQueue(player)
 	{
 		return QueueingService.queueing_player != null
 			&& QueueingService.queueing_player.equals(player);
+	}
+
+	static dequeue(player)
+	{
+		LoggerService.yellow(`Dequeueing '${ player.username }'`);
+		QueueingService.queueing_player = null;
+	}
+
+	static handleConnect(online_player)
+	{
+		// do nothing
+	}
+
+	static handleMessage(online_player, receiver, data)
+	{
+		QueueingService.receivers.get(receiver)(online_player, data);
+	}
+
+	// called from the player disconnect
+	static handleDisconnect(player)
+	{
+		if(QueueingService.queueing_player != null && QueueingService.queueing_player.equals(player))
+		{
+			QueueingService.dequeue(player);
+		}
 	}
 }

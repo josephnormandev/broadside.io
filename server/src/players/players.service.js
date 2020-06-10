@@ -5,6 +5,7 @@ import ConfigService from '../config/config.service.js';
 import DatabaseService from '../database/database.service.js';
 import LoggerService from '../logger/logger.service.js';
 import QueueingService from '../queueing/queueing.service.js';
+import GamesService from '../games/games.service.js';
 
 import Player from './player.js';
 import OnlinePlayer from './online-player.js';
@@ -105,8 +106,12 @@ export default class PlayersService
 
 	static async playerConnect(player, socket)
 	{
-		PlayersService.players.set(player.id, new OnlinePlayer(player, socket));
-		LoggerService.green(`Player '${ player.username }' Connected`);
+		const online_player = new OnlinePlayer(player, socket);
+		PlayersService.players.set(online_player.id, online_player);
+		LoggerService.green(`Player '${ online_player.username }' Connected`);
+
+		GamesService.handleConnect(online_player);
+		QueueingService.handleConnect(online_player);
 	}
 
 	static isPlayerOnline(player)
@@ -118,16 +123,24 @@ export default class PlayersService
 	{
 		const online_player = PlayersService.players.get(player.id);
 
-		if(player.inGame)
+		if(GamesService.receivers.has(receiver))
 		{
-
+			if(player.inGame)
+				GamesService.handleMessage(online_player, receiver, data);
+			else;
+				// they are trying to send a game message while they are not
+				// in a game
+		}
+		else if(QueueingService.receivers.has(receiver))
+		{
+			if(!player.inGame)
+				QueueingService.handleMessage(online_player, receiver, data);
+			else;
+				// they are trying to queue while already in a game
 		}
 		else
 		{
-			if(QueueingService.receivers.has(receiver))
-			{
-				QueueingService.receivers.get(receiver)(online_player, data);
-			}
+			// some social related message...
 		}
 	}
 
@@ -138,7 +151,8 @@ export default class PlayersService
 			PlayersService.players.delete(player.id);
 			LoggerService.red(`Player '${ player.username }' Disconnected`);
 
-			QueueingService.removeFromQueue(player);
+			GamesService.handleDisconnect(player);
+			QueueingService.handleDisconnect(player);
 		}
 	}
 }
