@@ -1,6 +1,10 @@
 import Matter from 'matter-js';
 
+import TerrainsService from '../terrains/terrains.service.js';
+
 import GamePlayer from './game-player.js';
+
+import { getType } from './objects/objects.js';
 
 export default class Game
 {
@@ -22,10 +26,22 @@ export default class Game
 		this.engine = Matter.Engine.create();
 		this.engine.world.gravity.y = 0;
 
-		var self = this;
-		setInterval(function() {
-			self.sendDummyMessage();
-		}, 1000);
+		this.s_id = 0;
+		this.objects = new Map();
+		for(const base of TerrainsService.getMap())
+		{
+			this.addObject(base);
+		}
+	}
+
+	update()
+	{
+		Engine.update(this.engine, time);
+	}
+
+	send()
+	{
+
 	}
 
 	sendDummyMessage()
@@ -52,5 +68,17 @@ export default class Game
 	handleDisconnect(player)
 	{
 		this.game_players.get(player.id).disconnect(player);
+	}
+
+	addObject(base)
+	{
+		const s_id = this.s_id ++;
+		const game_object = getType(base).create(null, {
+			...base,
+			s_id: s_id,
+		});
+		this.objects.set(game_object.s_id, game_object);
+
+		Matter.World.addBody(this.engine.world, game_object);
 	}
 }
