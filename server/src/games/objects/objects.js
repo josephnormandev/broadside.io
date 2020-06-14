@@ -18,6 +18,7 @@ objects.set(GameObject.TYPE, GameObject);
 				objects.set(SandTile.TYPE, SandTile);
 				objects.set(GrassTile.TYPE, GrassTile);
 			objects.set(WaterTile.TYPE, WaterTile);
+		objects.set(WorldBorder.TYPE, WorldBorder);
 
 function getType(object)
 {
@@ -27,7 +28,9 @@ function getType(object)
 		{
 			return objects.get(object.type);
 		}
+		throw `getType - No such type: '${ object.type }'`;
 	}
+	throw `getType - No type provided`;
 }
 
 export {
@@ -38,6 +41,7 @@ export {
 					SandTile,
 					GrassTile,
 				WaterTile,
+			WorldBorder,
 	Categories,
 	getType,
 };

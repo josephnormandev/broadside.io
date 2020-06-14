@@ -4,7 +4,7 @@ import { Static, Categories } from '../objects.js';
 
 export default class WorldBorder extends Static
 {
-	static TYPE = 'world-bound';
+	static TYPE = 'world-border';
 
 	static create(definers, base)
 	{
@@ -27,6 +27,7 @@ export default class WorldBorder extends Static
 				],
 			}),
 			category: Categories.Border,
+			type: WorldBorder.TYPE,
 		}, base);
 
 		static_obj.width = width;

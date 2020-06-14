@@ -7,7 +7,7 @@ export default class TerrainsService
 
 	}
 
-	static getMap()
+	static loadMap()
 	{
 		return new Set(generated_terrain);
 	}

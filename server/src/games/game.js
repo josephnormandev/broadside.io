@@ -28,7 +28,7 @@ export default class Game
 
 		this.s_id = 0;
 		this.objects = new Map();
-		for(const base of TerrainsService.getMap())
+		for(const base of TerrainsService.loadMap())
 		{
 			this.addObject(base);
 		}
@@ -73,12 +73,18 @@ export default class Game
 	addObject(base)
 	{
 		const s_id = this.s_id ++;
-		const game_object = getType(base).create(null, {
-			...base,
-			s_id: s_id,
-		});
-		this.objects.set(game_object.s_id, game_object);
 
-		Matter.World.addBody(this.engine.world, game_object);
+		try {
+			const game_object = getType(base).create(null, {
+				...base,
+				s_id: s_id,
+			});
+			this.objects.set(game_object.s_id, game_object);
+
+			Matter.World.addBody(this.engine.world, game_object);
+		} catch(e) {
+			console.log(e, base);
+		}
+
 	}
 }

@@ -1,7 +1,7 @@
 import Matter from 'matter-js';
 const { Common, Vector } = Matter;
 
-import { Objects, Maps } from 'game';
+import * as FS from 'fs';
 
 import generateNoise from 'heightmap-generator';
 
@@ -10,7 +10,7 @@ const heightmap = generateNoise(6, 8, false, 1);
 var TILE_OUT = [];
 
 // constants for radius etc
-const radius = Objects.Tile.RADIUS();
+const radius = 10;
 const a = Math.cos(Math.PI / 6) * radius;
 const b = 3 / 2 * radius;
 
@@ -19,7 +19,6 @@ var width = Math.min(heightmap[0].length && heightmap[1].length);
 width = width % 2 == 0 ? width : width - 1;
 const map_width = width / 2;
 
-var index = 0;
 for(var y = 0; y < height; y ++)
 {
 	var x = 0;
@@ -27,7 +26,6 @@ for(var y = 0; y < height; y ++)
 	{
 		if((y % 2 == 0 && col % 2 == 0) || (y % 2 == 1 && col % 2 == 1))
 		{
-			index = y * map_width + x;
 
 			var position = null;
 			if(y % 2 == 0)
@@ -37,13 +35,13 @@ for(var y = 0; y < height; y ++)
 
 			const tile_height = heightmap[y][col] * 5 - 18;
 
-			const type = [];
+			var type = '';
 			if(tile_height >= 10)
-				type.push('grass-tile');
+				type = 'grass-tile';
 			else if (tile_height > 0)
-				type.push('sand-tile');
+				type = 'sand-tile';
 			else
-				type.push('water-tile');
+				type = 'water-tile';
 
 			const adjacents = [];
 
@@ -103,7 +101,6 @@ for(var y = 0; y < height; y ++)
 			}
 
 			TILE_OUT.push({
-				s_id: index,
 				type: type,
 				height: tile_height,
 				position: position,
@@ -119,12 +116,11 @@ const map_width_b = map_width * 2 * b - b;
 const map_height = height * a - a;
 
 TILE_OUT.push({
-	s_id: index ++,
-	type: ['world-bound'],
+	type: 'world-border',
 	width: map_width_b,
 	height: map_height,
 	position: Vector.create(map_width_b / 2, map_height / 2),
 	angle: 0,
 });
 
-Maps.saveMap(TILE_OUT);
+FS.writeFileSync('/home/joseph/broadside.io/server/src/terrains/generated-map.json', JSON.stringify(TILE_OUT));

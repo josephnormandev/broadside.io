@@ -1,4 +1,4 @@
-import { Tile } from '../../objects.js';
+import { Tile, Categories } from '../../objects.js';
 
 export default class GroundTile extends Tile
 {
@@ -7,6 +7,7 @@ export default class GroundTile extends Tile
 	static create(definers, base)
 	{
 		const ground_tile = Tile.create({
+			...definers,
 			category: Categories.Ground,
 		}, base);
 
