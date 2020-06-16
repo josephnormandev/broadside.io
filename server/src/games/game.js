@@ -56,13 +56,14 @@ export default class Game
 
 	handleConnect(online_player)
 	{
-		this.game_players.get(online_player.id).connect(online_player);
+		const game_player = this.game_players.get(online_player.id);
+		game_player.connect(online_player);		
 	}
 
 	handleMessage(online_player, receiver, data)
 	{
 		const game_player = this.game_players.get(online_player.id);
-		Game.Service.receivers.get(receiver)(this, online_player, game_player, data);
+		Game.Service.receivers.get(receiver)(this, game_player, data);
 	}
 
 	handleDisconnect(player)
@@ -85,6 +86,5 @@ export default class Game
 		} catch(e) {
 			console.log(e, base);
 		}
-
 	}
 }

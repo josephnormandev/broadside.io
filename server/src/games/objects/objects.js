@@ -33,6 +33,11 @@ function getType(object)
 	throw `getType - No type provided`;
 }
 
+function isType(object, type)
+{
+	return object.type == type;
+}
+
 export {
 	GameObject,
 		Static,
@@ -44,4 +49,5 @@ export {
 			WorldBorder,
 	Categories,
 	getType,
+	isType,
 };

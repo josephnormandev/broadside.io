@@ -1,6 +1,6 @@
-export function receive(game, online_player, game_player, data)
+export function receive(game, game_player, data)
 {
-	
+
 }
 
 export const receiver = 'connected';

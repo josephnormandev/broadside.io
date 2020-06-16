@@ -25,7 +25,7 @@ export default class GamePlayer
 
 	send(message)
 	{
-		if(this.online_player != null)
+		if(this.connected)
 		{
 			this.online_player.send(message);
 		}

@@ -1,8 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
+import * as THREE from 'three';
+
 import checkMe from '../../workers/check-me';
 import Client from '../../workers/client';
+
+import Inputs from '../../game/inputs/inputs';
 
 class PlayPage extends React.Component
 {
@@ -13,10 +17,65 @@ class PlayPage extends React.Component
 		this.state = {
 			authorized: false,
 		};
+
+		this.receivers = new Map();
+	}
+
+	start()
+	{
+		this.scene = new THREE.Scene();
+		this.scene.add(new THREE.AxesHelper(5));
+
+		this.inputs = new Inputs(this);
+
+		this.objects = new Map();
+
+		this.animate();
+	}
+
+	mount()
+	{
+		this.inputs.mount(this.renderer_mount, this.scene);
+	}
+
+	animate()
+	{
+		requestAnimationFrame(this.animate.bind(this));
+
+		if(this.inputs.mounted)
+		{
+			this.inputs.update();
+			this.inputs.render(this.scene);
+		}
+	}
+
+	unmount()
+	{
+		this.inputs.unmount(this.scene);
+	}
+
+	handleMessage(receiver, data)
+	{
+		if(this.inputs.mounted)
+		{
+			if(this.receivers.has(receiver))
+			{
+				this.receivers.get(receiver)(this, data);
+			}
+		}
+	}
+
+	handleClose()
+	{
+		console.log('Websocket closed...');
+		this.setState({
+			authorized: false,
+		});
 	}
 
 	async componentDidMount()
 	{
+		window.addEventListener('resize', this.handleResize.bind(this));
 		const { logged_in, in_game } = await checkMe();
 
 		if(!logged_in)
@@ -34,6 +93,9 @@ class PlayPage extends React.Component
 				authorized: true,
 			});
 			console.log('Websocket opened...');
+
+			this.start();
+			this.mount();
 		}
 		else
 		{
@@ -41,23 +103,33 @@ class PlayPage extends React.Component
 		}
 	}
 
-	handleMessage(receiver, data)
-	{
-
-	}
-
-	handleClose()
-	{
-		console.log('Websocket closed...');
-	}
-
 	render()
 	{
 		return (
 			<div>
-				Play the Game here!
+				<> { !this.state.authorized &&
+					<h1>
+						Authorizing...
+					</h1>
+				} { this.state.authorized &&
+					<div style={{
+						width: '100vw',
+						height: '100vh',
+					}} ref={
+						ref => (this.renderer_mount = ref)
+					} />
+				} </>
 			</div>
 		);
+	}
+
+	handleResize()
+	{
+		if(this.state.authorized)
+		{
+			this.unmount();
+			this.mount();
+		}
 	}
 }
 
