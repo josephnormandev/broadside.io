@@ -8,6 +8,8 @@ import Client from '../../workers/client';
 
 import Inputs from '../../game/inputs/inputs';
 
+import Terrain from '../../game/terrain/terrain';
+
 class PlayPage extends React.Component
 {
 	constructor(props)
@@ -28,8 +30,12 @@ class PlayPage extends React.Component
 
 		this.inputs = new Inputs(this);
 
-		this.objects = new Map();
+		this.terrain = new Terrain();
+		this.dynamics = new Map();
 
+		// tell the server we are ready to play the game
+
+		
 		this.animate();
 	}
 

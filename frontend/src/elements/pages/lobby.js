@@ -95,6 +95,7 @@ class LobbyPage extends React.Component
 								<> Queue </>
 							} </>
 						</Button>
+						<p> You have to be an admin in order to queue for games. </p>
 					</div>
 				} { !this.state.authorized &&
 					<h2> Authorizing... </h2>
