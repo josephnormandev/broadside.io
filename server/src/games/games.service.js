@@ -2,7 +2,7 @@ import LoggerService from '../logger/logger.service.js';
 
 import Game from './game.js';
 
-import * as TerrainRequestReceiver from './io/receivers/terrain-request.js';
+import * as ReadyReceiver from './io/receivers/ready.js';
 
 export default class GamesService
 {
@@ -19,8 +19,7 @@ export default class GamesService
 		GamesService.game_players = new Map();
 
 		GamesService.receivers = new Map();
-		GamesService.receivers.set(TerrainRequestReceiver.receiver, TerrainRequestReceiver.receive);
-
+		GamesService.receivers.set(ReadyReceiver.receiver, ReadyReceiver.receive);
 	}
 
 	static createGame(team_1, team_2)

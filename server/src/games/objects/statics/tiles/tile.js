@@ -17,6 +17,7 @@ export default class Tile extends Static
 		const tile = Static.create({
 			...definers,
 			body: Matter.Bodies.polygon(0, 0, 6, Tile.RADIUS),
+			terrain: true,
 		}, base);
 		tile.adjaces = base.adjacents;
 		tile.height = base.height;

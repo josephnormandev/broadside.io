@@ -6,6 +6,8 @@ import * as THREE from 'three';
 import checkMe from '../../workers/check-me';
 import Client from '../../workers/client';
 
+import readyMessage from '../../workers/messages/ready';
+
 import Inputs from '../../game/inputs/inputs';
 
 import Terrain from '../../game/terrain/terrain';
@@ -34,8 +36,8 @@ class PlayPage extends React.Component
 		this.dynamics = new Map();
 
 		// tell the server we are ready to play the game
+		Client.sendMessage(readyMessage());
 
-		
 		this.animate();
 	}
 

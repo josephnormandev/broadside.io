@@ -28,6 +28,7 @@ export default class WorldBorder extends Static
 			}),
 			category: Categories.Border,
 			type: WorldBorder.TYPE,
+			terrain: false,
 		}, base);
 
 		static_obj.width = width;

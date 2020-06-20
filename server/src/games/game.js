@@ -57,13 +57,15 @@ export default class Game
 	handleConnect(online_player)
 	{
 		const game_player = this.game_players.get(online_player.id);
-		game_player.connect(online_player);		
+		game_player.connect(online_player);
 	}
 
 	handleMessage(online_player, receiver, data)
 	{
 		const game_player = this.game_players.get(online_player.id);
+				console.log(game_player);
 		Game.Service.receivers.get(receiver)(this, game_player, data);
+
 	}
 
 	handleDisconnect(player)

@@ -6,6 +6,8 @@ export default class GamePlayer
 	{
 		this.connect(online_player);
 		this.team = team;
+
+		this.ready_state = false;
 	}
 
 	get id()
@@ -16,6 +18,11 @@ export default class GamePlayer
 	connect(online_player)
 	{
 		this.online_player = online_player
+	}
+
+	ready()
+	{
+		this.ready_state = true;
 	}
 
 	get connected()
