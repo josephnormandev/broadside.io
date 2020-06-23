@@ -63,7 +63,6 @@ export default class Game
 	handleMessage(online_player, receiver, data)
 	{
 		const game_player = this.game_players.get(online_player.id);
-				console.log(game_player);
 		Game.Service.receivers.get(receiver)(this, game_player, data);
 
 	}
@@ -75,12 +74,11 @@ export default class Game
 
 	addObject(base)
 	{
-		const s_id = this.s_id ++;
-
 		try {
+			this.s_id = (base.s_id != null ? base.s_id : this.s_id);
 			const game_object = getType(base).create(null, {
 				...base,
-				s_id: s_id,
+				s_id: this.s_id,
 			});
 			this.objects.set(game_object.s_id, game_object);
 
@@ -88,5 +86,6 @@ export default class Game
 		} catch(e) {
 			console.log(e, base);
 		}
+		this.s_id ++;
 	}
 }

@@ -19,6 +19,7 @@ var width = Math.min(heightmap[0].length && heightmap[1].length);
 width = width % 2 == 0 ? width : width - 1;
 const map_width = width / 2;
 
+var index = 0;
 for(var y = 0; y < height; y ++)
 {
 	var x = 0;
@@ -26,6 +27,7 @@ for(var y = 0; y < height; y ++)
 	{
 		if((y % 2 == 0 && col % 2 == 0) || (y % 2 == 1 && col % 2 == 1))
 		{
+			index = y * map_width + x;
 
 			var position = null;
 			if(y % 2 == 0)
@@ -101,6 +103,7 @@ for(var y = 0; y < height; y ++)
 			}
 
 			TILE_OUT.push({
+				s_id: index,
 				type: type,
 				height: tile_height,
 				position: position,
@@ -116,6 +119,7 @@ const map_width_b = map_width * 2 * b - b;
 const map_height = height * a - a;
 
 TILE_OUT.push({
+	s_id: index ++,
 	type: 'world-border',
 	width: map_width_b,
 	height: map_height,

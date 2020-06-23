@@ -6,11 +6,15 @@ import * as THREE from 'three';
 import checkMe from '../../workers/check-me';
 import Client from '../../workers/client';
 
+import * as TerrainReceiver from '../../workers/receivers/terrain';
+import * as AddObjectReceiver from '../../workers/receivers/add-object';
+import * as UpdateObjectReceiver from '../../workers/receivers/update-object';
+import * as RemoveObjectReceiver from '../../workers/receivers/remove-object';
+
 import readyMessage from '../../workers/messages/ready';
 
 import Inputs from '../../game/inputs/inputs';
-
-import Terrain from '../../game/terrain/terrain';
+import Terrain from '../../game/terrain.js';
 
 class PlayPage extends React.Component
 {
@@ -23,6 +27,10 @@ class PlayPage extends React.Component
 		};
 
 		this.receivers = new Map();
+		this.receivers.set(TerrainReceiver.receiver, TerrainReceiver.receive);
+		this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver.receive);
+		this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver.receive);
+		this.receivers.set(RemoveObjectReceiver.receiver, RemoveObjectReceiver.receive);
 	}
 
 	start()

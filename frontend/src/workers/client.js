@@ -16,7 +16,7 @@ export default class Client
 
 		if(!Client.isOpen())
 		{
-			const url = `ws://localhost:8081`;
+			const url = `ws://${ window.location.hostname }:8081`;
 			Client.client = new WebSocket(url);
 
 			return (new Promise(function(resolve) {

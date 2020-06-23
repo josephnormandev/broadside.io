@@ -117,7 +117,6 @@ export default class Cursor
 		{
 			this.mouse_x = e.clientX;
 			this.mouse_y = e.clientY;
-					console.log(this.requestPointerLock);
 
 			this.requestPointerLock();
 		}

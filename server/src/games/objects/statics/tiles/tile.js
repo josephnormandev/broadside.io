@@ -19,7 +19,7 @@ export default class Tile extends Static
 			body: Matter.Bodies.polygon(0, 0, 6, Tile.RADIUS),
 			terrain: true,
 		}, base);
-		tile.adjaces = base.adjacents;
+		tile.adjacents = base.adjacents;
 		tile.height = base.height;
 
 		return tile;
