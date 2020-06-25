@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import LoginPage from './elements/pages/login';
 import RegisterPage from './elements/pages/register';
@@ -23,6 +23,9 @@ export default class Pages extends React.Component
             <div>
                 <Router>
                     <Switch>
+						<Route exact path="/">
+							<Redirect to="/login"/>
+						</Route>
                         <Route exact path="/login">
 							<LoginPage />
 						</Route>

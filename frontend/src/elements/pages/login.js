@@ -42,7 +42,7 @@ class LoginPage extends React.Component
 		}
 		else if(logged_in && in_game)
 		{
-			return this.props.history.push('/game');
+			return this.props.history.push('/play');
 		}
 
 		await Client.close();
