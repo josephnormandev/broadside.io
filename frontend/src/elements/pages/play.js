@@ -60,6 +60,8 @@ class PlayPage extends React.Component
 
 		if(this.inputs.mounted)
 		{
+			this.terrain.draw();
+			
 			this.inputs.update();
 			this.inputs.render(this.scene);
 		}

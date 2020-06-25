@@ -4,7 +4,9 @@ export default class Terrain
 {
 	constructor()
 	{
-		this.tiles = new Map();
+		this.terrain_tiles = new Map();
+		this.water_terrain_tiles = new Map();
+		this.water_tiles = new Map();
 	}
 
 	generate(scene, objects)
@@ -16,66 +18,131 @@ export default class Terrain
 			switch(base.type)
 			{
 				case 'grass-tile':
-					this.tiles.set(s_id, this.grassTile(scene, base));
+					this.grassTile(scene, base);
 					break;
 				case 'sand-tile':
-					this.tiles.set(s_id, this.sandTile(scene, base));
+					this.sandTile(scene, base);
 					break;
 				case 'water-tile':
-					this.tiles.set(s_id, this.waterTile(scene, base));
+					this.waterTile(scene, base);
 					break;
 			}
 		}
 
-		for(const [s_id, tile] of this.tiles)
+		for(const [s_id, tile] of this.terrain_tiles)
 		{
-			this.averageSurfaceHeights(tile, this.tiles);
+			this.averageSurfaceHeights(tile, this.terrain_tiles);
+		}
+
+		for(const [s_id, tile] of this.water_terrain_tiles)
+		{
+			this.averageSurfaceHeights(tile, this.water_terrain_tiles);
+		}
+
+		for(const [s_id, tile] of this.terrain_tiles)
+		{
+			this.applyRockiness(tile);
+		}
+
+		for(const [s_id, tile] of this.water_tiles)
+		{
+			this.randomHeights(tile);
+		}
+
+		console.log(this.water_tiles)
+	}
+
+	draw()
+	{
+		for(const [s_id, tile] of this.water_tiles)
+		{
+			if(tile.bob == true)
+			{
+				tile.vertices[0].y += .2;
+				if(tile.vertices[0].y > 2.5)
+					tile.bob = false;
+			}
+			else
+			{
+				tile.vertices[0].y -= .2;
+				if(tile.vertices[0].y < -2.5)
+					tile.bob = true;
+			}
+		}
+
+		for(const [s_id, tile] of this.water_tiles)
+		{
+			this.averageSurfaceHeights(tile, this.water_tiles);
+			tile.mesh.geometry.verticesNeedUpdate = true;
 		}
 	}
 
 	grassTile(scene, base)
 	{
 		const color = '#3db020';
-		const rocky_color = '#888888';
 
-		return this.terrainTile(scene, base, color, rocky_color);
+		this.terrain_tiles.set(base.s_id, this.terrainTile(scene, base, color));
 	}
 
 	sandTile(scene, base)
 	{
 		const color = '#edd9af';
-		const rocky_color = '#d6c298';
 
-		return this.terrainTile(scene, base, color, rocky_color);
-	}
-
-	terrainTile(scene, base, color, rocky_color)
-	{
-		const {
-			mesh,
-			vertices,
-			faces,
-		} = this.createHexagonMesh(scene, base, color);
-
-		scene.add(mesh);
-
-		return {
-			mesh: mesh,
-			vertices: vertices,
-			faces: faces,
-			base: base,
-		};
+		this.terrain_tiles.set(base.s_id, this.terrainTile(scene, base, color));
 	}
 
 	waterTile(scene, base)
 	{
 		const water_color = '#0077be';
-		const floor_color = '#0077be';//'#e5c9aa';
+		const {
+			mesh,
+			vertices,
+			faces,
+		} = this.createHexagonMesh(new THREE.MeshStandardMaterial({
+			roughness: .5,
+			transparent: true,
+			opacity: .6,
+			vertexColors: THREE.FaceColors,
+			flatShading: true,
+		}), {
+			...base,
+			height: 0,
+		}, water_color);
 
-		return this.terrainTile(scene, base, water_color, floor_color);
+		scene.add(mesh);
+
+		this.water_tiles.set(base.s_id, {
+			mesh: mesh,
+			vertices: vertices,
+			faces: faces,
+			base: base,
+		});
+
+		const floor_color = '#e5c9aa';//'#e5c9aa';
+		this.water_terrain_tiles.set(base.s_id, this.terrainTile(scene, base, floor_color));
 	}
 
-	createHexagonMesh(scene, base, color)
+	terrainTile(scene, base, color)
+	{
+		const {
+			mesh,
+			vertices,
+			faces,
+		} = this.createHexagonMesh(new THREE.MeshStandardMaterial({
+			roughness: .95,
+			transparent: false,
+			vertexColors: THREE.FaceColors,
+			flatShading: true,
+		}), base, color);
+
+		scene.add(mesh);
+
+		return {
+			mesh, vertices, faces, base
+		};
+	}
+
+	createHexagonMesh(material, base, color)
 	{
 		const radius = 10;
 		const vertices = [];
@@ -110,13 +177,6 @@ export default class Terrain
 		geometry.vertices = vertices;
 		geometry.faces = faces;
 
-		const material = new THREE.MeshStandardMaterial({
-			roughness: .95,
-			transparent: false,
-			vertexColors: THREE.FaceColors,
-			flatShading: true,
-		})
-
 		const mesh = new THREE.Mesh(geometry, material);
 		mesh.receiveShadow = true;
 		mesh.castShadow = true;
@@ -137,9 +197,9 @@ export default class Terrain
 			var adjacent_1 = tile.base.adjacents[vertex_id - 1];
 			var adjacent_2 = tile.base.adjacents[vertex_id != 1 ? vertex_id - 2 : 5];
 
-			var height_0 = tile.base.height;
-			var height_1 = (adjacent_1 != null && others.has(adjacent_1)) ? others.get(adjacent_1).base.height : null;
-			var height_2 = (adjacent_2 != null && others.has(adjacent_2)) ? others.get(adjacent_2).base.height : null;
+			var height_0 = tile.vertices[0].y;
+			var height_1 = (adjacent_1 != null && others.has(adjacent_1)) ? others.get(adjacent_1).vertices[0].y : null;
+			var height_2 = (adjacent_2 != null && others.has(adjacent_2)) ? others.get(adjacent_2).vertices[0].y : null;
 
 			var avg_height = 0;
 
@@ -148,6 +208,46 @@ export default class Terrain
 
 			tile.vertices[vertex_id].y = avg_height;
 		}
+	}
+
+	applyRockiness(tile)
+	{
+		var rocky_color = null;
+		switch(tile.base.type)
+		{
+			case 'sand-tile':
+				rocky_color = '#d6c298';
+				break;
+			case 'grass-tile':
+				rocky_color = '#888888';
+				break;
+		}
+
+		for(const face of tile.faces)
+		{
+			const h1 = tile.vertices[face.a].y;
+			const h2 = tile.vertices[face.b].y;
+			const h3 = tile.vertices[face.c].y;
+
+			const min = Math.min(h1, h2, h3);
+			const max = Math.max(h1, h2, h3);
+
+			if((max - min) > 7)
+			{
+				face.color.setStyle(rocky_color);
+				face.color.add(new THREE.Color(
+					THREE.Math.randFloat(-.04, .04),
+	                THREE.Math.randFloat(-.04, .04),
+	                THREE.Math.randFloat(-.04, .04),
+				));
+			}
+		}
+	}
+
+	randomHeights(tile)
+	{
+		tile.vertices[0].y = THREE.Math.randFloat(-2.5, 2.5);
+		tile.bob = (THREE.Math.randInt(0, 1) == 1);
 	}
 }
 

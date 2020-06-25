@@ -37,7 +37,7 @@ export default class Cursor
 
 	updateCursor()
 	{
-		const rate = (this.pointer_lock == true ? 10 : 0);
+		const rate = (this.pointer_lock == true ? 5 / this.zoom : 0);
 		const edge = 10;
 
 		var diff_x = 0;
