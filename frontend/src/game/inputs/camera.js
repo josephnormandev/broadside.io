@@ -75,7 +75,8 @@ export default class Camera
 
 	updateCamera(position_diff, zoom)
 	{
-		this.camera.position.add(position_diff);
+		position_diff.add(this.camera.position);
+		this.camera.position.lerp(position_diff, .5);
 
 		this.camera.zoom = THREE.MathUtils.lerp(this.camera.zoom, zoom, .1);
 		this.camera.updateProjectionMatrix();
