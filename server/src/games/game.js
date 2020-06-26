@@ -32,26 +32,29 @@ export default class Game
 		{
 			this.addObject(base);
 		}
+
+		const self = this;
+		this.update_loop = setInterval(function() {
+			self.update(1000 / 60);
+		}, 1000 / 60);
+		this.send_loop = setInterval(function() {
+			self.send(1000 / 20);
+		}, 1000 / 20);
 	}
 
-	update()
+	update(time)
 	{
-		Engine.update(this.engine, time);
+		Matter.Engine.update(this.engine, time);
 	}
 
-	send()
+	send(time)
 	{
-
 	}
 
-	sendDummyMessage()
+	end()
 	{
-		for(var [id, game_player] of this.game_players)
-		{
-			game_player.send({
-				id: id
-			});
-		}
+		clearInterval(this.update_loop);
+		clearInterval(this.send_loop);
 	}
 
 	handleConnect(online_player)
@@ -70,6 +73,20 @@ export default class Game
 	handleDisconnect(player)
 	{
 		this.game_players.get(player.id).disconnect(player);
+
+		var all_disconnected = true;
+		for(const [id, game_player] of this.game_players)
+		{
+			if(game_player.connected == true)
+			{
+				all_disconnected = false;
+				break;
+			}
+		}
+		if(all_disconnected)
+		{
+			Game.Service.endGame(this.id);
+		}
 	}
 
 	addObject(base)

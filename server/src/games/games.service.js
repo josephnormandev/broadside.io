@@ -37,6 +37,25 @@ export default class GamesService
 		LoggerService.cyan(`Game '${ game.id }' has been created`);
 	}
 
+	static endGame(game_id)
+	{
+		if(GamesService.games.has(game_id))
+		{
+			const game = GamesService.games.get(game_id);
+			game.end();
+
+			GamesService.games.delete(game.id);
+
+			for(const [player_id, game_id] of GamesService.game_players)
+			{
+				if(game_id == game.id)
+					GamesService.game_players.delete(player_id);
+			}
+
+			LoggerService.yellow(`Game '${ game.id }' has been ended`);
+		}
+	}
+
 	static inGame(player)
 	{
 		return GamesService.game_players.has(player.id);

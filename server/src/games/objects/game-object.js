@@ -23,6 +23,8 @@ export default class GameObject
 		game_object.collisionFilter.category = definers.category;
 
 		if(definers.moveable == false)
+			Matter.Body.setStatic(game_object, true);
+		else
 			Matter.Body.setStatic(game_object, false);
 
 		// base properties come from outside sources like the map file. They get
