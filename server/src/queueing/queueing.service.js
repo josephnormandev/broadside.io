@@ -17,6 +17,10 @@ export default class QueueingService
 
 		QueueingService.receivers = new Map();
 		QueueingService.receivers.set(QueueRequestReceiver.receiver, QueueRequestReceiver.receive);
+
+		QueueingService.queue_loop = setInterval(function() { // this loop is for testing purposes and seeing if anyone is actually in queue
+			
+		}, 1000);
 	}
 
 	static queue(online_player)

@@ -119,6 +119,17 @@ export default class PlayersService
 		return player.id != null && PlayersService.players.has(player.id);
 	}
 
+	static broadcastLobby(message)
+	{
+		for(const [id, online_player] of PlayersService.players)
+		{
+			if(!online_player.inGame)
+			{
+
+			}
+		}
+	}
+
 	static async handlePlayerMessage(player, receiver, data)
 	{
 		const online_player = PlayersService.players.get(player.id);

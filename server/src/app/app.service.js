@@ -1,4 +1,7 @@
 import HTTP from 'http';
+import HTTPS from 'https';
+import FS from 'fs';
+
 import Express from 'express';
 import BodyParser from 'body-parser';
 import Path from 'path';
@@ -73,7 +76,24 @@ export default class AppService
 			error500(req, res);
 		});
 
-        AppService.server = HTTP.createServer(AppService.app);
-        AppService.server.listen(ConfigService.get('http_port'));
+		const cert = FS.readFileSync('./certificate.crt');
+		const key = FS.readFileSync('./private.key');
+
+		const credentials = {
+			cert: cert,
+			key: key,
+		};
+
+		if(ConfigService.get('https') == false)
+		{
+	        AppService.server = HTTP.createServer(AppService.app);
+	        AppService.server.listen(ConfigService.get('http_port'));
+		}
+		else
+		{
+	        AppService.server = HTTPS.createServer(credentials, AppService.app);
+	        AppService.server.listen(ConfigService.get('https_port'));
+		}
+
 	}
 }
