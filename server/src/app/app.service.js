@@ -37,7 +37,7 @@ export default class AppService
 
 	static async initialize()
 	{
-		AppService.use_build = ConfigService.get('use_build');
+		AppService.use_build = ConfigService.get('https');
 
 		AppService.app = Express();
 		AppService.app.set('trust proxy', 1);

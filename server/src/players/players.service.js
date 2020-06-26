@@ -1,5 +1,6 @@
 import Websocket from 'ws';
 
+import AppService from '../app/app.service.js';
 import AuthService from '../auth/auth.service.js';
 import ConfigService from '../config/config.service.js';
 import DatabaseService from '../database/database.service.js';
@@ -62,7 +63,7 @@ export default class PlayersService
 	static initializeWebsocket()
 	{
 		PlayersService.server = new Websocket.Server({
-			port: ConfigService.get('ws_port'),
+			server: AppService.server,
 			verifyClient: function(info, callback) {
 				AuthService.session_parser(info.req, {}, async function() {
 					const player_id = info.req.session.player_id;

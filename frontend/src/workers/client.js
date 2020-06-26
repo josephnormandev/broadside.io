@@ -16,7 +16,11 @@ export default class Client
 
 		if(!Client.isOpen())
 		{
-			const url = `ws://${ window.location.hostname }:8081`;
+			var url = `ws://${ window.location.hostname }:8080`;
+			if(window.location.protocol === 'https:')
+			{
+				url = `wss://${ window.location.hostname }:${ window.location.port }`;
+			}
 			Client.client = new WebSocket(url);
 
 			return (new Promise(function(resolve) {
