@@ -6,7 +6,7 @@ import queueRequestPendingMessage from '../messages/queue-request-pending.js';
 export async function receive(online_player, data)
 {
 
-	if(online_player.inGame || !online_player.admin)
+	if(online_player.inGame)
 	{
 		online_player.send(queueRequestFailMessage());
 	}
