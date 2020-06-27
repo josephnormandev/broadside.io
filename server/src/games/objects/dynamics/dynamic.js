@@ -1,5 +1,7 @@
 import Matter from 'matter-js';
 
+import { GameObject } from '../objects.js';
+
 export default class Dynamic extends GameObject
 {
 	static TYPE = 'dynamic';
@@ -8,16 +10,13 @@ export default class Dynamic extends GameObject
 	{
 		if(definers.mass == null)
 			throw 'Missing Definition - Dynamic.mass';
-		if(definers.controllable == null)
-			throw 'Missing Definition - Dynamic.controllable';
 
 		const dynamic = GameObject.create({
 			...definers,
-			moveable: true,
 		}, base);
 
+		Matter.Body.setStatic(dynamic, false);
 		Matter.Body.setMass(dynamic, definers.mass);
-		dynamic.controllable = definers.controllable;
 
 		if(base.velocity != null)
 			Matter.Body.setVelocity(dynamic, base.velocity);

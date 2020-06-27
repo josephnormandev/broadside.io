@@ -17,7 +17,7 @@ export default class WorldBorder extends Static
 		const height = base.height;
 		const border = 5;
 
-		const static_obj = Static.create({
+		const world_border = Static.create({
 			body: Matter.Body.create({
 				parts: [
 					Matter.Bodies.rectangle(width / 2, 0 - border / 2, width, border), // top rect
@@ -28,21 +28,20 @@ export default class WorldBorder extends Static
 			}),
 			category: Categories.Border,
 			type: WorldBorder.TYPE,
-			terrain: false,
 		}, base);
 
-		static_obj.width = width;
-		static_obj.height = height;
+		world_border.width = width;
+		world_border.height = height;
 
-		return static_obj;
+		return world_border;
 	}
 
-	static getBase(world_bound)
+	static getBase(world_border)
 	{
 		return {
-			...Static.getBase(world_bound),
-			width: world_bound.width,
-			height: world_bound.height,
+			...Static.getBase(world_border),
+			width: world_border.width,
+			height: world_border.height,
 		};
 	}
 }

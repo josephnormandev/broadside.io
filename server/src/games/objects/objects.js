@@ -6,6 +6,8 @@ import GameObject from './game-object.js';
 				import GrassTile from './statics/tiles/ground-tiles/grass-tile.js';
 			import WaterTile from './statics/tiles/water-tile.js';
 		import WorldBorder from './statics/world-border.js';
+	import Dynamic from './dynamics/dynamic.js';
+		import Ship from './dynamics/ships/ship.js';
 
 import Categories from './categories.js';
 
@@ -19,6 +21,8 @@ objects.set(GameObject.TYPE, GameObject);
 				objects.set(GrassTile.TYPE, GrassTile);
 			objects.set(WaterTile.TYPE, WaterTile);
 		objects.set(WorldBorder.TYPE, WorldBorder);
+	objects.set(Dynamic.TYPE, Dynamic);
+		objects.set(Ship.TYPE, Ship);
 
 function getType(object)
 {
@@ -33,9 +37,43 @@ function getType(object)
 	throw `getType - No type provided`;
 }
 
+function getOneOfType(objects, type)
+{
+	for(const [s_id, object] of objects)
+	{
+		if(isType(object, type))
+			return object;
+	}
+	return null;
+}
+
+function getOfType(objects, type)
+{
+	const objects_of_type = new Map();
+
+	for(const [s_id, object] of objects)
+	{
+		if(isType(object, type))
+		{
+			objects_of_type.set(s_id, object);
+		}
+	}
+
+	return objects_of_type;
+}
+
+// this method is actual genius
 function isType(object, type)
 {
-	return object.type == type;
+	var type_class = getType(object);
+
+	while(type_class != null && type_class.TYPE != null)
+	{
+		if(type_class.TYPE == type)
+			return true;
+		type_class = Object.getPrototypeOf(type_class);
+	}
+	return false;
 }
 
 export {
@@ -47,7 +85,11 @@ export {
 					GrassTile,
 				WaterTile,
 			WorldBorder,
+		Dynamic,
+			Ship,
 	Categories,
 	getType,
+	getOfType,
+	getOneOfType,
 	isType,
 };

@@ -58,13 +58,13 @@ export default class Terrain
 		{
 			if(tile.bob == true)
 			{
-				tile.vertices[0].y += .2;
+				tile.vertices[0].y += .05;
 				if(tile.vertices[0].y > 2.5)
 					tile.bob = false;
 			}
 			else
 			{
-				tile.vertices[0].y -= .2;
+				tile.vertices[0].y -= .05;
 				if(tile.vertices[0].y < -2.5)
 					tile.bob = true;
 			}

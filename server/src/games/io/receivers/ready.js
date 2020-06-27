@@ -1,23 +1,26 @@
 import terrainMessage from '../messages/terrain.js';
 
-import { getType } from '../../objects/objects.js';
+import { getOfType, getOneOfType, getType, WorldBorder, Tile } from '../../objects/objects.js';
 
 export function receive(game, game_player, data)
 {
 	game_player.ready();
 
 	// send all of the terrain objects to the player
+	const tiles = getOfType(game.objects, Tile.TYPE);
+	const world_border = getOneOfType(game.objects, WorldBorder.TYPE);
+
 	const terrain_objects = [];
 
-	for(const [s_id, object] of game.objects)
+	for(const [s_id, tile] of tiles)
 	{
-		if(!object.moveable && object.terrain)
-		{
-			terrain_objects.push(getType(object).getBase(object));
-		}
+		terrain_objects.push(getType(tile).getBase(tile));
 	}
 
-	game_player.send(terrainMessage(terrain_objects));
+	if(world_border != null)
+	{
+		game_player.send(terrainMessage(terrain_objects, world_border.width, world_border.height));
+	}
 }
 
 export const receiver = 'ready';

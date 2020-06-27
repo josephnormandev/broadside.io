@@ -4,7 +4,7 @@ import TerrainsService from '../terrains/terrains.service.js';
 
 import GamePlayer from './game-player.js';
 
-import { getType } from './objects/objects.js';
+import { getType, getOfType, Dynamic } from './objects/objects.js';
 
 export default class Game
 {
@@ -61,13 +61,26 @@ export default class Game
 	{
 		const game_player = this.game_players.get(online_player.id);
 		game_player.connect(online_player);
+
+		this.ship_id = this.addObject({
+			type: 'ship',
+			position: {
+				x: 135,
+				y: 60,
+			},
+			angle: 0,
+			velocity: {
+				x: 5,
+				y: 5,
+			},
+			angularVelocity: 1,
+		});
 	}
 
 	handleMessage(online_player, receiver, data)
 	{
 		const game_player = this.game_players.get(online_player.id);
 		Game.Service.receivers.get(receiver)(this, game_player, data);
-
 	}
 
 	handleDisconnect(player)
@@ -100,9 +113,11 @@ export default class Game
 			this.objects.set(game_object.s_id, game_object);
 
 			Matter.World.addBody(this.engine.world, game_object);
+			this.s_id ++;
+
+			return this.s_id - 1;
 		} catch(e) {
 			console.log(e, base);
 		}
-		this.s_id ++;
 	}
 }

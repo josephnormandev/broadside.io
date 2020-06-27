@@ -15,17 +15,13 @@ export default class GameObject
 			throw 'Missing Definition - GameObject.body';
 		if(definers.category == null)
 			throw 'Missing Definition - GameObject.category';
-		if(definers.moveable == null)
-			throw 'Missing Definition - GameObject.moveable';
 
 		const game_object = definers.body;
 		game_object.type = definers.type;
 		game_object.collisionFilter.category = definers.category;
 
-		if(definers.moveable == false)
-			Matter.Body.setStatic(game_object, true);
-		else
-			Matter.Body.setStatic(game_object, false);
+		if(definers.mask != null)
+			game_object.collisionFilter.mask = definers.mask;
 
 		// base properties come from outside sources like the map file. They get
 		// factored into the
