@@ -42,20 +42,20 @@ function getOneOfType(objects, type)
 	for(const [s_id, object] of objects)
 	{
 		if(isType(object, type))
-			return object;
+			return s_id;
 	}
 	return null;
 }
 
 function getOfType(objects, type)
 {
-	const objects_of_type = new Map();
+	const objects_of_type = [];
 
 	for(const [s_id, object] of objects)
 	{
 		if(isType(object, type))
 		{
-			objects_of_type.set(s_id, object);
+			objects_of_type.push(s_id);
 		}
 	}
 

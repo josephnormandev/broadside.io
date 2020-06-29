@@ -24,4 +24,9 @@ export default class Ship extends Dynamic
 
 		return ship;
 	}
+
+	static tick(object)
+	{
+
+	}
 }

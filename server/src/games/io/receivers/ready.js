@@ -7,20 +7,26 @@ export function receive(game, game_player, data)
 	game_player.ready();
 
 	// send all of the terrain objects to the player
-	const tiles = getOfType(game.objects, Tile.TYPE);
-	const world_border = getOneOfType(game.objects, WorldBorder.TYPE);
+	const tile_ids = getOfType(game.objects, Tile.TYPE);
+	const world_border_id = getOneOfType(game.objects, WorldBorder.TYPE);
 
 	const terrain_objects = [];
 
-	for(const [s_id, tile] of tiles)
+	for(const s_id of tile_ids)
 	{
+		const tile = game.objects.get(s_id);
 		terrain_objects.push(getType(tile).getBase(tile));
 	}
+
+	const world_border = game.objects.get(world_border_id);
 
 	if(world_border != null)
 	{
 		game_player.send(terrainMessage(terrain_objects, world_border.width, world_border.height));
 	}
+
+	const add_objects = game.visions.get(game_player.team).getAddPackets(game.objects);
+	game_player.send(add_objects);
 }
 
 export const receiver = 'ready';

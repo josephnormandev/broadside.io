@@ -68,13 +68,15 @@ export default class Terrain
 				if(tile.vertices[0].y < -2.5)
 					tile.bob = true;
 			}
-		}
-
-		for(const [s_id, tile] of this.water_tiles)
-		{
-			this.averageSurfaceHeights(tile, this.water_tiles);
 			tile.mesh.geometry.verticesNeedUpdate = true;
 		}
+
+/*
+		for(const [s_id, tile] of this.water_tiles)
+		{
+			//this.averageSurfaceHeights(tile, this.water_tiles);
+		}
+*/
 	}
 
 	grassTile(scene, base)
