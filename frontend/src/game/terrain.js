@@ -48,8 +48,6 @@ export default class Terrain
 		{
 			this.randomHeights(tile);
 		}
-
-		console.log(this.water_tiles)
 	}
 
 	draw()

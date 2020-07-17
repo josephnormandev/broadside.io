@@ -54,8 +54,8 @@ export default class Game
 			},
 			angle: 0,
 			velocity: {
-				x: 5,
-				y: 5,
+				x: 50,
+				y: 50,
 			},
 			angularVelocity: 1,
 		});
@@ -88,7 +88,7 @@ export default class Game
 			}
 		}
 
-		if(this.updates % 20 == 0)
+		if(this.updates % 3 == 0)
 		{
 			this.send(dynamic_ids);
 		}
@@ -128,7 +128,7 @@ export default class Game
 
 				const dynamic_2 = this.objects.get(s_id_2);
 
-				if(Dynamic.observable(this.objects, dynamic_1, dynamic_2))
+				if(true ||Dynamic.observable(this.objects, dynamic_1, dynamic_2))
 				{
 					this.visions.get(1).addVision(s_id_2);
 					this.visions.get(2).addVision(s_id_1);
@@ -159,6 +159,23 @@ export default class Game
 	{
 		const game_player = this.game_players.get(online_player.id);
 		game_player.connect(online_player);
+
+
+
+		this.addObject({
+			type: 'ship',
+			team: 2,
+			position: {
+				x: 155,
+				y: 60,
+			},
+			angle: 0,
+			velocity: {
+				x: 50,
+				y: 50,
+			},
+			angularVelocity: 0,
+		});
 	}
 
 	handleMessage(online_player, receiver, data)
