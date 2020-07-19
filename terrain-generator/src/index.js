@@ -10,7 +10,7 @@ const heightmap = generateNoise(6, 8, false, 1);
 var TILE_OUT = [];
 
 // constants for radius etc
-const radius = 10;
+const radius = 15;
 const a = Math.cos(Math.PI / 6) * radius;
 const b = 3 / 2 * radius;
 
@@ -127,4 +127,4 @@ TILE_OUT.push({
 	angle: 0,
 });
 
-FS.writeFileSync('/home/joseph/broadside.io/server/src/terrains/generated-map.json', JSON.stringify(TILE_OUT));
+FS.writeFileSync('/home/joseph/broadside.io/server/src/terrains/generated-map2.json', JSON.stringify(TILE_OUT));

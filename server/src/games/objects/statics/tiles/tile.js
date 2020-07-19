@@ -5,7 +5,7 @@ import { Static } from '../../objects.js';
 export default class Tile extends Static
 {
 	static TYPE = 'tile';
-	static RADIUS = 10;
+	static RADIUS = 15;
 
 	static create(definers, base)
 	{

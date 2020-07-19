@@ -5,7 +5,7 @@ import TerrainsService from '../terrains/terrains.service.js';
 import GamePlayer from './game-player.js';
 import Vision from './vision.js';
 
-import { getType, isType, Dynamic } from './objects/objects.js';
+import { getType, getOfType, isType, Dynamic, WorldBorder } from './objects/objects.js';
 
 export default class Game
 {
@@ -28,7 +28,6 @@ export default class Game
 		for(const online_player of team_1) this.game_players.set(online_player.id, new GamePlayer(online_player, 1));
 		for(const online_player of team_2) this.game_players.set(online_player.id, new GamePlayer(online_player, 2));
 
-
 		this.engine = Matter.Engine.create();
 		this.engine.world.gravity.y = 0;
 
@@ -45,35 +44,37 @@ export default class Game
 			self.update(1000 / 60);
 		}, 1000 / 60);
 
-		this.addObject({
-			type: 'ship',
-			team: 1,
-			position: {
-				x: 135,
-				y: 60,
-			},
-			angle: 0,
-			velocity: {
-				x: 50,
-				y: 50,
-			},
-			angularVelocity: 1,
-		});
+		setTimeout(function() {
+			self.addObject({
+				type: 'ship',
+				team: 1,
+				position: {
+					x: 400,
+					y: 100,
+				},
+				angle: Math.PI / 2,
+				velocity: {
+					x: 4,
+					y: 4,
+				},
+				angularVelocity: 0,
+			});
 
-		this.addObject({
-			type: 'ship',
-			team: 2,
-			position: {
-				x: 135,
-				y: 60,
-			},
-			angle: 0,
-			velocity: {
-				x: 5,
-				y: 5,
-			},
-			angularVelocity: 1,
-		});
+			self.addObject({
+				type: 'ship',
+				team: 2,
+				position: {
+					x: 600,
+					y: 400,
+				},
+				angle: 0,
+				velocity: {
+					x: 2,
+					y: -2,
+				},
+				angularVelocity: 0,
+			});
+		}, 5000);
 	}
 
 	update(time)
@@ -160,22 +161,8 @@ export default class Game
 		const game_player = this.game_players.get(online_player.id);
 		game_player.connect(online_player);
 
-
-
-		this.addObject({
-			type: 'ship',
-			team: 2,
-			position: {
-				x: 155,
-				y: 60,
-			},
-			angle: 0,
-			velocity: {
-				x: 50,
-				y: 50,
-			},
-			angularVelocity: 0,
-		});
+		const objects = getOfType(this.objects, WorldBorder.TYPE);
+		console.log(objects);
 	}
 
 	handleMessage(online_player, receiver, data)

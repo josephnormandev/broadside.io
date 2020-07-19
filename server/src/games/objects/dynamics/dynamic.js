@@ -51,7 +51,7 @@ export default class Dynamic extends GameObject
 		return {
 			...GameObject.getBase(dynamic),
 			velocity: dynamic.velocity,
-			angularVelocity: dynamic.angularVelocity,
+			angularVelocity: -dynamic.angularVelocity, // negated to translate from MatterJS to THREE.JS
 			team: dynamic.team,
 		};
 	}
@@ -61,9 +61,9 @@ export default class Dynamic extends GameObject
 		return {
 			s_id: dynamic.s_id,
 			position: dynamic.position,
-			angle: dynamic.angle,
+			angle: -dynamic.angle, // negated to translate from MatterJS to THREE.JS
 			velocity: dynamic.velocity,
-			angularVelocity: dynamic.angularVelocity,
+			angularVelocity: -dynamic.angularVelocity, // negated to translate from MatterJS to THREE.JS
 		};
 	}
 }

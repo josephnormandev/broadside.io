@@ -144,16 +144,16 @@ export default class Terrain
 
 	createHexagonMesh(material, base, color)
 	{
-		const radius = 10;
+		const radius = 15;
 		const vertices = [];
 		const faces = [];
 		vertices.push(new THREE.Vector3(0, 0, 0)); // 0
-		vertices.push(new THREE.Vector3(0, 0, - radius)); // 1, bottom, then left
-		vertices.push(new THREE.Vector3(radius * Math.sin(Math.PI / 3), 0, -radius * Math.cos(Math.PI / 3))); // 2, bot left, then top left
-		vertices.push(new THREE.Vector3(radius * Math.sin(Math.PI / 3), 0, radius * Math.cos(Math.PI / 3))); // 3, top left, then top right
-		vertices.push(new THREE.Vector3(0, 0, radius)); // 4, top, then bot right
-		vertices.push(new THREE.Vector3(- radius * Math.sin(Math.PI / 3), 0, radius * Math.cos(Math.PI / 3))); // 5, top right, then bottom right
-		vertices.push(new THREE.Vector3(- radius * Math.sin(Math.PI / 3), 0, - radius * Math.cos(Math.PI / 3))); // 6, bot right, then bot left
+		vertices.push(new THREE.Vector3(0, 0, radius)); // 1, bottom, then left
+		vertices.push(new THREE.Vector3(-radius * Math.sin(Math.PI / 3), 0, radius * Math.cos(Math.PI / 3))); // 2, bot left, then top left
+		vertices.push(new THREE.Vector3(-radius * Math.sin(Math.PI / 3), 0, -radius * Math.cos(Math.PI / 3))); // 3, top left, then top right
+		vertices.push(new THREE.Vector3(0, 0, -radius)); // 4, top, then bot right
+		vertices.push(new THREE.Vector3(radius * Math.sin(Math.PI / 3), 0, -radius * Math.cos(Math.PI / 3))); // 5, top right, then bottom right
+		vertices.push(new THREE.Vector3(radius * Math.sin(Math.PI / 3), 0, radius * Math.cos(Math.PI / 3))); // 6, bot right, then bot left
 		faces.push(new THREE.Face3(0, 2, 1));
 		faces.push(new THREE.Face3(0, 3, 2));
 		faces.push(new THREE.Face3(0, 4, 3));

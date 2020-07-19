@@ -16,8 +16,8 @@ export default class Ship extends Dynamic
 			mask: Categories.Border | Categories.Ground,
 			body: Matter.Body.create({
 				parts: [
-					Matter.Bodies.rectangle(0, 0, 32, 80),
-					Matter.Bodies.circle(0, 0, 24),
+					Matter.Bodies.rectangle(0, 0, 15, 30),
+					Matter.Bodies.circle(0, 0, 10),
 				],
 			}),
 		}, base);

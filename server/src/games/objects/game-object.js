@@ -47,7 +47,7 @@ export default class GameObject
 									// object
 			s_id: game_object.s_id,
 			position: game_object.position,
-			angle: game_object.angle,
+			angle: -game_object.angle, // negated to translate from MatterJS to THREE.JS
 		};
 	}
 }

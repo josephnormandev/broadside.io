@@ -1,4 +1,4 @@
-import generated_terrain from './generated-map.json';
+import generated_terrain from './generated-map2.json';
 
 export default class TerrainsService
 {

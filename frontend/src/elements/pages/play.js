@@ -38,7 +38,7 @@ class PlayPage extends React.Component
 	start()
 	{
 		this.scene = new THREE.Scene();
-		this.scene.add(new THREE.AxesHelper(5));
+		this.scene.add(new THREE.AxesHelper(1000));
 
 		this.inputs = new Inputs(this);
 
