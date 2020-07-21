@@ -132,7 +132,7 @@ export default class Cursor
 
         this.zoom += e.deltaY / -300 * ZOOM_SENSITIVITY;
         if(this.zoom > 1.5) this.zoom = 1.5;
-        if(this.zoom < .5) this.zoom = .5;
+        if(this.zoom < .1) this.zoom = .1;
     }
 
 	pointerLockChange(e)

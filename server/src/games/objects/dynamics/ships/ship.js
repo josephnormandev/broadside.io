@@ -13,10 +13,10 @@ export default class Ship extends Dynamic
 			controllable: true,
 			mass: 1000,
 			category: Categories.Ship,
-			mask: Categories.Border | Categories.Ground,
+			mask: Categories.Border | Categories.Ground | Categories.Ship,
 			body: Matter.Body.create({
 				parts: [
-					Matter.Bodies.rectangle(0, 0, 15, 30),
+					Matter.Bodies.rectangle(0, 0, 30, 15),
 					Matter.Bodies.circle(0, 0, 10),
 				],
 			}),

@@ -20,7 +20,7 @@ export default class Ship extends Dynamic
 		});
 		this.center_mesh = new THREE.Mesh(this.center_geometry, this.material);
 
-		this.length_geometry = new THREE.BoxGeometry(30, 10, 15);
+		this.length_geometry = new THREE.BoxGeometry(30, 10, 15); // X Y Z
 		this.center_mesh.updateMatrix();
 		this.length_geometry.merge(this.center_mesh.geometry, this.center_mesh.matrix);
 
@@ -36,6 +36,23 @@ export default class Ship extends Dynamic
 
 	draw()
 	{
+		const time = (new Date()).getTime();
+
+		if(this.old_time != null)
+		{
+			const delta = (time - this.old_time) / 4;
+			console.log(delta);
+
+			this.mesh.position.set(
+				this.position.x + this.velocity.x * delta,
+				0,
+				this.position.y + this.velocity.y * delta,
+			);
+
+			this.mesh.rotation.set(0, this.angle + this.angularVelocity * delta, 0, "YXZ",);
+		}
+
+		this.old_time = time;
 	}
 
 	update(update)

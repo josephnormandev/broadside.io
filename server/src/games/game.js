@@ -5,7 +5,7 @@ import TerrainsService from '../terrains/terrains.service.js';
 import GamePlayer from './game-player.js';
 import Vision from './vision.js';
 
-import { getType, getOfType, isType, Dynamic, WorldBorder } from './objects/objects.js';
+import { getType, getOfType, isType, Dynamic, WaterTile } from './objects/objects.js';
 
 export default class Game
 {
@@ -44,37 +44,30 @@ export default class Game
 			self.update(1000 / 60);
 		}, 1000 / 60);
 
-		setTimeout(function() {
-			self.addObject({
-				type: 'ship',
-				team: 1,
-				position: {
-					x: 400,
-					y: 100,
-				},
-				angle: Math.PI / 2,
-				velocity: {
-					x: 4,
-					y: 4,
-				},
-				angularVelocity: 0,
-			});
 
-			self.addObject({
-				type: 'ship',
-				team: 2,
-				position: {
-					x: 600,
-					y: 400,
-				},
-				angle: 0,
-				velocity: {
-					x: 2,
-					y: -2,
-				},
-				angularVelocity: 0,
-			});
-		}, 5000);
+		setInterval(function() {
+			self.spawnRandomShip();
+		}, 1000);
+	}
+
+	// TEMP
+	spawnRandomShip()
+	{
+		const water_tiles = getOfType(this.objects, WaterTile.TYPE);
+
+		const random_tile = this.objects.get(water_tiles[Math.floor(Math.random() * water_tiles.length)]);
+		
+		this.addObject({
+			type: 'ship',
+			team: 1,
+			position: random_tile.position,
+			angle: 0,
+			velocity: {
+				x: Math.random() * 6 - 3,
+				y: Math.random() * 6 - 3,
+			},
+			angularVelocity: 0,
+		});
 	}
 
 	update(time)
@@ -89,7 +82,7 @@ export default class Game
 			}
 		}
 
-		if(this.updates % 3 == 0)
+		if(this.updates % 6 == 0)
 		{
 			this.send(dynamic_ids);
 		}
@@ -120,21 +113,13 @@ export default class Game
 		for(const s_id_1 of team_1_ids)
 		{
 			this.visions.get(1).addVision(s_id_1);
+			this.visions.get(2).addVision(s_id_1);
+		}
 
-			const dynamic_1 = this.objects.get(s_id_1);
-
-			for(const s_id_2 of team_2_ids)
-			{
-				this.visions.get(2).addVision(s_id_2);
-
-				const dynamic_2 = this.objects.get(s_id_2);
-
-				if(true ||Dynamic.observable(this.objects, dynamic_1, dynamic_2))
-				{
-					this.visions.get(1).addVision(s_id_2);
-					this.visions.get(2).addVision(s_id_1);
-				}
-			}
+		for(const s_id_2 of team_2_ids)
+		{
+			this.visions.get(1).addVision(s_id_2);
+			this.visions.get(2).addVision(s_id_2);
 		}
 
 		const packets_1 = this.visions.get(1).createPackets(this.objects);
@@ -160,9 +145,6 @@ export default class Game
 	{
 		const game_player = this.game_players.get(online_player.id);
 		game_player.connect(online_player);
-
-		const objects = getOfType(this.objects, WorldBorder.TYPE);
-		console.log(objects);
 	}
 
 	handleMessage(online_player, receiver, data)
@@ -206,6 +188,7 @@ export default class Game
 			return this.s_id - 1;
 		} catch(e) {
 			console.log(e, base);
+			return null;
 		}
 	}
 }
