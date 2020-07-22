@@ -56,7 +56,7 @@ export default class Game
 		const water_tiles = getOfType(this.objects, WaterTile.TYPE);
 
 		const random_tile = this.objects.get(water_tiles[Math.floor(Math.random() * water_tiles.length)]);
-		
+
 		this.addObject({
 			type: 'ship',
 			team: 1,
@@ -82,7 +82,7 @@ export default class Game
 			}
 		}
 
-		if(this.updates % 6 == 0)
+		if(this.updates % 3 == 0)
 		{
 			this.send(dynamic_ids);
 		}
