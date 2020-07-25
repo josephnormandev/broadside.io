@@ -1,3 +1,5 @@
+import assignShipMessage from './io/messages/assign-ship.js';
+
 // this class is NOT related to the Player class. Instead, it is the vessel
 // that ties Players to their in game status
 export default class GamePlayer
@@ -7,6 +9,7 @@ export default class GamePlayer
 		this.connect(online_player);
 		this.team = team;
 
+		this.ship_id = null;
 		this.ready_state = false;
 	}
 
@@ -25,6 +28,26 @@ export default class GamePlayer
 		this.ready_state = true;
 	}
 
+	assignShip(ship_id)
+	{
+		this.ship_id = ship_id;
+
+		if(this.ready_state)
+		{
+			this.send(assignShipMessage(this.ship_id));
+		}
+	}
+
+	ship(objects)
+	{
+		if(this.ship_id != null && objects.has(this.ship_id))
+		{
+			return objects.get(this.ship_id);
+		}
+		this.ship_id = null;
+		return null;
+	}
+
 	get connected()
 	{
 		return this.online_player != null;
@@ -32,7 +55,7 @@ export default class GamePlayer
 
 	send(message)
 	{
-		if(this.connected)
+		if(this.connected && this.ready_state)
 		{
 			this.online_player.send(message);
 		}

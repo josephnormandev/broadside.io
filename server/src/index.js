@@ -12,7 +12,7 @@ import GamesService from './games/games.service.js';
 (async function() {
 	await LoggerService.initialize();
 	await ConfigService.initialize();
-    await DatabaseService.initialize();
+	await DatabaseService.initialize();
 	await AuthService.initialize();
 	await AppService.initialize();
 

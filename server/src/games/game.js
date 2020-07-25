@@ -44,22 +44,28 @@ export default class Game
 			self.update(1000 / 60);
 		}, 1000 / 60);
 
+		const ship_1_id = this.spawnRandomShip(1);
+		const ship_2_id = this.spawnRandomShip(2);
 
-		setInterval(function() {
-			self.spawnRandomShip();
-		}, 1000);
+		for(const [id, game_player] of this.game_players)
+		{
+			if(game_player.team == 1)
+				game_player.assignShip(ship_1_id);
+			if(game_player.team == 2)
+				game_player.assignShip(ship_2_id);
+		}
 	}
 
 	// TEMP
-	spawnRandomShip()
+	spawnRandomShip(team)
 	{
 		const water_tiles = getOfType(this.objects, WaterTile.TYPE);
 
 		const random_tile = this.objects.get(water_tiles[Math.floor(Math.random() * water_tiles.length)]);
 
-		this.addObject({
+		return this.addObject({
 			type: 'ship',
-			team: 1,
+			team: team,
 			position: random_tile.position,
 			angle: 0,
 			velocity: {

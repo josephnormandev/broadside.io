@@ -2,7 +2,7 @@ export default class Dynamic
 {
 	static TYPE() { return 'dynamic'; }
 
-	constructor(base)
+	constructor(base, page)
 	{
 		if(base.s_id == null)
 			throw 'Missing - Dynamic.s_id';
@@ -14,11 +14,6 @@ export default class Dynamic
 		this.s_id = base.s_id;
 		this.type = base.type;
 		this.team = base.team;
-	}
-
-	addTo(scene)
-	{
-		throw 'Missing - Dynamic.addTo()'
 	}
 
 	draw(scene)

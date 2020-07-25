@@ -10,10 +10,9 @@ export function receive(page, data)
 
 		if(Type != null)
 		{
-			const object = new Type(base);
+			const object = new Type(base, page);
 
 			page.dynamics.set(object.s_id, object);
-			object.addTo(page.scene);
 		}
 	}
 }

@@ -8,6 +8,8 @@ import Client from '../../workers/client';
 
 import * as TerrainReceiver from '../../workers/receivers/terrain';
 import * as BundledReceiver from '../../workers/receivers/bundled';
+import * as AssignTeamReceiver from '../../workers/receivers/assign-team';
+import * as AssignShipReceiver from '../../workers/receivers/assign-ship';
 import * as AddObjectReceiver from '../../workers/receivers/add-object';
 import * as UpdateObjectReceiver from '../../workers/receivers/update-object';
 import * as RemoveObjectReceiver from '../../workers/receivers/remove-object';
@@ -30,6 +32,8 @@ class PlayPage extends React.Component
 		this.receivers = new Map();
 		this.receivers.set(TerrainReceiver.receiver, TerrainReceiver.receive);
 		this.receivers.set(BundledReceiver.receiver, BundledReceiver.receive);
+		this.receivers.set(AssignTeamReceiver.receiver, AssignTeamReceiver.receive);
+		this.receivers.set(AssignShipReceiver.receiver, AssignShipReceiver.receive);
 		this.receivers.set(AddObjectReceiver.receiver, AddObjectReceiver.receive);
 		this.receivers.set(UpdateObjectReceiver.receiver, UpdateObjectReceiver.receive);
 		this.receivers.set(RemoveObjectReceiver.receiver, RemoveObjectReceiver.receive);
@@ -44,6 +48,9 @@ class PlayPage extends React.Component
 
 		this.terrain = new Terrain();
 		this.dynamics = new Map();
+
+		this.team = null; // the team that the client is on
+		this.ship_id = null; // the s_id within the dynamics map of the client's ship
 
 		// tell the server we are ready to play the game
 		Client.sendMessage(readyMessage());

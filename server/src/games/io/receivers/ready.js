@@ -1,10 +1,19 @@
 import terrainMessage from '../messages/terrain.js';
+import assignTeamMessage from '../messages/assign-team.js';
+import assignShipMessage from '../messages/assign-ship.js';
 
 import { getOfType, getOneOfType, getType, WorldBorder, Tile } from '../../objects/objects.js';
 
 export function receive(game, game_player, data)
 {
 	game_player.ready();
+	game_player.send(assignTeamMessage(game_player.team));
+
+	const ship = game_player.ship(game.objects);
+
+	if(ship != null)
+		game_player.send(assignShipMessage(ship.s_id));
+
 
 	// send all of the terrain objects to the player
 	const tile_ids = getOfType(game.objects, Tile.TYPE);
